@@ -87,7 +87,7 @@ const Login = ({navigation}) => {
           <>
           <TouchableOpacity
               style={basic.btn}
-              disabled={loading || !email || !password}
+              // disabled={loading || !email || !password}
               onPress={() => {
                 logUser();
               }}>

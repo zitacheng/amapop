@@ -25,6 +25,7 @@
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-localize": "^3.0.3",
     "react-native-responsive-fontsize": "^0.5.1",
+    "react-native-user-avatar": "^1.0.8",
     "react-native-web": "~0.19.6"
   },
   "devDependencies": {
