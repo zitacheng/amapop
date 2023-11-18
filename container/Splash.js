@@ -19,8 +19,7 @@ const Splash = (props) => {
       // saveLang(user);
       props.navigation.navigate('Home');
     } else {
-      console.log("OnBoarding")
-      props.navigation.push('OnBoarding', {
+      props.navigation.push('Login', {
         // lang: localPref ? localPref : i18n.locale,
         lang: 'fr',
       });
@@ -33,7 +32,7 @@ const Splash = (props) => {
     // props.navigation.push('OnBoarding', {
     //   lang: localPref ? localPref : i18n.locale,
     // });
-    props.navigation.push('OnBoarding', {
+    props.navigation.push('Login', {
         lang: 'fr',
       });
   };

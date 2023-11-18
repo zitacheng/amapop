@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Splash from './container/Splash.js';
-import OnBoarding from './container/OnBoarding.js';
+// import OnBoarding from './container/OnBoarding.js';
 import Login from './container/Login.js';
 import Register from './container/Register.js';
 import Home from './container/Home.js';
@@ -23,7 +23,7 @@ export default function App() {
           gestureEnabled: false,
         }}>
         <Stack.Screen name="Splash" component={Splash} />
-        <Stack.Screen name="OnBoarding" component={OnBoarding} />
+        {/* <Stack.Screen name="OnBoarding" component={OnBoarding} /> */}
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Home" component={TabScreen} />

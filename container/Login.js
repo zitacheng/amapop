@@ -39,13 +39,6 @@ const Login = ({navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <TouchableOpacity
-        style={basic.back}
-        onPress={() => {
-          navigation.goBack();
-        }}>
-        <Image style={styles.back} source={arrow} resizeMode="contain" />
-      </TouchableOpacity>
       {/* <MultiLang /> */}
       <Load loading={loading} />
       <Image style={styles.logo} source={logo} resizeMode="contain" />
@@ -116,7 +109,7 @@ const Login = ({navigation}) => {
               navigation.navigate('Register');
             }}
             style={styles.row}>
-            <Text style={styles.bottomTxt}>{'New user?'}</Text>
+            <Text style={styles.bottomTxt}>{'New user? '}</Text>
             <Text style={styles.pinkTxt}>{'Register'}</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity
