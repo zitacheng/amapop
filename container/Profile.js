@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: color.ultraLightYellow
+    backgroundColor: color.lightOrange
   },
   header: {
     marginTop: 20,

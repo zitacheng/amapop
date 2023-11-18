@@ -1,30 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Home from './container/Home.js';
 import History from './container/History.js';
 import Favorite from './container/Favorite.js';
 import Profile from './container/Profile.js';
 import {Image} from 'react-native';
-import userOn from './assets/userOn.png';
-import giftOn from './assets/giftOn.png';
-import popOn from './assets/popOn.png';
-import boxOn from './assets/boxOn.png';
+import user from './assets/user.png';
+import gift from './assets/gift.png';
+import pop from './assets/pop.png';
+import box from './assets/box.png';
 import {basic} from './constant/basic.js';
 import {color} from './constant/color.js';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 const Tab = createMaterialBottomTabNavigator();
 export function TabScreen({navigation, route}) {
+  console.log("route ", route);
+
+  useEffect(() => {
+    console.log("route ", route)
+  }, [navigation, route]);
 
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      tabBarOptions={{
-        activeTintColor: color.pink,
-        showLabel: false,
-        tabStyle: {
-          backgroundColor: color.lightOrange,
-        },
-      }}>
+      activeColor='white'
+      inactiveColor='white'
+      barStyle={{backgroundColor:color.pink}}
+    >
       <Tab.Screen
         name="Home"
         component={Home}
@@ -32,7 +34,7 @@ export function TabScreen({navigation, route}) {
         //   tabBarLabel: translate('home'),
           tabBarLabel: 'Home',
           tabBarIcon: () => (
-            <Image style={basic.barIcon} source={giftOn} resizeMode="contain" />
+            <Image style={basic.barIcon} source={gift} resizeMode="contain" />
           ),
         }}
       />
@@ -44,7 +46,7 @@ export function TabScreen({navigation, route}) {
           tabBarIcon: () => (
             <Image
               style={basic.barIcon}
-              source={popOn}
+              source={pop}
               resizeMode="contain"
             />
           ),
@@ -56,7 +58,7 @@ export function TabScreen({navigation, route}) {
         options={{
           tabBarLabel: 'History',
           tabBarIcon: () => (
-            <Image style={basic.barIcon} source={boxOn} resizeMode="contain" />
+            <Image style={basic.barIcon} source={box} resizeMode="contain" />
           ),
         }}
       />
@@ -66,7 +68,7 @@ export function TabScreen({navigation, route}) {
         options={{
           tabBarLabel: 'Account',
           tabBarIcon: () => (
-            <Image style={basic.barIcon} source={userOn} resizeMode="contain" />
+            <Image style={basic.barIcon} source={user} resizeMode="contain" />
           ),
         }}
       />
