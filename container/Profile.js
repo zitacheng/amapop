@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   menu: {
     fontSize: RFValue(28),
     textTransform: 'uppercase',
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     alignSelf: 'flex-start',
     lineHeight: 45,
     marginLeft: 25,
@@ -159,14 +159,14 @@ const styles = StyleSheet.create({
   submenu: {
     fontSize: RFValue(20),
     textTransform: 'uppercase',
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     alignSelf: 'flex-start',
     marginLeft: 25,
   },
   submenuSelected: {
     fontSize: RFValue(20),
     textTransform: 'uppercase',
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     alignSelf: 'flex-start',
     marginLeft: 25,
     color: color.pink,
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   menuSub: {
     fontSize: RFValue(24),
     textTransform: 'uppercase',
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     alignSelf: 'flex-start',
     lineHeight: 40,
     marginLeft: 25,

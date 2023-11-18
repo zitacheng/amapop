@@ -87,14 +87,14 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
   },
   header: {
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     fontSize: RFValue(20),
     marginTop: 20,
     marginBottom: 20,
     alignSelf: 'flex-start',
   },
   big: {
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     fontSize: RFValue(30),
     textTransform: 'uppercase',
     marginTop: 10,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   info: {
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     fontSize: RFValue(20),
     textAlign: 'left',
     alignSelf: 'flex-start',

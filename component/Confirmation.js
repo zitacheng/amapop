@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   header: {
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     fontSize: RFValue(20),
     marginTop: 40,
     textTransform: 'uppercase',

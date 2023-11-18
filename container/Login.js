@@ -66,7 +66,7 @@ const Login = ({navigation}) => {
             </View>
           </>
         )}
-        <View style={styles.break} />
+        <View style={basic.break} />
         {passForgot ? (
           <>
             <TouchableOpacity
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     alignSelf: 'center',
     marginBottom: 30,
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
   },
   inputPass: {
     padding: 10,
@@ -168,9 +168,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
-  break: {
-    height: 20,
-  },
   back: {
     width: 30,
     height: 40,
@@ -194,7 +191,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignContent: 'center'
-
   }
 });
 

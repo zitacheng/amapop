@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     textTransform: 'uppercase',
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     alignSelf: 'center',
     marginBottom: 30,
   },

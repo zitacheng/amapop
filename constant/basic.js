@@ -42,11 +42,16 @@ export const basic = StyleSheet.create({
     color: 'white',
     marginBottom: 10,
     fontFamily: 'Helvetica-Bold',
+    width: '100%',
   },
   input: {
     borderRadius: 6,
     padding: 20,
-    backgroundColor: color.lightOrange
+    backgroundColor: color.lightOrange,
+    width: '100%',
+  },
+  break: {
+    height: 20,
   },
   btnFutura: {
     backgroundColor: 'black',
@@ -153,7 +158,7 @@ export const basic = StyleSheet.create({
   },
   spinnerTextStyle: {
     color: 'white',
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
   },
   upper: {
     textTransform: 'uppercase',
@@ -181,7 +186,7 @@ export const basic = StyleSheet.create({
   },
   modalText: {
     textAlign: 'center',
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     fontSize: RFValue(24),
   },
   center: {

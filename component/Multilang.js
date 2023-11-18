@@ -24,13 +24,13 @@ const styles = StyleSheet.create({
   },
   lang: {
     fontSize: 20,
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     color: color.grey
     // marginRight: 10,
   },
   selected: {
     fontSize: 20,
-    fontFamily: 'D-DINCondensed-Bold',
+    fontFamily: 'Helvetica-Bold',
     color: color.pink,
   },
   row: {
