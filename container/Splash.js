@@ -1,13 +1,8 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Image, StatusBar} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
-import logo from '../assets/logo.png';
-// import {setI18nConfig} from '../constant/config.js';
+import {images} from '../constant/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import i18n from 'i18n-js';
-import {saveLang} from '../component/Utils';
-
-// const Parse = require('parse/react-native.js');
 
 const Splash = (props) => {
   const isFocused = useIsFocused();
@@ -69,7 +64,7 @@ const Splash = (props) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <Image style={styles.logo} source={logo} resizeMode="contain" />
+      <Image style={styles.logo} source={images.logo} resizeMode="contain" />
     </View>
   );
 };

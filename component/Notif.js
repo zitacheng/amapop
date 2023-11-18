@@ -1,8 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
 import {basic} from '../constant/basic';
-// import {translate} from '../constant/config';
-import logo from '../assets/logo.png';
+import {images} from '../constant/images';
 import {RFValue} from 'react-native-responsive-fontsize';
 import NotificationSetting from 'react-native-open-notification';
 import {Platform} from 'react-native';
@@ -31,7 +30,7 @@ export const Notif = ({newAccount, navigation, setShowNotif}) => {
     <View style={styles.container}>
       <Image
         style={[styles.logo, {marginTop: newAccount ? 30 : 0}]}
-        source={logo}
+        source={images.logo}
         resizeMode="contain"
       />
       <View style={styles.top}>

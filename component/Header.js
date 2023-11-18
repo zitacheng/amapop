@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {StyleSheet, Image, Text} from 'react-native';
-import logo from '../assets/logo.png';
+import {images} from '../constant/images';
 import arrow from '../assets/arrow.png';
 
 export const Header = ({title, setStep, stepVal, navigation, addMarg}) => {
@@ -21,7 +21,7 @@ export const Header = ({title, setStep, stepVal, navigation, addMarg}) => {
             <Image style={styles.icon} source={arrow} resizeMode="contain" />
           </TouchableOpacity>
         )}
-        <Image style={styles.logo} source={logo} resizeMode="contain" />
+        <Image style={styles.logo} source={images.logo} resizeMode="contain" />
       </View>
 
       {title && <Text style={styles.title}>{title}</Text>}

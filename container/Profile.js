@@ -9,14 +9,11 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
-// import {translate} from '../constant/config.js';
 import {Header} from '../component/Header';
 import {RFValue} from 'react-native-responsive-fontsize';
 import InAppReview from 'react-native-in-app-review';
-// import i18n from 'i18n-js';
 import {color} from '../constant/color';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import RNRestart from 'react-native-restart';
 
 const Profile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);

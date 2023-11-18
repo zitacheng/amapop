@@ -9,12 +9,11 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import logo from '../assets/logo.png';
+import {images} from '../constant/images';
 import arrow from '../assets/arrow.png';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {color} from '../constant/color';
 import {basic} from '../constant/basic';
-// import {translate} from '../constant/config.js';
 import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
 

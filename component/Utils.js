@@ -2,7 +2,6 @@ import {Platform} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // const Parse = require('parse/react-native.js');
 import {Alert} from 'react-native';
-// import {translate} from '../constant/config.js';
 import {color} from '../constant/color.js';
 // import SpInAppUpdates, {
 //   NeedsUpdateResponse,
@@ -12,7 +11,7 @@ import {color} from '../constant/color.js';
 import DeviceInfo from 'react-native-device-info';
 import {getVersion, getBuildNumber} from 'react-native-device-info';
 import compareVersions from 'compare-versions';
-import logo from '../assets/logo.png';
+import {images} from '../constant/images';
 
 // const inAppUpdates = new SpInAppUpdates(false);
 
@@ -120,22 +119,6 @@ export function stateColor(val) {
       return 'black';
   }
 }
-
-export function defaultPic(item) {
-  if (item.get('main') != true && item.get('img')) {
-    return {uri: item.get('img')._url};
-  } else if (
-    item.get('main') != true &&
-    item.get('parent').get(item.get('defaultImg'))
-  ) {
-    return {uri: item.get('parent').get(item.get('defaultImg'))._url};
-  } else if (item.get('main') == true && item.get('img')) {
-    return {uri: item.get('img')._url};
-  } else {
-    return logo;
-  }
-}
-
 
 // export async function updateAppVersion() {
 //   const Attribute = Parse.Object.extend('Attribute');

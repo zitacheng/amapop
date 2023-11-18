@@ -10,7 +10,6 @@ import popOn from './assets/popOn.png';
 import boxOn from './assets/boxOn.png';
 import {basic} from './constant/basic.js';
 import {color} from './constant/color.js';
-// import {translate} from './constant/config.js';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 const Tab = createMaterialBottomTabNavigator();

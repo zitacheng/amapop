@@ -9,6 +9,44 @@ export const basic = StyleSheet.create({
     padding: 15,
     minWidth: '75%',
     marginTop: 15,
+    borderRadius: 6,
+  },
+  btnWhiteout: {
+    backgroundColor: 'transparent',
+    alignSelf: 'center',
+    padding: 15,
+    minWidth: '75%',
+    marginTop: 15,
+    borderRadius: 6,
+    borderColor: 'white',
+    borderWidth: 2,
+  },
+  btnTxt: {
+    color: 'white',
+    fontSize: RFValue(14),
+    alignSelf: 'center',
+    fontFamily: 'Helvetica-Bold',
+    textTransform: 'uppercase',
+  },
+  btnDis: {
+    backgroundColor: color.ligtGrey,
+    alignSelf: 'center',
+    padding: 15,
+    minWidth: '75%',
+    marginTop: 15,
+    borderRadius: 6,
+  },
+  label: {
+    marginTop: 20,
+    fontSize: 16,
+    color: 'white',
+    marginBottom: 10,
+    fontFamily: 'Helvetica-Bold',
+  },
+  input: {
+    borderRadius: 6,
+    padding: 20,
+    backgroundColor: color.lightOrange
   },
   btnFutura: {
     backgroundColor: 'black',
@@ -63,13 +101,6 @@ export const basic = StyleSheet.create({
     minWidth: '30%',
     marginBottom: 10,
     marginTop: 10,
-  },
-  btnTxt: {
-    color: 'white',
-    fontSize: RFValue(14),
-    alignSelf: 'center',
-    fontFamily: 'Futura-Medium',
-    textTransform: 'uppercase',
   },
   btnTxtFutura: {
     color: 'white',

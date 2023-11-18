@@ -4,6 +4,7 @@ export const color = {
     ligtGrey: '#D5D5D5',
     green: '#17a562',
     red: '#fc5863',
-    lightOrange: '#fecc7d',
+    orange: '#fecc7d',
+    lightOrange: '#ffe2b1',
   };
   

@@ -5,17 +5,13 @@ import {
   Text,
   StatusBar,
   Image,
-  Alert,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import logo from '../assets/logo.png';
-import arrow from '../assets/arrow.png';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {color} from '../constant/color';
+import {images} from '../constant/images';
 import {basic} from '../constant/basic';
-// import {translate} from '../constant/config.js';
-import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
 
 Icon.loadFont();
@@ -39,86 +35,84 @@ const Login = ({navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      {/* <MultiLang /> */}
       <Load loading={loading} />
-      <Image style={styles.logo} source={logo} resizeMode="contain" />
-      {/* <Text style={styles.title}>{translate(passForgot ? 'pass_forgot_' : 'login')}</Text> */}
-      <View style={styles.break} />
-      <Text style={styles.label}>E-mail</Text>
-      <TextInput
-        style={styles.input}
-        placeholderTextColor={'#D2D6DA'}
-        autoCapitalize={'none'}
-        keyboardType="email-address"
-        placeholder={'Email'}
-        onChangeText={setEmail}
-        value={email}
-      />
-      {!passForgot && (
-        <>
-          <Text style={styles.label}>{'Password'}</Text>
-          <View style={styles.searchSection}>
-            <TextInput
-              style={styles.inputPass}
-              placeholder={'Password'}
-              placeholderTextColor={'#D2D6DA'}
-              onChangeText={setPassword}
-              secureTextEntry={!show}
-              value={password}
-            />
+      <View style={styles.centerBox}>
+        <Image style={styles.logo} source={images.logo} resizeMode="contain" />
+        <Text style={basic.label}>E-mail</Text>
+        <TextInput
+          style={basic.input}
+          autoCapitalize={'none'}
+          keyboardType="email-address"
+          onChangeText={setEmail}
+          value={email}
+        />
+        {!passForgot && (
+          <>
+            <Text style={basic.label}>{'Password'}</Text>
+            <View style={styles.searchSection}>
+              <TextInput
+                style={styles.inputPass}
+                onChangeText={setPassword}
+                secureTextEntry={!show}
+                value={password}
+              />
+              <TouchableOpacity
+                style={styles.eye}
+                onPress={() => {
+                  setShow(!show);
+                }}>
+                <Icon name={show ? 'eye' : 'eye-off'} size={20} color={'white'} />
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+        <View style={styles.break} />
+        {passForgot ? (
+          <>
             <TouchableOpacity
-              style={styles.eye}
-              onPress={() => {
-                setShow(!show);
-              }}>
-              <Icon name={show ? 'eye' : 'eye-off'} size={20} color={'black'} />
+              style={!email ? basic.btnDis : basic.btn}
+              disabled={!email}
+              onPress={restPass}>
+              <Text style={basic.btnTxt}>{"Initialize"}</Text>
             </TouchableOpacity>
-          </View>
-        </>
-      )}
-      {passForgot ? (
-        <>
+            <TouchableOpacity
+              style={basic.btn}
+              onPress={() => {
+                setPassForgot(false);
+              }}>
+              <Text style={basic.btnTxt}>{"Cancel"}</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
           <TouchableOpacity
-            style={basic.btn}
-            disabled={!email}
-            onPress={restPass}>
-            <Text style={basic.btnTxt}>{"Initialize your password from the email you will receive"}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={basic.btn}
-            onPress={() => {
-              setPassForgot(false);
-            }}>
-            <Text style={basic.btnTxt}>{"Annuler"}</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <TouchableOpacity
-          style={basic.btn}
-          disabled={loading || !email || !password}
-          onPress={() => {
-            logUser();
-          }}>
-          <Text style={basic.btnTxt}>{"Login"}</Text>
-        </TouchableOpacity>
-      )}
+              style={basic.btn}
+              disabled={loading || !email || !password}
+              onPress={() => {
+                logUser();
+              }}>
+              <Text style={basic.btnTxt}>{"Login"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={basic.btnWhiteout}
+              disabled={loading}
+              onPress={() => {
+                navigation.navigate('Register');
+              }}>
+              <Text style={basic.btnTxt}>{"Sign Up"}</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
       {!passForgot ? (
         <View style={styles.bottom}>
           <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Register');
-            }}
-            style={styles.row}>
-            <Text style={styles.bottomTxt}>{'New user? '}</Text>
-            <Text style={styles.pinkTxt}>{'Register'}</Text>
-          </TouchableOpacity>
-          {/* <TouchableOpacity
             style={styles.bottomTxt}
             onPress={() => {
               setPassForgot(true);
             }}>
-            <Text style={styles.bottomTxt}>{translate('pass_forgot')}</Text>
-          </TouchableOpacity> */}
+            <Text style={styles.bottomTxt}>{"Password forgot"}</Text>
+          </TouchableOpacity>
         </View>
       ) : null}
     </View>
@@ -130,24 +124,18 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     alignItems: 'center',
+    backgroundColor: color.orange
   },
   logo: {
-    width: '70%',
-    height: '10%',
+    width: '50%',
+    height: '20%',
     alignSelf: 'center',
-    marginTop: '40%',
   },
   title: {
     fontSize: 28,
     alignSelf: 'center',
     marginBottom: 30,
     fontFamily: 'D-DINCondensed-Bold',
-  },
-  input: {
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.2,
-    padding: 10,
-    width: '80%',
   },
   inputPass: {
     padding: 10,
@@ -158,24 +146,23 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
     justifyContent: 'flex-end',
     marginBottom: 50,
-  },
-  label: {
-    marginTop: 20,
-    fontSize: 18,
-    width: '80%',
-    fontFamily: 'D-DINCondensed-Bold',
+    paddingLeft: 30,
+    paddingRight: 30,
+    width: '100%',
   },
   bottomTxt: {
     textAlign: 'auto',
-    fontSize: 18,
-    fontFamily: 'D-DINCondensed-Bold',
+    fontSize: 16,
+    fontFamily: 'Helvetica',
     marginBottom: 10,
+    color: 'white'
   },
   pinkTxt: {
-    fontFamily: 'D-DINCondensed-Bold',
-    fontSize: 18,
+    fontFamily: 'Helvetica',
+    fontSize: 16,
     color: color.pink,
   },
   row: {
@@ -192,13 +179,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.2,
-    width: '80%',
+    borderRadius: 6,
+    padding: 8,
+    backgroundColor: color.lightOrange
   },
   eye: {
     padding: 2,
   },
+  centerBox: {
+    display: 'flex',
+    flex: 5,
+    paddingLeft: 30,
+    paddingRight: 30,
+    width: '100%',
+    justifyContent: 'center',
+    alignContent: 'center'
+
+  }
 });
 
 export default Login;
