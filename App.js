@@ -4,8 +4,9 @@ import Splash from './container/Splash.js';
 import Login from './container/Login.js';
 import Register from './container/Register.js';
 import Profile from './container/Profile.js';
-import Favorite from './container/Favorite.js';
-import History from './container/History.js';
+import Settings from './container/Settings.js';
+import Chat from './container/Chat.js';
+import Chatting from './container/Chatting.js';
 import {TabScreen} from './bar.js';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -27,9 +28,10 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Home" component={TabScreen} />
-        <Stack.Screen name="Favorite" component={Favorite} />
+        <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="History" component={History} />
+        <Stack.Screen name="Chat" component={Chat} />
+        <Stack.Screen name="Chatting" component={Chatting} />
       </Stack.Navigator>
     </NavigationContainer>
   </SafeAreaProvider>

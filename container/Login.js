@@ -6,6 +6,7 @@ import {
   StatusBar,
   Image,
   TextInput,
+  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -33,7 +34,7 @@ const Login = ({navigation}) => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <Load loading={loading} />
       <View style={styles.centerBox}>
@@ -85,7 +86,7 @@ const Login = ({navigation}) => {
           </>
         ) : (
           <>
-          <TouchableOpacity
+            <TouchableOpacity
               style={basic.btn}
               // disabled={loading || !email || !password}
               onPress={() => {
@@ -115,7 +116,7 @@ const Login = ({navigation}) => {
           </TouchableOpacity>
         </View>
       ) : null}
-    </View>
+    </SafeAreaView>
   );
 };
 

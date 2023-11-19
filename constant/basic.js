@@ -60,6 +60,29 @@ export const basic = StyleSheet.create({
   break: {
     height: 20,
   },
+  shadow: {
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+  logo: {
+    height: 30,
+    width: 100,
+    margin: 30
+  },
+  search: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
+    padding: 8,
+    backgroundColor: 'white',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 6},
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
   btnFutura: {
     backgroundColor: 'black',
     alignSelf: 'center',

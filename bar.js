@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import Home from './container/Home.js';
-import History from './container/History.js';
-import Favorite from './container/Favorite.js';
+import Chat from './container/Chat.js';
+import Settings from './container/Settings.js';
 import Profile from './container/Profile.js';
 import {Image} from 'react-native';
 import user from './assets/userOn.png';
 import gift from './assets/giftOn.png';
 import pop from './assets/popOn.png';
-import box from './assets/boxOn.png';
+import chat from './assets/chat.png';
 import {basic} from './constant/basic.js';
 import {color} from './constant/color.js';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -34,36 +34,36 @@ export function TabScreen({navigation, route}) {
         }}
       />
       <Tab.Screen
-        name="Favorite"
-        component={Favorite}
+        name="Chat"
+        component={Chat}
         options={{
-          tabBarLabel: 'Favorite',
+          tabBarLabel: 'Chat',
+          tabBarIcon: () => (
+            <Image style={basic.barIcon} source={chat} resizeMode="contain" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: () => (
+            <Image style={basic.barIcon} source={user} resizeMode="contain" />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          tabBarLabel: 'Settings',
           tabBarIcon: () => (
             <Image
               style={basic.barIcon}
               source={pop}
               resizeMode="contain"
             />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="History"
-        component={History}
-        options={{
-          tabBarLabel: 'History',
-          tabBarIcon: () => (
-            <Image style={basic.barIcon} source={box} resizeMode="contain" />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Account"
-        component={Profile}
-        options={{
-          tabBarLabel: 'Account',
-          tabBarIcon: () => (
-            <Image style={basic.barIcon} source={user} resizeMode="contain" />
           ),
         }}
       />

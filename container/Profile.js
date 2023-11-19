@@ -20,15 +20,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const Profile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);
-  const [sell, setSell] = useState(true);
+  const [look, setLooking] = useState(true);
   const looking = [
       {id: 1, pic: images.gallery, looking: true, selling: false, changing: false, price: null, available: false},
       {id: 2, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false},
       {id: 3, pic: images.gallery3, looking: true, selling: false, changing: false, price: null, available: false},
-      {id: 4, pic: images.avatar, looking: true, selling: false, changing: false, price: null, available: false},
+      {id: 4, pic: images.gallery5, looking: true, selling: false, changing: false, price: null, available: false},
       {id: 5, pic: images.gallery, looking: true, selling: false, changing: false, price: null, available: false},
       {id: 6, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false},
-      {id: 7, pic: images.avatar, looking: true, selling: false, changing: false, price: null, available: false},
+      {id: 7, pic: images.gallery5, looking: true, selling: false, changing: false, price: null, available: false},
       {id: 8, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false},
       {id: 9, pic: images.gallery4, looking: true, selling: false, changing: false, price: null, available: false},
     ];
@@ -36,70 +36,66 @@ const Profile = ({navigation}) => {
   const changing = [
       {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true},
       {id: 12, pic: images.gallery3, looking: false, selling: true, changing: true, price: 18, available: true},
-      {id: 13, pic: images.avatar, looking: false, selling: true, changing: true, price: 28, available: true},
+      {id: 13, pic: images.gallery5, looking: false, selling: true, changing: true, price: 28, available: true},
       {id: 14, pic: images.gallery4, looking: false, selling: true, changing: true, price: 13, available: true},
       {id: 15, pic: images.gallery2, looking: false, selling: true, changing: true, price: 18, available: true},
       {id: 16, pic: images.gallery, looking: false, selling: true, changing: true, price: 12, available: true},
-      {id: 17, pic: images.avatar, looking: false, selling: true, changing: true, price: 18, available: true},
+      {id: 17, pic: images.gallery5, looking: false, selling: true, changing: true, price: 18, available: true},
       {id: 18, pic: images.gallery3, looking: false, selling: true, changing: true, price: 13, available: true},
       {id: 19, pic: images.gallery2, looking: false, selling: true, changing: true, price: 12, available: true},
       {id: 20, pic: images.gallery4, looking: false, selling: true, changing: true, price: 15, available: true},
       {id: 21, pic: images.gallery2, looking: false, selling: true, changing: true, price: 17, available: true},
-      {id: 21, pic: images.avatar, looking: false, selling: true, changing: true, price: 17, available: true},
+      {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true},
     ];
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <View style={styles.header}>
+      <View style={[styles.header, basic.shadow]}>
         {/* <UserAvatar size={90} name="userPicture" bgColor={color.grey} src={images.avatar} /> */}
         <View style={styles.imgBox}>
           <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
-          <View style={styles.titleBox}>
-            <Text style={styles.title}>Username</Text>
-              <View style={styles.rowHead}>
-                <TouchableOpacity style={styles.col} onPress={() => {setSell(true)}}>
-                  <Text style={styles.colTxt}>J'echange</Text>
-                  <Text style={styles.colTxt}>8</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.col} onPress={() => {setSell(false)}}>
-                  <Text style={styles.colTxt}>Je veux</Text>
-                  <Text style={styles.colTxt}>23</Text>
-                </TouchableOpacity>
-                {/* <TouchableOpacity style={sell ? styles.badgeOn : styles.badgeOff} onPress={() => {setSell(true)}}>
-                  <Text style={styles.txt}>To sell / exchange</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={!sell ? styles.badgeOn : styles.badgeOff} onPress={() => {setSell(false)}}>
-                  <Text style={styles.txt}>Looking</Text>
-                </TouchableOpacity> */}
-              </View>
-          </View>
+          {/* <Text style={styles.title}>Username</Text> */}
+        </View>
+        <View  style={styles.iconBox}>
+          <TouchableOpacity style={styles.col} onPress={() => {setLooking(false)}}>
+            <View style={!look ? styles.iconBg : styles.iconBgT}>
+              <Image style={styles.icon} source={images.exchange} resizeMode="cover" />
+            </View>
+            <Text style={!look ? styles.colTxtBigOn : styles.colTxtBig}>Exchange</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.col} onPress={() => {setLooking(true)}}>
+            <View style={look ? styles.iconBg : styles.iconBgT}>
+              <Image style={styles.icon} source={images.looking} resizeMode="cover" />
+            </View>
+            <Text style={look ? styles.colTxtBigOn : styles.colTxtBig}>Looking</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.content}>
       <FlatList
-        data={sell == true ? changing : looking}
+        data={look == true ? looking : changing}
         numColumns={2}
         columnWrapperStyle={styles.row} 
         renderItem={({item}) => {
           return (
-          <View style={styles.card}>
+          <View style={[styles.card, basic.shadow]}>
             <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
             <View style={styles.cardBottom}>
               <Text style={styles.cardtxt}>Hirono Mischief - Destroyer</Text>
             </View>
-            <View style={styles.cardPrice}>
-              <Text style={styles.price}>15€</Text>
-            </View>
+            {/* {
+              item.looking != true &&
+              <View style={styles.cardPrice}>
+                <Text style={styles.price}>15€</Text>
+              </View>
+            } */}
           </View>
           )
         }}
         keyExtractor={item => item.id}
       />
       </View>
-      <TouchableOpacity style={styles.out} onPress={() => {navigation.dispatch(StackActions.popToTop())}}>
-        <Image style={styles.outImg} source={images.out} resizeMode="contain" />
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -108,24 +104,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 6,
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   header: {
     marginTop: 20,
     flex: 1,
     display: 'flex',
     justifyContent: 'space-around',
+    flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    width: '100%',
+    width: '95%',
+    borderRadius: 80,
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
   },
   content: {
     flex: 5,
@@ -145,26 +139,20 @@ const styles = StyleSheet.create({
   break: {
     height: 70,
   },
-  out: {
-    position: 'absolute',
-    top :90,
-    right: 20,
-  },
-  outImg: {
-    width: 40,
-    height: 40
-  },
   row: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: '100%',
+    width: '95%',
+    marginTop: 20,
+    alignSelf: 'center'
   },
   rowHead: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     width: '80%',
+    marginTop: 10,
   },
   badgeOn: {
     backgroundColor: color.pink,
@@ -180,16 +168,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Helvetica-Bold'
   },
-  titleBox: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '80%',
-    padding: 15,
-  },
   title: {
-    color: color.pink,
+    color: 'black',
     fontFamily: 'Helvetica',
     fontSize: 20,
+    marginTop: 5
   },
   rounded: {
     borderRadius: 50,
@@ -198,20 +181,16 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '45%',
-    height:300,
+    height:350,
     borderRadius: 6,
     marginBottom: 15,
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
     position: 'relative'
   },
   cardImg: {
     width: '100%',
     height: '100%',
     borderRadius: 6,
-    backgroundColor: color.grey
+    backgroundColor: color.ultraLightPurple
   },
   cardBottom: {
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
@@ -219,8 +198,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
     height: '25%',
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
+    borderRadius: 6,
     padding: 10,
   },
   cardtxt: {
@@ -245,9 +223,14 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   imgBox: {
+    flexDirection: 'col',
+    display: 'flex',
+  },
+  iconBox: {
     flexDirection: 'row',
     display: 'flex',
-    width: '80%'
+    justifyContent: 'space-around',
+    width: '60%',
   },
   col: {
     display: 'flex',
@@ -257,7 +240,46 @@ const styles = StyleSheet.create({
   colTxt: {
     fontFamily: 'Helvetica-Bold',
     alignSelf: 'center',
-    fontSize: 18
+    fontSize: 18,
+    color: color.grey
+  },
+  colTxtBig: {
+    fontFamily: 'Helvetica-Bold',
+    alignSelf: 'center',
+    fontSize: 14,
+    color: color.ligtGrey,
+    marginTop: 10,
+  },
+  colTxtBigOn: {
+    fontFamily: 'Helvetica-Bold',
+    alignSelf: 'center',
+    fontSize: 14,
+    color: color.pink,
+    marginTop: 10,
+  },
+  iconBg: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    padding: 5,
+    backgroundColor: color.ultraLightPurple,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  iconBgT: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    padding: 5,
+    backgroundColor: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  icon: {
+    width: 40,
+    height: 40,
   }
 });
 

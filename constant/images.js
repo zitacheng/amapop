@@ -1,10 +1,13 @@
 import logo from '../assets/logoLongP.png';
-import avatar from '../assets/hirono.png';
+import avatar from '../assets/gho.jpeg';
 import out from '../assets/out.png';
 import gallery from '../assets/gallery.png';
 import gallery2 from '../assets/gallery2.jpg';
 import gallery3 from '../assets/gallery3.png';
 import gallery4 from '../assets/gallery4.png';
+import gallery5 from '../assets/hirono.png';
+import looking from '../assets/looking.png';
+import exchange from '../assets/exchange.png';
 
 export const images = {
     logo: logo,
@@ -13,6 +16,9 @@ export const images = {
     gallery: gallery,
     gallery2: gallery2,
     gallery3: gallery3,
-    gallery4: gallery4
+    gallery4: gallery4,
+    gallery5: gallery5,
+    looking: looking,
+    exchange: exchange,
   };
   
