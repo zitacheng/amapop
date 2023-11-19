@@ -16,6 +16,7 @@ import {images} from '../constant/images';
 import {basic} from '../constant/basic';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import UserAvatar from 'react-native-user-avatar';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Profile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);
@@ -52,15 +53,27 @@ const Profile = ({navigation}) => {
       <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
         {/* <UserAvatar size={90} name="userPicture" bgColor={color.grey} src={images.avatar} /> */}
-        <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
-        <Text style={styles.title}>Username</Text>
-        <View style={styles.row}>
-            <TouchableOpacity style={sell ? styles.badgeOn : styles.badgeOff} onPress={() => {setSell(true)}}>
-              <Text style={styles.txt}>To sell / exchange</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={!sell ? styles.badgeOn : styles.badgeOff} onPress={() => {setSell(false)}}>
-              <Text style={styles.txt}>Looking</Text>
-            </TouchableOpacity>
+        <View style={styles.imgBox}>
+          <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
+          <View style={styles.titleBox}>
+            <Text style={styles.title}>Username</Text>
+              <View style={styles.rowHead}>
+                <TouchableOpacity style={styles.col} onPress={() => {setSell(true)}}>
+                  <Text style={styles.colTxt}>J'echange</Text>
+                  <Text style={styles.colTxt}>8</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.col} onPress={() => {setSell(false)}}>
+                  <Text style={styles.colTxt}>Je veux</Text>
+                  <Text style={styles.colTxt}>23</Text>
+                </TouchableOpacity>
+                {/* <TouchableOpacity style={sell ? styles.badgeOn : styles.badgeOff} onPress={() => {setSell(true)}}>
+                  <Text style={styles.txt}>To sell / exchange</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={!sell ? styles.badgeOn : styles.badgeOff} onPress={() => {setSell(false)}}>
+                  <Text style={styles.txt}>Looking</Text>
+                </TouchableOpacity> */}
+              </View>
+          </View>
         </View>
       </View>
       <View style={styles.content}>
@@ -72,6 +85,12 @@ const Profile = ({navigation}) => {
           return (
           <View style={styles.card}>
             <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
+            <View style={styles.cardBottom}>
+              <Text style={styles.cardtxt}>Hirono Mischief - Destroyer</Text>
+            </View>
+            <View style={styles.cardPrice}>
+              <Text style={styles.price}>15€</Text>
+            </View>
           </View>
           )
         }}
@@ -91,19 +110,25 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: color.lightOrange
   },
   header: {
     marginTop: 20,
-    flex: 2,
+    flex: 1,
     display: 'flex',
     justifyContent: 'space-around',
     alignItems: 'center',
     padding: 10,
     width: '100%',
+    backgroundColor: 'white',
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   content: {
-    flex: 4,
+    flex: 5,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -122,8 +147,8 @@ const styles = StyleSheet.create({
   },
   out: {
     position: 'absolute',
-    top :70,
-    right: 30,
+    top :90,
+    right: 20,
   },
   outImg: {
     width: 40,
@@ -134,6 +159,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
+  },
+  rowHead: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
   },
   badgeOn: {
     backgroundColor: color.pink,
@@ -149,10 +180,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Helvetica-Bold'
   },
+  titleBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '80%',
+    padding: 15,
+  },
   title: {
     color: color.pink,
     fontFamily: 'Helvetica',
-    fontSize: 20
+    fontSize: 20,
   },
   rounded: {
     borderRadius: 50,
@@ -161,14 +198,66 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '45%',
-    height:150,
+    height:300,
     borderRadius: 6,
     marginBottom: 15,
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    position: 'relative'
   },
   cardImg: {
     width: '100%',
     height: '100%',
     borderRadius: 6,
+    backgroundColor: color.grey
+  },
+  cardBottom: {
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: '25%',
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    padding: 10,
+  },
+  cardtxt: {
+    fontSize: 20,
+    fontFamily: 'Helvetica-Bold',
+    color: 'white'
+  },
+  cardPrice: {
+    backgroundColor: color.pink,
+    position: 'absolute',
+    width: 60,
+    height: 30,
+    borderRadius: 15,
+    top: 5,
+    right: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  price: {
+    fontFamily: 'Helvetica-Bold',
+    fontSize: 18,
+    color: 'white'
+  },
+  imgBox: {
+    flexDirection: 'row',
+    display: 'flex',
+    width: '80%'
+  },
+  col: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  colTxt: {
+    fontFamily: 'Helvetica-Bold',
+    alignSelf: 'center',
+    fontSize: 18
   }
 });
 

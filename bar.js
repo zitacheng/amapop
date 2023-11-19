@@ -4,28 +4,23 @@ import History from './container/History.js';
 import Favorite from './container/Favorite.js';
 import Profile from './container/Profile.js';
 import {Image} from 'react-native';
-import user from './assets/user.png';
-import gift from './assets/gift.png';
-import pop from './assets/pop.png';
-import box from './assets/box.png';
+import user from './assets/userOn.png';
+import gift from './assets/giftOn.png';
+import pop from './assets/popOn.png';
+import box from './assets/boxOn.png';
 import {basic} from './constant/basic.js';
 import {color} from './constant/color.js';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 const Tab = createMaterialBottomTabNavigator();
 export function TabScreen({navigation, route}) {
-  console.log("route ", route);
-
-  useEffect(() => {
-    console.log("route ", route)
-  }, [navigation, route]);
 
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      activeColor='white'
-      inactiveColor='white'
-      barStyle={{backgroundColor:color.pink}}
+      activeColor={color.pink}
+      inactiveColor={color.pink}
+      // barStyle={{backgroundColor:color.orange}}
     >
       <Tab.Screen
         name="Home"

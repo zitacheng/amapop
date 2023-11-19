@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: color.orange
+    backgroundColor: 'white'
   },
   first: {
     height: '20%',

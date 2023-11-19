@@ -7,7 +7,9 @@ export const color = {
     orange: '#fecc7d',
     lightOrange: '#ffe2b1',
     lightYellow: '#feedb5',
+    lightPurple: '#e7def8',
     darkOrange: '#ff916b',
     ultraLightYellow: '#f8f3d5',
+    ultraLightPurple: '#f2edf6',
   };
   

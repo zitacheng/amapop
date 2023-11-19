@@ -18,11 +18,18 @@ export const basic = StyleSheet.create({
     minWidth: '75%',
     marginTop: 15,
     borderRadius: 6,
-    borderColor: 'white',
+    borderColor: color.pink,
     borderWidth: 2,
   },
   btnTxt: {
     color: 'white',
+    fontSize: RFValue(14),
+    alignSelf: 'center',
+    fontFamily: 'Helvetica-Bold',
+    textTransform: 'uppercase',
+  },
+  btnTxtOut: {
+    color: color.pink,
     fontSize: RFValue(14),
     alignSelf: 'center',
     fontFamily: 'Helvetica-Bold',
@@ -39,7 +46,7 @@ export const basic = StyleSheet.create({
   label: {
     marginTop: 20,
     fontSize: 16,
-    color: 'white',
+    color: color.grey,
     marginBottom: 10,
     fontFamily: 'Helvetica-Bold',
     width: '100%',
@@ -47,7 +54,7 @@ export const basic = StyleSheet.create({
   input: {
     borderRadius: 6,
     padding: 20,
-    backgroundColor: color.lightOrange,
+    backgroundColor: color.ultraLightPurple,
     width: '100%',
   },
   break: {

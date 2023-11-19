@@ -61,7 +61,7 @@ const Login = ({navigation}) => {
                 onPress={() => {
                   setShow(!show);
                 }}>
-                <Icon name={show ? 'eye' : 'eye-off'} size={20} color={'white'} />
+                <Icon name={show ? 'eye' : 'eye-off'} size={20} color={color.pink} />
               </TouchableOpacity>
             </View>
           </>
@@ -99,7 +99,7 @@ const Login = ({navigation}) => {
               onPress={() => {
                 navigation.navigate('Register');
               }}>
-              <Text style={basic.btnTxt}>{"Sign Up"}</Text>
+              <Text style={basic.btnTxtOut}>{"Sign Up"}</Text>
             </TouchableOpacity>
           </>
         )}
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: color.orange
+    backgroundColor: 'white'
   },
   logo: {
     width: '50%',
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 6,
     padding: 8,
-    backgroundColor: color.lightOrange
+    backgroundColor: color.ultraLightPurple
   },
   eye: {
     padding: 2,
