@@ -6,7 +6,7 @@ import {
   StatusBar,
   Image,
   Text,
-  FlatList,
+  ScrollView,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
@@ -47,21 +47,21 @@ const Chat = ({navigation}) => {
       </View>
       <View style={[styles.list, basic.shadow]}>
         <Text style={styles.title}>Conversation</Text>
-        <FlatList
-        data={contacts}
-        renderItem={({item}) => {
-          return (
-          <TouchableOpacity style={[styles.contactLane, basic.shadow]} onPress={() => {navigation.navigate('Chatting');        }}>
-            <Image style={styles.contactImg} source={item.pic} resizeMode="cover" />
-            <View style={styles.contactInfo}>
-              <Text style={styles.contactTitle}>{item.name}</Text>
-              <Text style={styles.contactTxt}>{item.msg}</Text>
-            </View>
-          </TouchableOpacity>
-          )
-        }}
-        keyExtractor={item => item.id}
-      />
+        <ScrollView style={styles.scroll}>
+          {
+            contacts.map((item, id) => {
+                return (
+                  <TouchableOpacity style={styles.contactLane} onPress={() => {navigation.navigate('Chatting');        }}>
+                  <Image style={styles.contactImg} source={item.pic} resizeMode="cover" key={id} />
+                  <View style={styles.contactInfo}>
+                    <Text style={styles.contactTitle}>{item.name}</Text>
+                    <Text style={styles.contactTxt}>{item.msg}</Text>
+                  </View>
+                </TouchableOpacity>
+              )
+          })
+        }
+        </ScrollView>
       </View>
     </SafeAreaView>
   )
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '95%',
     borderRadius: 10,
-    padding: 20,
+    padding: 10,
     marginTop: 20,
   },
   title: {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
+    width: '90%',
     marginBottom: 20,
     alignSelf: 'center',
     backgroundColor: 'white',
@@ -125,6 +125,9 @@ const styles = StyleSheet.create({
   contactTxt: {
     fontFamily: 'Helvetica',
     fontSize: 16
+  },
+  scroll: {
+    width: '100%'
   }
 });
 
