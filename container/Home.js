@@ -19,12 +19,15 @@ import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
 
 Icon.loadFont();
 
 const Home = ({navigation}) => {
   const [search, setSearch] = useState('');
-  const [change, setChange] = useState(false);
+  const [change, setChange] = useState(true);
+  const [look, setLook] = useState(false);
+
   // const menu = [
   //   {id: -1, name: 'Changer', selected: true},
   //   {id: 0, name: 'Recherche', selected: false},
@@ -40,25 +43,23 @@ const Home = ({navigation}) => {
   // ]
 
   const [menu, setMenu] = useState([
-    {id: 0, name: 'Changer', selected: true, exchange: true,},
-    {id: 1, name: 'Recherche', selected: false, look: true},
-    {id: 2, name: 'Skullpanda', selected: false},
+    {id: 0, name: 'Labubu', selected: false},
+    {id: 1, name: 'Azura', selected: false},
+    {id: 2, name: 'SkullPanda', selected: false},
     {id: 3, name: 'Hirono', selected: false},
     {id: 4, name: 'Nori', selected: false},
     {id: 5, name: 'Molly', selected: false},
-    {id: 6, name: 'SkullPanda', selected: false},
+    {id: 6, name: 'Hapuchichi', selected: false},
     {id: 7, name: 'Cry Baby', selected: false},
     {id: 8, name: 'Dimoo', selected: false},
-    {id: 9, name: 'Azura', selected: false},
-    {id: 10, name: 'Labubu', selected: false},
   ]);
 
   const pops = [
-    {id: 1, name: 'Hirono',  pic: images.gallery, username: 'Sophie', look: false},
-    {id: 2, name: 'SkullPanda',  pic: images.gallery6, username: 'Max', exchange: true},
-    {id: 3, name: 'Hirono',  pic: images.gallery3, username: 'Esther', look: true},
-    {id: 3, name: 'Hirono',  pic: images.gallery4, username: 'Lilia', exchange: true},
-    {id: 3, name: 'Hirono',  pic: images.gallery5, username: 'Marine', exchange: true},
+    {id: 1, name: 'Hirono',  pic: images.gallery, model: 'model name', look: false},
+    {id: 2, name: 'SkullPanda',  pic: images.gallery6, model: 'model name', exchange: true},
+    {id: 3, name: 'Hirono',  pic: images.gallery3, model: 'model name', look: true},
+    {id: 3, name: 'Hirono',  pic: images.gallery4, model: 'model name', exchange: true},
+    {id: 3, name: 'Hirono',  pic: images.gallery5, model: 'model name', exchange: true},
   ];
 
   const onChangeMenu = (item) => {
@@ -86,10 +87,18 @@ const Home = ({navigation}) => {
       </View>
       <View style={basic.break} />
       <View style={styles.btnSelect}>
+        <View style={[styles.togglesBox, basic.shadow]}>
+          <TouchableOpacity style={!look ? styles.toggleOn : styles.toggleOff} onPress={() => {setLook(false)}}>
+            <Text style={styles.smTxt}>Échange</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={look ? styles.toggleOn : styles.toggleOff} onPress={() => {setLook(true)}}>
+            <Text style={styles.smTxt}>Recherche</Text>
+          </TouchableOpacity>
+        </View>
         {
           menu.map((item, id) => {
             return (
-              <TouchableOpacity style={[styles.badge, {backgroundColor: item.selected ? color.pink : color.lightPurple}]}
+              <TouchableOpacity style={[styles.badge, basic.shadow, {backgroundColor: item.selected ? color.pink : color.lightPurple}]}
                 onPress={() => {
                   onChangeMenu(item);
                 }} key={id}>
@@ -103,10 +112,8 @@ const Home = ({navigation}) => {
         <View style={styles.scrollContent}>
           {
             pops.map((pop) => {
-              //TODO compare to ID in the future instead of the label
-              // Possibilityy to implement multilanguage
-              if (menu.find((e) => {
-                return ((e.name === pop.name && e.selected == true) && ((e.look === pop.look) || (e.exchange === pop.exchange)))})) {
+              if (menu.find((e) => {return (e.name === pop.name && e.selected == true)})
+                && ((look == pop.look) || (pop.exchange == true && !look))) {
                 return (
                   <View style={[styles.card, basic.shadow]}>
                     <View style={styles.imgBox}>
@@ -116,7 +123,7 @@ const Home = ({navigation}) => {
                       </View>
                     </View>
                     <Text style={styles.name}>{pop.name}</Text>
-                    <Text style={styles.sub}>{pop.username}</Text>
+                    <Text style={styles.sub}>{pop.model}</Text>
                     <View style={styles.btnRow}>
                       <TouchableOpacity style={basic.smBtnRound}>
                         <Text style={styles.smtxt}>{pop.look == true ? 'Recherche' : 'Échanger'}</Text>
@@ -228,7 +235,30 @@ const styles = StyleSheet.create({
     padding: 5,
     marginTop: 5,
     marginRight: 5
-  }
+  },
+  togglesBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderColor: color.pink,
+    borderWidth: 1.5,
+    borderRadius: 20,
+    flexDirection: 'row',
+    backgroundColor: color.lightPurple,
+    marginRight: 5,
+  },
+  toggleOff: {
+    backgroundColor: color.lightPurple,
+    padding: 6,
+    borderRadius: 20,
+  },
+  toggleOn: {
+    backgroundColor: color.pink,
+    color: 'white',
+    padding: 6,
+    borderRadius: 20,
+  },
 });
 
 export default Home;
