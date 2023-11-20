@@ -6,6 +6,7 @@ import gallery2 from '../assets/gallery2.jpg';
 import gallery3 from '../assets/gallery3.png';
 import gallery4 from '../assets/gallery4.png';
 import gallery5 from '../assets/hirono.png';
+import gallery6 from '../assets/skull.png';
 import looking from '../assets/looking.png';
 import exchange from '../assets/exchange.png';
 
@@ -18,6 +19,7 @@ export const images = {
     gallery3: gallery3,
     gallery4: gallery4,
     gallery5: gallery5,
+    gallery6: gallery6,
     looking: looking,
     exchange: exchange,
   };

@@ -123,6 +123,11 @@ export const basic = StyleSheet.create({
     minWidth: '75%',
     marginTop: 10,
   },
+  smBtnRound: {
+    backgroundColor: color.pink,
+    padding: 5,
+    borderRadius: 15
+  },
   smbtn: {
     backgroundColor: 'black',
     padding: 10,

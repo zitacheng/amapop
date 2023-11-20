@@ -20,7 +20,6 @@ import {color} from '../constant/color';
 import {basic} from '../constant/basic';
 import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 Icon.loadFont();
 

@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
+    backgroundColor: 'white'
   },
   icon: {
     padding: 2,
