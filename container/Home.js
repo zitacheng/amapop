@@ -24,10 +24,23 @@ Icon.loadFont();
 const Home = ({navigation}) => {
   const [search, setSearch] = useState('');
   const [change, setChange] = useState(false);
-  const menu = [
-    {id: -1, name: 'Changer', selected: true},
-    {id: 0, name: 'Recherche', selected: false},
-    {id: 1, name: 'Labubu', selected: false},
+  // const menu = [
+  //   {id: -1, name: 'Changer', selected: true},
+  //   {id: 0, name: 'Recherche', selected: false},
+  //   {id: 1, name: 'Labubu', selected: false},
+  //   {id: 2, name: 'Skullpanda', selected: false},
+  //   {id: 3, name: 'hirono', selected: false},
+  //   {id: 4, name: 'Nori', selected: false},
+  //   {id: 5, name: 'Molly', selected: false},
+  //   {id: 6, name: 'Skullpanda', selected: false},
+  //   {id: 7, name: 'Cry Baby', selected: false},
+  //   {id: 8, name: 'Dimoo', selected: false},
+  //   {id: 9, name: 'Azura', selected: false},
+  // ]
+
+  const [menu, setMenu] = useState([
+    {id: 0, name: 'Changer', selected: true},
+    {id: 1, name: 'Recherche', selected: false},
     {id: 2, name: 'Skullpanda', selected: false},
     {id: 3, name: 'hirono', selected: false},
     {id: 4, name: 'Nori', selected: false},
@@ -36,7 +49,13 @@ const Home = ({navigation}) => {
     {id: 7, name: 'Cry Baby', selected: false},
     {id: 8, name: 'Dimoo', selected: false},
     {id: 9, name: 'Azura', selected: false},
-  ]
+    {id: 10, name: 'Labubu', selected: false},
+  ]);
+
+  console.log("menu ", menu)
+  console.log("menu  ARRAY ", Array.isArray(menu))
+  console.log("menu  ARRAY ", typeof(menu))
+
   const pops = [
     {id: 1, name: 'Hirono',  pic: images.gallery, username: 'Sophie', look: false},
     {id: 2, name: 'SkullPanda',  pic: images.gallery6, username: 'Max', exchange: true},
@@ -44,6 +63,12 @@ const Home = ({navigation}) => {
     {id: 3, name: 'Hirono',  pic: images.gallery4, username: 'Lilia', exchange: true},
     {id: 3, name: 'Hirono',  pic: images.gallery5, username: 'Marine', exchange: true},
   ];
+
+  const onChangeMenu = (item) => {
+    let newArr = [...menu];
+        newArr[item.id].selected = !item.selected;
+        setMenu(newArr);
+      }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,12 +90,12 @@ const Home = ({navigation}) => {
       <View style={basic.break} />
       <View style={styles.btnSelect}>
         {
-          menu.map((item) => {
+          menu.map((item, id) => {
             return (
-              <TouchableOpacity style={[styles.badge, {backgroundColor: item.selected ? color.darkOrange : color.grey}]}
+              <TouchableOpacity style={[styles.badge, {backgroundColor: item.selected ? color.pink : color.lightPurple}]}
                 onPress={() => {
-                  //TODO change value
-                }}>
+                  onChangeMenu(item);
+                }} key={id}>
                 <Text style={styles.smTxt}>{item.name}</Text>
               </TouchableOpacity>
             )
@@ -85,7 +110,7 @@ const Home = ({navigation}) => {
                 <View style={[styles.card, basic.shadow]}>
                   <View style={styles.imgBox}>
                     <Image style={styles.cardImg} source={pop.pic} resizeMode="cover" />
-                    <View style={[styles.topBtn, {backgroundColor: pop.look ? color.blue : color.green}]}>
+                    <View style={[styles.topBtn, basic.shadow]}>
                       <Text style={styles.smTxt}>{pop.look ? "Cherche" : 'Échange'}</Text>
                     </View>
                   </View>
@@ -96,7 +121,7 @@ const Home = ({navigation}) => {
                       <Text style={styles.smtxt}>Contact</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={basic.smBtnRound}>
-                      <Text style={styles.smtxt}>Plus</Text>
+                      <Text style={styles.smtxt}>Voir plus</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -176,7 +201,8 @@ const styles = StyleSheet.create({
     top: 5,
     right: 5,
     padding: 5,
-    borderRadius: 15
+    borderRadius: 15,
+    // backgroundColor: color.blue
   },
   smTxt: {
     color: 'white',

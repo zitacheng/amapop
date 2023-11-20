@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     top: 70,
     left: 20,
     position: 'absolute',
+    zIndex: 100
   },
   chatBox: {
     width: '80%',
