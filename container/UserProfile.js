@@ -10,7 +10,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
-import {RFValue} from 'react-native-responsive-fontsize';
+import arrow from '../assets/arrow.png';
 import {color} from '../constant/color';
 import {images} from '../constant/images';
 import {basic} from '../constant/basic';
@@ -18,9 +18,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import UserAvatar from 'react-native-user-avatar';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconSim from 'react-native-vector-icons/SimpleLineIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const Profile = ({navigation}) => {
+const UserProfile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);
   const [look, setLooking] = useState(true);
   const looking = [
@@ -83,12 +84,11 @@ const Profile = ({navigation}) => {
           return (
           <View style={[styles.card, basic.shadow]}>
             <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
-            <LinearGradient
-            colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
+            <LinearGradient colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
               <Text style={styles.cardtitle}>Hirono Mischief - Destroyer</Text>
             </LinearGradient>
             <TouchableOpacity style={[styles.cardBottom, basic.shadow]}>
-              <IconMat name={'lead-pencil'} size={20} color={color.pink} />
+              <IconMat name={'send'} size={20} color={color.pink} />
             </TouchableOpacity>
           </View>
           )
@@ -96,6 +96,10 @@ const Profile = ({navigation}) => {
         keyExtractor={item => item.id}
       />
       </View>
+        <TouchableOpacity style={styles.backUp}
+            onPress={() => { navigation.goBack();}}>
+            <IconSim name={'arrow-left'} size={20} color={'white'} />
+        </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -108,6 +112,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: color.pink,
+  },
+  back: {
+    width: 30,
+    height: 40,
+  },
+  backUp: {
+    top: 50,
+    left: 10,
+    position: 'absolute',
+    zIndex: 100,
+    padding: 10,
   },
   header: {
     flex: 1,
@@ -181,12 +196,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     width: '100%',
-    paddingLeft: 2,
-    paddingRight: 2,
-    paddingBottom: 10,
-    paddingTop: 10,
+    padding: 3,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   cardtitle: {
     fontSize: 16,
@@ -235,4 +248,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default UserProfile;

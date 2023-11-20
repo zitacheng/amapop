@@ -4,6 +4,7 @@ import Splash from './container/Splash.js';
 import Login from './container/Login.js';
 import Register from './container/Register.js';
 import Profile from './container/Profile.js';
+import UserProfile from './container/UserProfile.js';
 import Settings from './container/Settings.js';
 import Chat from './container/Chat.js';
 import Chatting from './container/Chatting.js';
@@ -11,7 +12,6 @@ import {TabScreen} from './bar.js';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {createStackNavigator} from '@react-navigation/stack';
-import {color} from './constant/color';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +30,7 @@ export default function App() {
         <Stack.Screen name="Home" component={TabScreen} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="UserProfile" component={UserProfile} />
         <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name="Chatting" component={Chatting} />
       </Stack.Navigator>

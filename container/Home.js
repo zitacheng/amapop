@@ -12,14 +12,13 @@ import {
 } from 'react-native';
 import {images} from '../constant/images';
 import arrow from '../assets/arrow.png';
-// import Icon from 'react-native-vector-icons/Ionicons';
 import {color} from '../constant/color';
 import {basic} from '../constant/basic';
 import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 Icon.loadFont();
 
@@ -27,20 +26,6 @@ const Home = ({navigation}) => {
   const [search, setSearch] = useState('');
   const [change, setChange] = useState(true);
   const [look, setLook] = useState(false);
-
-  // const menu = [
-  //   {id: -1, name: 'Changer', selected: true},
-  //   {id: 0, name: 'Recherche', selected: false},
-  //   {id: 1, name: 'Labubu', selected: false},
-  //   {id: 2, name: 'Skullpanda', selected: false},
-  //   {id: 3, name: 'hirono', selected: false},
-  //   {id: 4, name: 'Nori', selected: false},
-  //   {id: 5, name: 'Molly', selected: false},
-  //   {id: 6, name: 'Skullpanda', selected: false},
-  //   {id: 7, name: 'Cry Baby', selected: false},
-  //   {id: 8, name: 'Dimoo', selected: false},
-  //   {id: 9, name: 'Azura', selected: false},
-  // ]
 
   const [menu, setMenu] = useState([
     {id: 0, name: 'Labubu', selected: false},
@@ -118,15 +103,13 @@ const Home = ({navigation}) => {
                   <View style={[styles.card, basic.shadow]}>
                     <View style={styles.imgBox}>
                       <Image style={styles.cardImg} source={pop.pic} resizeMode="cover" />
-                      <TouchableOpacity style={[styles.topBtn, basic.shadow]}>
-                        <Text style={styles.smTxt}>{'Plus'}</Text>
-                      </TouchableOpacity>
+                      <LinearGradient colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.nameBg}>
+                        <Text style={styles.name}>{pop.name + ' ' + pop.model}</Text>
+                      </LinearGradient>
                     </View>
-                    <Text style={styles.name}>{pop.name}</Text>
-                    <Text style={styles.sub}>{pop.model}</Text>
-                    <View style={styles.btnRow}>
-                      <TouchableOpacity style={basic.smBtnRound}>
-                        <Text style={styles.smtxt}>{pop.look == true ? 'Recherche' : 'Échanger'}</Text>
+                    <View style={[styles.btnRow, basic.shadow]}>
+                      <TouchableOpacity style={[styles.smBtnRound, basic.shadow]}  onPress={() => {navigation.navigate('UserProfile');}}>
+                        <Text style={styles.profileTxt}>Voir profil</Text>
                       </TouchableOpacity>
                       <Icon name={'send'} size={20} color={color.pink} />
                     </View>
@@ -158,7 +141,10 @@ const styles = StyleSheet.create({
   card: {
     width: '45%',
     height: 220,
-    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 35,
+    borderBottomRightRadius: 35,
     marginBottom: 15,
     position: 'relative',
     backgroundColor: 'white',
@@ -167,24 +153,40 @@ const styles = StyleSheet.create({
   cardImg: {
     width: '100%',
     height: '100%',
-    borderRadius: 20,
-    backgroundColor: color.ultraLightPurple,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 35,
+    borderBottomRightRadius: 35,
   },
   flat: {
     flex: 1,
     width: '90%',
   },
+  nameBg: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    paddingLeft: 3,
+    paddingRight: 3,
+    paddingTop: 5,
+    paddingRight: 10,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    textAlign: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    overflow: 'hidden'
+  },
   name: {
-    fontSize: 20,
-    fontFamily: 'Helvetica'
+    fontSize: 16,
+    fontFamily: 'Helvetica-Bold',
+    color: 'white',
+    padding: 2,
+    textAlign: 'center',
   },
   sub: {
     fontSize: 16,
     fontFamily: 'Helvetica',
     color: color.grey
-  },
-  smtxt: {
-    color: 'white'
   },
   scroll: {
     flex: 1,
@@ -200,10 +202,9 @@ const styles = StyleSheet.create({
   },
   imgBox: {
     position: 'relative',
-    width: '90%',
-    height: '60%',
+    width: '100%',
+    height: '100%',
     borderRadius: 20,
-    marginTop: 10,
   },
   topBtn: {
     position: 'absolute',
@@ -217,12 +218,30 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Helvetica-Bold'
   },
+  profileTxt: {
+    color: 'white',
+    fontFamily: 'Helvetica-Bold',
+    padding: 5,
+  },
+  smBtnRound: {
+    backgroundColor: color.pink,
+    padding: 5,
+    borderRadius: 20
+  },
   btnRow: {
     flexDirection: 'row',
     display: 'flex',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
     justifyContent: 'space-between',
-    width: '90%',
-    marginTop: 5,
+    width: '100%',
+    height: '30%',
+    borderRadius: 35,
+    backgroundColor: 'white',
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   btnSelect: {
     flexDirection: 'row',
