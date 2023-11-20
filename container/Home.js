@@ -12,12 +12,13 @@ import {
 } from 'react-native';
 import {images} from '../constant/images';
 import arrow from '../assets/arrow.png';
-import Icon from 'react-native-vector-icons/Ionicons';
+// import Icon from 'react-native-vector-icons/Ionicons';
 import {color} from '../constant/color';
 import {basic} from '../constant/basic';
 import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
 import { ScrollView } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 Icon.loadFont();
 
@@ -39,22 +40,18 @@ const Home = ({navigation}) => {
   // ]
 
   const [menu, setMenu] = useState([
-    {id: 0, name: 'Changer', selected: true},
-    {id: 1, name: 'Recherche', selected: false},
+    {id: 0, name: 'Changer', selected: true, exchange: true,},
+    {id: 1, name: 'Recherche', selected: false, look: true},
     {id: 2, name: 'Skullpanda', selected: false},
-    {id: 3, name: 'hirono', selected: false},
+    {id: 3, name: 'Hirono', selected: false},
     {id: 4, name: 'Nori', selected: false},
     {id: 5, name: 'Molly', selected: false},
-    {id: 6, name: 'Skullpanda', selected: false},
+    {id: 6, name: 'SkullPanda', selected: false},
     {id: 7, name: 'Cry Baby', selected: false},
     {id: 8, name: 'Dimoo', selected: false},
     {id: 9, name: 'Azura', selected: false},
     {id: 10, name: 'Labubu', selected: false},
   ]);
-
-  console.log("menu ", menu)
-  console.log("menu  ARRAY ", Array.isArray(menu))
-  console.log("menu  ARRAY ", typeof(menu))
 
   const pops = [
     {id: 1, name: 'Hirono',  pic: images.gallery, username: 'Sophie', look: false},
@@ -106,26 +103,29 @@ const Home = ({navigation}) => {
         <View style={styles.scrollContent}>
           {
             pops.map((pop) => {
-              return (
-                <View style={[styles.card, basic.shadow]}>
-                  <View style={styles.imgBox}>
-                    <Image style={styles.cardImg} source={pop.pic} resizeMode="cover" />
-                    <View style={[styles.topBtn, basic.shadow]}>
-                      <Text style={styles.smTxt}>{pop.look ? "Cherche" : 'Échange'}</Text>
+              //TODO compare to ID in the future instead of the label
+              // Possibilityy to implement multilanguage
+              if (menu.find((e) => {
+                return ((e.name === pop.name && e.selected == true) && ((e.look === pop.look) || (e.exchange === pop.exchange)))})) {
+                return (
+                  <View style={[styles.card, basic.shadow]}>
+                    <View style={styles.imgBox}>
+                      <Image style={styles.cardImg} source={pop.pic} resizeMode="cover" />
+                      <View style={[styles.topBtn, basic.shadow]}>
+                        <Text style={styles.smTxt}>{'Plus'}</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.name}>{pop.name}</Text>
+                    <Text style={styles.sub}>{pop.username}</Text>
+                    <View style={styles.btnRow}>
+                      <TouchableOpacity style={basic.smBtnRound}>
+                        <Text style={styles.smtxt}>{pop.look == true ? 'Recherche' : 'Échanger'}</Text>
+                      </TouchableOpacity>
+                      <Icon name={'send'} size={20} color={color.pink} />
                     </View>
                   </View>
-                  <Text style={styles.name}>{pop.name}</Text>
-                  <Text style={styles.sub}>{pop.username}</Text>
-                  <View style={styles.btnRow}>
-                    <TouchableOpacity style={basic.smBtnRound}>
-                      <Text style={styles.smtxt}>Contact</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={basic.smBtnRound}>
-                      <Text style={styles.smtxt}>Voir plus</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )
+                )
+              }
             })
           }
         </View>
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     right: 5,
     padding: 5,
     borderRadius: 15,
-    // backgroundColor: color.blue
+    backgroundColor: color.green
   },
   smTxt: {
     color: 'white',
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
   btnRow: {
     flexDirection: 'row',
     display: 'flex',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     width: '90%',
     marginTop: 5,
   },
