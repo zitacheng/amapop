@@ -25,11 +25,11 @@ const UserProfile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);
   const [look, setLooking] = useState(true);
   const looking = [
-      {id: 1, pic: images.gallery6, looking: true, selling: false, changing: false, price: null, available: false},
-      {id: 2, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false},
-      {id: 3, pic: images.gallery3, looking: true, selling: false, changing: false, price: null, available: false},
-      {id: 4, pic: images.gallery5, looking: true, selling: false, changing: false, price: null, available: false},
-      {id: 5, pic: images.gallery, looking: true, selling: false, changing: false, price: null, available: false},
+      {id: 1, pic: images.gallery6, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
+      {id: 2, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
+      {id: 3, pic: images.gallery3, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
+      {id: 4, pic: images.gallery5, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
+      {id: 5, pic: images.gallery, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
       {id: 6, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false},
       {id: 7, pic: images.gallery5, looking: true, selling: false, changing: false, price: null, available: false},
       {id: 8, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false},
@@ -90,6 +90,12 @@ const UserProfile = ({navigation}) => {
             <TouchableOpacity style={[styles.cardBottom, basic.shadow]}>
               <IconMat name={'send'} size={20} color={color.pink} />
             </TouchableOpacity>
+            {
+              item.prio &&
+              <View style={[styles.prio, basic.shadow]}>
+                <Icon name={'star'} size={30} color={color.orange} />
+              </View>
+            }
           </View>
           )
         }}
@@ -245,6 +251,16 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: 'white',
     marginTop: 10,
+  },
+  prio: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    width: 40,
+    height: 40,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });
 
