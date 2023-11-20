@@ -16,7 +16,8 @@ import {images} from '../constant/images';
 import {basic} from '../constant/basic';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import UserAvatar from 'react-native-user-avatar';
-import { LinearGradient } from 'expo-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
+import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Profile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);
@@ -53,25 +54,25 @@ const Profile = ({navigation}) => {
       <StatusBar barStyle="dark-content" />
       <View style={[styles.header, basic.shadow]}>
         {/* <UserAvatar size={90} name="userPicture" bgColor={color.grey} src={images.avatar} /> */}
-        <View style={styles.imgBox}>
-          <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
-          {/* <Text style={styles.title}>Username</Text> */}
-        </View>
-        <View  style={styles.iconBox}>
-          <TouchableOpacity style={styles.col} onPress={() => {setLooking(false)}}>
-            <View style={!look ? styles.iconBg : styles.iconBgT}>
-              <Image style={styles.icon} source={images.exchange} resizeMode="cover" />
-            </View>
-            <Text style={!look ? styles.colTxtBigOn : styles.colTxtBig}>Exchange</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.col} onPress={() => {setLooking(true)}}>
-            <View style={look ? styles.iconBg : styles.iconBgT}>
-              <Image style={styles.icon} source={images.looking} resizeMode="cover" />
-            </View>
-            <Text style={look ? styles.colTxtBigOn : styles.colTxtBig}>Looking</Text>
-          </TouchableOpacity>
-        </View>
+        <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
+        <Text style={styles.title}>SlashZita</Text>
+        <TouchableOpacity>
+          <Icon name={'add-circle'} size={40} color={'white'} />
+        </TouchableOpacity>
       </View>
+      <View  style={styles.textRow}>
+        <TouchableOpacity style={styles.col} onPress={() => {setLooking(false)}}>
+          <Text style={!look ? styles.colTxtBigOn : styles.colTxtBig}>J'échange</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.col} onPress={() => {setLooking(true)}}>
+          <Text style={look ? styles.colTxtBigOn : styles.colTxtBig}>Je recherche</Text>
+        </TouchableOpacity>
+      </View>
+      <View  style={styles.iconBox}>
+        <Icon name={'triangle'} size={15} color={!look ? 'white' : 'transparent'} />
+        <Icon name={'triangle'} size={15} color={look ? 'white' : 'transparent'} />
+      </View>
+
       <View style={styles.content}>
       <FlatList
         data={look == true ? looking : changing}
@@ -81,15 +82,10 @@ const Profile = ({navigation}) => {
           return (
           <View style={[styles.card, basic.shadow]}>
             <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
-            <View style={styles.cardBottom}>
-              <Text style={styles.cardtxt}>Hirono Mischief - Destroyer</Text>
-            </View>
-            {/* {
-              item.looking != true &&
-              <View style={styles.cardPrice}>
-                <Text style={styles.price}>15€</Text>
-              </View>
-            } */}
+            <Text style={[styles.cardtitle, basic.shadow]}>Hirono Mischief - Destroyer</Text>
+            <TouchableOpacity style={[styles.cardBottom, basic.shadow]}>
+              <IconMat name={'lead-pencil'} size={20} color={color.pink} />
+            </TouchableOpacity>
           </View>
           )
         }}
@@ -107,10 +103,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: color.pink,
   },
   header: {
-    marginTop: 20,
     flex: 1,
     display: 'flex',
     justifyContent: 'space-around',
@@ -118,8 +113,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     width: '95%',
-    borderRadius: 80,
-    backgroundColor: 'white',
   },
   content: {
     flex: 5,
@@ -129,15 +122,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     flexWrap: 'wrap',
-  },
-  logo: {
-    width: '40%',
-    height: '10%',
-    alignSelf: 'center',
-    marginTop: '5%',
-  },
-  break: {
-    height: 70,
+    backgroundColor: 'white',
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
   },
   row: {
     display: 'flex',
@@ -147,44 +134,25 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignSelf: 'center'
   },
-  rowHead: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '80%',
-    marginTop: 10,
-  },
-  badgeOn: {
-    backgroundColor: color.pink,
-    padding: 10,
-    borderRadius: 18,
-  },
-  badgeOff: {
-    backgroundColor: color.ligtGrey,
-    padding: 10,
-    borderRadius: 18,
-  },
-  txt: {
-    color: 'white',
-    fontFamily: 'Helvetica-Bold'
-  },
   title: {
-    color: 'black',
-    fontFamily: 'Helvetica',
+    color: 'white',
+    fontFamily: 'Helvetica-Bold',
     fontSize: 20,
-    marginTop: 5
+    padding: 10,
+    flex: 1,
   },
   rounded: {
-    borderRadius: 50,
-    width: 100,
-    height: 100
+    borderRadius: 25,
+    width: 50,
+    height: 50
   },
   card: {
     width: '45%',
-    height:350,
+    height: 260,
     borderRadius: 6,
     marginBottom: 15,
-    position: 'relative'
+    position: 'relative',
+    backgroundColor: 'white',
   },
   cardImg: {
     width: '100%',
@@ -193,44 +161,42 @@ const styles = StyleSheet.create({
     backgroundColor: color.ultraLightPurple
   },
   cardBottom: {
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: 'white',
     position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    height: '25%',
-    borderRadius: 6,
+    bottom: 10,
+    right: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     padding: 10,
-  },
-  cardtxt: {
-    fontSize: 20,
-    fontFamily: 'Helvetica-Bold',
-    color: 'white'
-  },
-  cardPrice: {
-    backgroundColor: color.pink,
-    position: 'absolute',
-    width: 60,
-    height: 30,
-    borderRadius: 15,
-    top: 5,
-    right: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  price: {
-    fontFamily: 'Helvetica-Bold',
-    fontSize: 18,
-    color: 'white'
-  },
-  imgBox: {
-    flexDirection: 'col',
     display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  cardtitle: {
+    fontSize: 16,
+    fontFamily: 'Helvetica-Bold',
+    color: 'white',
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    padding: 3,
+    textAlign: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)'
+  },
+  textRow: {
+    flexDirection: 'row',
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '95%',
+    paddingBottom: 20,
   },
   iconBox: {
     flexDirection: 'row',
     display: 'flex',
     justifyContent: 'space-around',
-    width: '60%',
+    width: '95%',
+    marginBottom: -2
   },
   col: {
     display: 'flex',
@@ -246,41 +212,17 @@ const styles = StyleSheet.create({
   colTxtBig: {
     fontFamily: 'Helvetica-Bold',
     alignSelf: 'center',
-    fontSize: 14,
-    color: color.ligtGrey,
+    fontSize: 22,
+    color: 'rgba(255, 255, 255, 0.4)',
     marginTop: 10,
   },
   colTxtBigOn: {
     fontFamily: 'Helvetica-Bold',
     alignSelf: 'center',
-    fontSize: 14,
-    color: color.pink,
+    fontSize: 22,
+    color: 'white',
     marginTop: 10,
   },
-  iconBg: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    padding: 5,
-    backgroundColor: color.ultraLightPurple,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  iconBgT: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    padding: 5,
-    backgroundColor: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  icon: {
-    width: 40,
-    height: 40,
-  }
 });
 
 export default Profile;

@@ -118,9 +118,9 @@ const Home = ({navigation}) => {
                   <View style={[styles.card, basic.shadow]}>
                     <View style={styles.imgBox}>
                       <Image style={styles.cardImg} source={pop.pic} resizeMode="cover" />
-                      <View style={[styles.topBtn, basic.shadow]}>
+                      <TouchableOpacity style={[styles.topBtn, basic.shadow]}>
                         <Text style={styles.smTxt}>{'Plus'}</Text>
-                      </View>
+                      </TouchableOpacity>
                     </View>
                     <Text style={styles.name}>{pop.name}</Text>
                     <Text style={styles.sub}>{pop.model}</Text>
@@ -188,13 +188,15 @@ const styles = StyleSheet.create({
   },
   scroll: {
     flex: 1,
-    width: '90%',
+    width: '100%',
     marginTop: 20
   },
   scrollContent: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    paddingRight: 10,
+    paddingLeft: 10,
   },
   imgBox: {
     position: 'relative',
