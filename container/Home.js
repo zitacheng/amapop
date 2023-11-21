@@ -72,7 +72,7 @@ const Home = ({navigation}) => {
       </View>
       <View style={basic.break} />
       <View style={styles.btnSelect}>
-        <View style={[styles.togglesBox, basic.shadow]}>
+        <View style={styles.togglesBox}>
           <TouchableOpacity style={!look ? styles.toggleOn : styles.toggleOff} onPress={() => {setLook(false)}}>
             <Text style={styles.smTxt}>Échange</Text>
           </TouchableOpacity>
@@ -246,16 +246,17 @@ const styles = StyleSheet.create({
   btnSelect: {
     flexDirection: 'row',
     display: 'flex',
-    justifyContent: 'center',
-    width: '90%',
+    width: '92%',
     marginTop: 5,
     flexWrap: 'wrap',
+    // justifyContent: 'center'
   },
   badge: {
     borderRadius: 15,
     padding: 5,
     marginTop: 5,
-    marginRight: 5
+    marginRight: 5,
+    marginBottom: 6,
   },
   togglesBox: {
     display: 'flex',
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
   toggleOn: {
     backgroundColor: color.pink,
     color: 'white',
-    padding: 6,
+    padding: 9,
     borderRadius: 20,
   },
 });

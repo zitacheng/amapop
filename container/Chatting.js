@@ -18,8 +18,7 @@ import arrow from '../assets/arrow.png';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {color} from '../constant/color';
 import {basic} from '../constant/basic';
-import {MultiLang} from '../component/Multilang';
-import {Load} from '../component/Load';
+import IconSim from 'react-native-vector-icons/SimpleLineIcons';
 
 Icon.loadFont();
 
@@ -37,8 +36,13 @@ const Chatting = ({navigation}) => {
             enabled style={styles.container}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <>
-                <View style={[styles.header, basic.shadow]}>
+                  <View style={[styles.header, basic.shadow]}>
+                    <TouchableOpacity style={styles.backUp}
+                        onPress={() => { navigation.goBack();}}>
+                        <IconSim name={'arrow-left'} size={20} color={'white'} style={styles.icon} />
+                    </TouchableOpacity>
                     <Text style={styles.title}>Matthieu</Text>
+                    <View style={styles.empty}/>
                 </View>
                 <FlatList
                     data={messages}
@@ -88,10 +92,6 @@ const Chatting = ({navigation}) => {
                 </>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
-        <TouchableOpacity style={styles.backUp}
-            onPress={() => { navigation.goBack();}}>
-            <Image style={styles.back} source={arrow} resizeMode="contain" />
-        </TouchableOpacity>
     </SafeAreaView>
   )
 };
@@ -109,10 +109,8 @@ const styles = StyleSheet.create({
     height: 40,
   },
   backUp: {
-    top: 70,
-    left: 20,
-    position: 'absolute',
-    zIndex: 100
+    justifyContent: 'center',
+    width: '10%'
   },
   chatBox: {
     width: '80%',
@@ -158,19 +156,20 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   header: {
-    backgroundColor: 'white',
-    width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    width: '100%',
+    justifyContent: 'space-between',
+    backgroundColor: color.pink,
     padding: 10,
   },
   title: {
     padding: 10,
     fontFamily: 'Helvetica',
     fontSize: 24,
+    width: '80%',
+    textAlign: 'center',
+    color: 'white'
   },
   msgContact: {
     color: 'white',
@@ -203,7 +202,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     borderColor: 'transparent',
-  }
+  },
+  empty: {
+    width: '10%',
+  },
 });
 
 export default Chatting;

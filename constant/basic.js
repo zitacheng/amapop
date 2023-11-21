@@ -54,7 +54,7 @@ export const basic = StyleSheet.create({
   input: {
     borderRadius: 6,
     padding: 20,
-    backgroundColor: color.ultraLightPurple,
+    backgroundColor: color.lightPurple,
     width: '100%',
   },
   break: {
@@ -127,6 +127,22 @@ export const basic = StyleSheet.create({
     backgroundColor: color.pink,
     padding: 5,
     borderRadius: 15
+  },
+  containerBg: {
+    backgroundColor: color.pink,
+    width: '100%',
+    height: '50%',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
+  containerBgBotWhite: {
+    backgroundColor: color.white,
+    width: '100%',
+    height: '50%',
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
   },
   smbtn: {
     backgroundColor: 'black',

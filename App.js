@@ -5,6 +5,7 @@ import Login from './container/Login.js';
 import Register from './container/Register.js';
 import Profile from './container/Profile.js';
 import UserProfile from './container/UserProfile.js';
+import Creation from './container/Creation.js';
 import Settings from './container/Settings.js';
 import Chat from './container/Chat.js';
 import Chatting from './container/Chatting.js';
@@ -33,6 +34,7 @@ export default function App() {
         <Stack.Screen name="UserProfile" component={UserProfile} />
         <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name="Chatting" component={Chatting} />
+        <Stack.Screen name="Creation" component={Creation} />
       </Stack.Navigator>
     </NavigationContainer>
   </SafeAreaProvider>

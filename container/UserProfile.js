@@ -53,14 +53,12 @@ const UserProfile = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={basic.containerBg} />
       <StatusBar barStyle="dark-content" />
       <View style={[styles.header, basic.shadow]}>
         {/* <UserAvatar size={90} name="userPicture" bgColor={color.grey} src={images.avatar} /> */}
         <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
         <Text style={styles.title}>SlashZita</Text>
-        <TouchableOpacity>
-          <Icon name={'add-circle'} size={40} color={'white'} />
-        </TouchableOpacity>
       </View>
       <View  style={styles.textRow}>
         <TouchableOpacity style={styles.col} onPress={() => {setLooking(false)}}>
@@ -74,34 +72,33 @@ const UserProfile = ({navigation}) => {
         <Icon name={'triangle'} size={15} color={!look ? 'white' : 'transparent'} />
         <Icon name={'triangle'} size={15} color={look ? 'white' : 'transparent'} />
       </View>
-
       <View style={styles.content}>
-      <FlatList
-        data={look == true ? looking : changing}
-        numColumns={2}
-        columnWrapperStyle={styles.row} 
-        renderItem={({item}) => {
-          return (
-          <View style={[styles.card, basic.shadow]}>
-            <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
-            <LinearGradient colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
-              <Text style={styles.cardtitle}>Hirono Mischief - Destroyer</Text>
-            </LinearGradient>
-            <TouchableOpacity style={[styles.cardBottom, basic.shadow]}>
-              <IconMat name={'send'} size={20} color={color.pink} />
-            </TouchableOpacity>
-            {
-              item.prio &&
-              <View style={[styles.prio, basic.shadow]}>
-                <Icon name={'star'} size={30} color={color.orange} />
-              </View>
-            }
-          </View>
-          )
-        }}
-        keyExtractor={item => item.id}
-      />
-      </View>
+        <FlatList
+            data={look == true ? looking : changing}
+            numColumns={2}
+            columnWrapperStyle={styles.row} 
+            renderItem={({item}) => {
+            return (
+            <View style={[styles.card, basic.shadow]}>
+                <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
+                <LinearGradient colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
+                <Text style={styles.cardtitle}>Hirono Mischief - Destroyer</Text>
+                </LinearGradient>
+                <TouchableOpacity style={[styles.cardBottom, basic.shadow]}>
+                <IconMat name={'send'} size={20} color={color.pink} />
+                </TouchableOpacity>
+                {
+                item.prio &&
+                <View style={[styles.prio, basic.shadow]}>
+                    <Icon name={'star'} size={30} color={color.orange} />
+                </View>
+                }
+            </View>
+            )
+            }}
+            keyExtractor={item => item.id}
+        />
+         </View>
         <TouchableOpacity style={styles.backUp}
             onPress={() => { navigation.goBack();}}>
             <IconSim name={'arrow-left'} size={20} color={'white'} />
@@ -117,14 +114,14 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: color.pink,
+    backgroundColor: 'white',
   },
   back: {
     width: 30,
     height: 40,
   },
   backUp: {
-    top: 50,
+    top: 55,
     left: 10,
     position: 'absolute',
     zIndex: 100,
@@ -137,7 +134,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    width: '95%',
+    width: '80%',
   },
   content: {
     flex: 5,
@@ -148,8 +145,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexWrap: 'wrap',
     backgroundColor: 'white',
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
+    borderRadius: 25,
   },
   row: {
     display: 'flex',

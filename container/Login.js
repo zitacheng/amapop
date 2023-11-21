@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 6,
     padding: 8,
-    backgroundColor: color.ultraLightPurple
+    backgroundColor: color.lightPurple
   },
   eye: {
     padding: 2,
