@@ -52,7 +52,7 @@ const Profile = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
       <View style={[styles.header, basic.shadow]}>
         {/* <UserAvatar size={90} name="userPicture" bgColor={color.grey} src={images.avatar} /> */}
         <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
@@ -87,7 +87,7 @@ const Profile = ({navigation}) => {
             colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
               <Text style={styles.cardtitle}>Hirono Mischief - Destroyer</Text>
             </LinearGradient>
-            <TouchableOpacity style={[styles.cardBottom, basic.shadow]}>
+            <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Creation', {editMode: true});}}>
               <IconMat name={'lead-pencil'} size={20} color={color.pink} />
             </TouchableOpacity>
             {

@@ -54,7 +54,7 @@ const UserProfile = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={basic.containerBg} />
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
       <View style={[styles.header, basic.shadow]}>
         {/* <UserAvatar size={90} name="userPicture" bgColor={color.grey} src={images.avatar} /> */}
         <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />

@@ -31,7 +31,7 @@ const Chatting = ({navigation}) => {
   ];
   return (
     <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             enabled style={styles.container}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

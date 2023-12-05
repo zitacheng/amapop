@@ -30,7 +30,7 @@ const Chat = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
       <Image style={basic.logo} source={images.logo} resizeMode="cover" />
       <View style={basic.search}>
         <TouchableOpacity

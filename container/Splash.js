@@ -63,7 +63,7 @@ const Splash = (props) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
       <Image style={styles.logo} source={images.logo} resizeMode="contain" />
     </View>
   );

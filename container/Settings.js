@@ -7,6 +7,7 @@ import {
   Image,
   SafeAreaView,
   TextInput,
+  Linking,
   TouchableOpacity,
 } from 'react-native';
 import {images} from '../constant/images';
@@ -30,9 +31,9 @@ const Settings = ({navigation}) => {
         <TouchableOpacity
           style={basic.btn}
           onPress={() => {
-            logUser();
+            Linking.openURL('https://chat.whatsapp.com/DG3NgcmlTkw2q57cAMa0DV');
           }}>
-          <Text style={basic.btnTxt}>{"Whatsapp"}</Text>
+          <Text style={basic.btnTxt}>{"Whatsapp group"}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={basic.btnWhiteout}

@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import Home from './container/Home.js';
-import Chat from './container/Chat.js';
+import Creation from './container/Creation.js';
 import Settings from './container/Settings.js';
 import Profile from './container/Profile.js';
-import {Image} from 'react-native';
+import {Image, View} from 'react-native';
 import user from './assets/userOn.png';
 import gift from './assets/giftOn.png';
 import pop from './assets/popOn.png';
-import chat from './assets/chat.png';
+import plus from './assets/plus.png';
 import {basic} from './constant/basic.js';
 import {color} from './constant/color.js';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { Badge } from 'react-native-paper';
 
 const Tab = createMaterialBottomTabNavigator();
 export function TabScreen({navigation, route}) {
@@ -33,13 +34,29 @@ export function TabScreen({navigation, route}) {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Chat"
         component={Chat}
         options={{
           tabBarLabel: 'Chat',
           tabBarIcon: () => (
-            <Image style={basic.barIcon} source={chat} resizeMode="contain" />
+            <View>
+              <Image style={basic.barIcon} source={chat} resizeMode="contain" />
+            </View>
+
+          ),
+        }}
+      /> */}
+      <Tab.Screen
+        name="Creation"
+        component={Creation}
+        options={{
+          tabBarLabel: 'Add',
+          tabBarIcon: () => (
+            <View>
+              <Image style={basic.barIcon} source={plus} resizeMode="contain" />
+            </View>
+
           ),
         }}
       />
