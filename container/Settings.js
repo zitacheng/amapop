@@ -28,6 +28,7 @@ const Settings = ({navigation}) => {
         <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
         <Text style={styles.label}>Username</Text>
         <Text style={styles.label}>example98@gmail.com</Text>
+        <Text style={styles.label}>+33620323287</Text>
         <TouchableOpacity
           style={basic.btn}
           onPress={() => {

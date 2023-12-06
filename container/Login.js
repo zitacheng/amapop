@@ -25,7 +25,7 @@ const Login = ({navigation}) => {
   const [show, setShow] = useState(false);
 
   function logUser() {
-    navigation.navigate('Home');
+    navigation.navigate('TabScreen');
   }
 
   function restPass() {

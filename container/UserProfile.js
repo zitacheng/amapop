@@ -5,6 +5,7 @@ import {
   Text,
   StatusBar,
   View,
+  Linking,
   Image,
   FlatList,
   SafeAreaView,
@@ -23,7 +24,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const UserProfile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);
-  const [look, setLooking] = useState(true);
+  const [look, setLooking] = useState(false);
   const looking = [
       {id: 1, pic: images.gallery6, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
       {id: 2, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
@@ -84,8 +85,8 @@ const UserProfile = ({navigation}) => {
                 <LinearGradient colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
                 <Text style={styles.cardtitle}>Hirono Mischief - Destroyer</Text>
                 </LinearGradient>
-                <TouchableOpacity style={[styles.cardBottom, basic.shadow]}>
-                <IconMat name={'send'} size={20} color={color.pink} />
+                <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as XXX je suis interessé' +'&phone=+33768628787')}}>
+                  <IconMat name={'send'} size={20} color={color.pink} />
                 </TouchableOpacity>
                 {
                 item.prio &&

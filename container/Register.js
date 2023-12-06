@@ -26,6 +26,7 @@ const Register = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [created, setCreated] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
@@ -76,6 +77,15 @@ const Register = ({navigation}) => {
                 onChangeText={setPassword}
                 secureTextEntry={true}
                 value={password}
+              />
+              <Text style={basic.label}>
+                {'Phone'}
+              </Text>
+              <TextInput
+                style={basic.input}
+                keyboardType='phone-pad'
+                onChangeText={setPhone}
+                value={phone}
               />
               <View style={basic.break} />
               <TouchableOpacity

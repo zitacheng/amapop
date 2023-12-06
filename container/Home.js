@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   StatusBar,
   Image,
-  FlatList,
+  Linking,
   TextInput,
   Text,
   TouchableOpacity,
@@ -111,7 +111,9 @@ const Home = ({navigation}) => {
                       <TouchableOpacity style={[styles.smBtnRound, basic.shadow]}  onPress={() => {navigation.navigate('UserProfile');}}>
                         <Text style={styles.profileTxt}>Voir profil</Text>
                       </TouchableOpacity>
-                      <Icon name={'send'} size={20} color={color.pink} />
+                      <TouchableOpacity onPress={() => {Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as XXX je suis interessé' +'&phone=+33768628787')}}>
+                        <Icon name={'send'} size={20} color={color.pink} />
+                      </TouchableOpacity>
                     </View>
                   </View>
                 )

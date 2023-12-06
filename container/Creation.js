@@ -53,7 +53,9 @@ const Creation = ({navigation, route}) => {
         <StatusBar barStyle="light-content" />
         <View style={styles.header}>
             <TouchableOpacity style={[(route.params && route.params.editMode) ?styles.hide : styles.backUp]}
-                onPress={() => { navigation.goBack();}}>
+                onPress={() => {
+                    navigation.navigate('Profile');
+                }}>
                 <Icon name={'arrow-left'} size={20} color={'white'} style={styles.icon} />
             </TouchableOpacity>
             <Text style={styles.title}>{(route.params && route.params.editMode) ? 'Modifier votre popmart' : 'Ajouter un popmart'}</Text>

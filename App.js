@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Splash from './container/Splash.js';
 import Login from './container/Login.js';
+import Home from './container/Home.js';
 import Register from './container/Register.js';
 import Profile from './container/Profile.js';
 import UserProfile from './container/UserProfile.js';
@@ -28,7 +29,8 @@ export default function App() {
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Home" component={TabScreen} />
+        <Stack.Screen name="TabScreen" component={TabScreen} />
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="UserProfile" component={UserProfile} />

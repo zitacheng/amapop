@@ -57,9 +57,9 @@ const Profile = ({navigation}) => {
         {/* <UserAvatar size={90} name="userPicture" bgColor={color.grey} src={images.avatar} /> */}
         <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
         <Text style={styles.title}>SlashZita</Text>
-        <TouchableOpacity onPress={() => {navigation.navigate('Creation');}}>
+        {/* <TouchableOpacity onPress={() => {navigation.navigate('Creation');}}>
           <Icon name={'add-circle'} size={40} color={'white'} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View  style={styles.textRow}>
         <TouchableOpacity style={styles.col} onPress={() => {setLooking(false)}}>
