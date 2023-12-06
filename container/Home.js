@@ -72,14 +72,14 @@ const Home = ({navigation}) => {
       </View>
       <View style={basic.break} />
       <View style={styles.btnSelect}>
-        <View style={styles.togglesBox}>
+        {/* <View style={styles.togglesBox}>
           <TouchableOpacity style={!look ? styles.toggleOn : styles.toggleOff} onPress={() => {setLook(false)}}>
             <Text style={styles.smTxt}>Échange</Text>
           </TouchableOpacity>
           <TouchableOpacity style={look ? styles.toggleOn : styles.toggleOff} onPress={() => {setLook(true)}}>
             <Text style={styles.smTxt}>Recherche</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         {
           menu.map((item, id) => {
             return (
