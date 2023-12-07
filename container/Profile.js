@@ -38,18 +38,18 @@ const Profile = ({navigation}) => {
     ];
 
   const changing = [
-      {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true},
-      {id: 12, pic: images.gallery3, looking: false, selling: true, changing: true, price: 18, available: true},
-      {id: 13, pic: images.gallery5, looking: false, selling: true, changing: true, price: 28, available: true},
-      {id: 14, pic: images.gallery6, looking: false, selling: true, changing: true, price: 13, available: true},
-      {id: 15, pic: images.gallery2, looking: false, selling: true, changing: true, price: 18, available: true},
-      {id: 16, pic: images.gallery, looking: false, selling: true, changing: true, price: 12, available: true},
-      {id: 17, pic: images.gallery5, looking: false, selling: true, changing: true, price: 18, available: true},
-      {id: 18, pic: images.gallery3, looking: false, selling: true, changing: true, price: 13, available: true},
-      {id: 19, pic: images.gallery2, looking: false, selling: true, changing: true, price: 12, available: true},
-      {id: 20, pic: images.gallery4, looking: false, selling: true, changing: true, price: 15, available: true},
-      {id: 21, pic: images.gallery2, looking: false, selling: true, changing: true, price: 17, available: true},
-      {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true},
+      {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, favorite: 1},
+      {id: 12, pic: images.gallery3, looking: false, selling: true, changing: true, price: 18, available: true, favorite: 2},
+      {id: 13, pic: images.gallery5, looking: false, selling: true, changing: true, price: 28, available: true, favorite: 3},
+      {id: 14, pic: images.gallery6, looking: false, selling: true, changing: true, price: 13, available: true, favorite: 0},
+      {id: 15, pic: images.gallery2, looking: false, selling: true, changing: true, price: 18, available: true, favorite: 2},
+      {id: 16, pic: images.gallery, looking: false, selling: true, changing: true, price: 12, available: true, favorite: 2},
+      {id: 17, pic: images.gallery5, looking: false, selling: true, changing: true, price: 18, available: true, favorite: 2},
+      {id: 18, pic: images.gallery3, looking: false, selling: true, changing: true, price: 13, available: true, favorite: 2},
+      {id: 19, pic: images.gallery2, looking: false, selling: true, changing: true, price: 12, available: true, favorite: 1},
+      {id: 20, pic: images.gallery4, looking: false, selling: true, changing: true, price: 15, available: true, favorite: 2},
+      {id: 21, pic: images.gallery2, looking: false, selling: true, changing: true, price: 17, available: true, favorite: 4},
+      {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true, favorite: 2},
     ];
 
   return (
@@ -110,6 +110,13 @@ const Profile = ({navigation}) => {
               item.prio &&
               <View style={[styles.prio, basic.shadow]}>
                 <Icon name={'star'} size={30} color={color.orange} />
+              </View>
+            }
+            {
+              look != true &&
+              <View style={[styles.prio, basic.shadow]}>
+                <Icon name={'heart'} size={30} color={color.pink} />
+                <Text style={styles.favNb}>{item.favorite}</Text>
               </View>
             }
           </View>
@@ -207,7 +214,8 @@ const styles = StyleSheet.create({
     height: 40,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexDirection: 'row'
   },
   cardtitleBg: {
     position: 'absolute',
@@ -265,6 +273,14 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 10,
   },
+  favNb: {
+    fontFamily: 'Helvetica-Bold',
+    color: 'white',
+    shadowColor: '#171717',
+    shadowOffset: {width: -1, height: 2},
+    shadowOpacity: 2,
+    shadowRadius: 3,
+  }
 });
 
 export default Profile;
