@@ -82,6 +82,7 @@ const Creation = ({navigation, route}) => {
               style={{flex: 1}} enabled>
               <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                   <View style={styles.form}>
+                      <Text style={styles.info}>Ajouter une image qui représente le ou les popmarts que vous recherchez/échangez</Text>
                       <Text style={basic.label}>Ajouter une image</Text>
                       <View style={styles.imgRow}>
                           <TouchableOpacity style={styles.addImg} onPress={async() => {
@@ -300,6 +301,19 @@ const styles = StyleSheet.create({
   },
   scroll: {
     width: '100%',
+  },
+  info: {
+    marginTop: 20,
+    fontSize: 18,
+    color: color.pink,
+    marginBottom: 10,
+    fontFamily: 'Helvetica',
+    width: '100%',
+    textAlign: 'center',
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   }
 });
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   StyleSheet,
   View,
@@ -8,6 +8,8 @@ import {
   Linking,
   TextInput,
   Text,
+  TouchableWithoutFeedback,
+  Keyboard,
   TouchableOpacity,
 } from 'react-native';
 import {images} from '../constant/images';
@@ -19,6 +21,7 @@ import {Load} from '../component/Load';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
+import Modal from 'react-native-modalbox';
 
 Icon.loadFont();
 
@@ -26,7 +29,11 @@ const Home = ({navigation}) => {
   const [search, setSearch] = useState('');
   const [change, setChange] = useState(true);
   const [look, setLook] = useState(false);
+  const [current, setCurrent] = useState(null);
+  const modalRef = useRef(null);
+  
 
+  //TODO recuperer que ceux que les gens echange
   const [menu, setMenu] = useState([
     {id: 0, name: 'Labubu', selected: false},
     {id: 1, name: 'Azura', selected: false},
@@ -40,11 +47,11 @@ const Home = ({navigation}) => {
   ]);
 
   const pops = [
-    {id: 1, name: 'Hirono',  pic: images.gallery, model: 'model name', look: false},
+    {id: 1, name: 'Hirono',  pic: images.gallery, model: 'Destroyer', look: false},
     {id: 2, name: 'SkullPanda',  pic: images.gallery6, model: 'model name', exchange: true},
-    {id: 3, name: 'Hirono',  pic: images.gallery3, model: 'model name', look: true},
-    {id: 3, name: 'Hirono',  pic: images.gallery4, model: 'model name', exchange: true},
-    {id: 3, name: 'Hirono',  pic: images.gallery5, model: 'model name', exchange: true},
+    {id: 3, name: 'Hirono',  pic: images.gallery3, model: 'fallen angel', look: true},
+    {id: 3, name: 'Hirono',  pic: images.gallery4, model: 'Unspoken', exchange: true},
+    {id: 3, name: 'Hirono',  pic: images.gallery5, model: 'the silent', exchange: true},
   ];
 
   const onChangeMenu = (item) => {
@@ -93,23 +100,30 @@ const Home = ({navigation}) => {
           })
         }
       </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView style={styles.scroll}>
         <View style={styles.scrollContent}>
           {
             pops.map((pop) => {
-              if (menu.find((e) => {return (e.name === pop.name && e.selected == true)})
-                && ((look == pop.look) || (pop.exchange == true && !look))) {
+              if ((menu.find((e) => {return (e.name === pop.name && e.selected == true)}) || !menu.find((e) => e.selected === true)) && 
+              (!search || (search && (pop.name.toLowerCase().includes(search.toLocaleLowerCase()) || pop.model.toLowerCase().includes(search.toLocaleLowerCase()))))
+              )
+                // && ((look == pop.look) || (pop.exchange == true && !look))) Filtre par echange ou recherche
+              {
                 return (
                   <View style={[styles.card, basic.shadow]}>
                     <View style={styles.imgBox}>
                       <Image style={styles.cardImg} source={pop.pic} resizeMode="cover" />
                       <LinearGradient colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.nameBg}>
-                        <Text style={styles.name}>{pop.name + ' ' + pop.model}</Text>
+                        <Text style={styles.name}>{pop.name + ' - ' + pop.model}</Text>
                       </LinearGradient>
                     </View>
                     <View style={[styles.btnRow, basic.shadow]}>
+                      <TouchableOpacity style={[styles.smBtnRound, basic.shadow]} onPress={() => {setCurrent(pop);modalRef.current.open();}}>
+                        <Text style={styles.profileTxt}>Détail</Text>
+                      </TouchableOpacity>
                       <TouchableOpacity style={[styles.smBtnRound, basic.shadow]}  onPress={() => {navigation.navigate('UserProfile');}}>
-                        <Text style={styles.profileTxt}>Voir profil</Text>
+                        <Text style={styles.profileTxt}>profil</Text>
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => {Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as XXX je suis interessé' +'&phone=+33768628787')}}>
                         <Icon name={'send'} size={20} color={color.pink} />
@@ -122,6 +136,28 @@ const Home = ({navigation}) => {
           }
         </View>
       </ScrollView>
+      </TouchableWithoutFeedback>
+      <Modal style={styles.modal} position={"bottom"} ref={modalRef} coverScreen={true}>
+        <Image style={styles.modalPic} source={(current && current.pic) && current.pic} resizeMode="cover" />
+        <Text style={styles.title}>{current && (current.name + ' - ' + current.model)}</Text>
+        <Text style={styles.content}>{"Note du produit exemple: J'echange tout ceux qui sont entouré"}</Text>
+        <Text style={styles.content}>{"L'utilisateur veut échanger"}</Text>
+        <View style={basic.break} />
+        <TouchableOpacity
+            style={basic.btn}
+            onPress={() => {
+            }}>
+            <Text style={basic.btnTxt}>Envoyer un message</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+            style={basic.btnWhiteout}
+            onPress={() => {
+              modalRef.current.close();
+              navigation.navigate('UserProfile');
+            }}>
+            <Text style={basic.btnTxtOut}>Voir son profil</Text>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   )
 };
@@ -168,6 +204,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     width: '100%',
+    minHeight: 40,
+    maxHeight: 80,
     paddingLeft: 3,
     paddingRight: 3,
     paddingTop: 5,
@@ -283,6 +321,32 @@ const styles = StyleSheet.create({
     padding: 9,
     borderRadius: 20,
   },
+  modal: {
+    justifyContent: 'flex-start',
+    borderRadius: 20,
+    height: '90%',
+    width: '100%',
+  },
+  title: {
+    fontSize: 22,
+    fontFamily: 'Helvetica-Bold',
+    color: 'black',
+    padding: 20,
+  },
+  content: {
+    fontSize: 22,
+    fontFamily: 'Helvetica',
+    color: 'black',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+  },
+  modalPic: {
+    width: '100%',
+    height: '50%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  }
 });
 
 export default Home;
