@@ -22,6 +22,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
 import Modal from 'react-native-modalbox';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 Icon.loadFont();
 
@@ -30,7 +31,9 @@ const Home = ({navigation}) => {
   const [change, setChange] = useState(true);
   const [look, setLook] = useState(false);
   const [current, setCurrent] = useState(null);
+  const [sorting, setSorting] = useState('Date croissant');
   const modalRef = useRef(null);
+  const modalSortRef = useRef(null);
   
 
   //TODO recuperer que ceux que les gens echange
@@ -47,18 +50,23 @@ const Home = ({navigation}) => {
   ]);
 
   const pops = [
-    {id: 1, name: 'Hirono',  pic: images.gallery, model: 'Destroyer', look: false},
-    {id: 2, name: 'SkullPanda',  pic: images.gallery6, model: 'model name', exchange: true},
-    {id: 3, name: 'Hirono',  pic: images.gallery3, model: 'fallen angel', look: true},
-    {id: 3, name: 'Hirono',  pic: images.gallery4, model: 'Unspoken', exchange: true},
-    {id: 3, name: 'Hirono',  pic: images.gallery5, model: 'the silent', exchange: true},
+    {id: 1, name: 'Hirono',  pic: images.gallery, model: 'Destroyer', look: false, like: true},
+    {id: 2, name: 'SkullPanda',  pic: images.gallery6, model: 'model name', exchange: true, like: false},
+    {id: 3, name: 'Hirono',  pic: images.gallery3, model: 'fallen angel', look: true, like: true},
+    {id: 3, name: 'Hirono',  pic: images.gallery4, model: 'Unspoken', exchange: true, like: false},
+    {id: 3, name: 'Hirono',  pic: images.gallery5, model: 'the silent', exchange: true, like: true},
   ];
 
   const onChangeMenu = (item) => {
     let newArr = [...menu];
         newArr[item.id].selected = !item.selected;
         setMenu(newArr);
-      }
+  }
+
+  const changeRadio = (val) => {
+    setSorting(val);
+    modalSortRef.current.close();
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -79,6 +87,11 @@ const Home = ({navigation}) => {
       </View>
       <View style={basic.break} />
       <View style={styles.btnSelect}>
+      <View style={styles.togglesBox}>
+        <TouchableOpacity style={!look ? styles.toggleOn : styles.toggleOff} onPress={() => {modalSortRef.current.open();}}>
+          <Text style={styles.smTxt}>{'Trie: ' + sorting}</Text>
+        </TouchableOpacity>
+      </View>
         {/* <View style={styles.togglesBox}>
           <TouchableOpacity style={!look ? styles.toggleOn : styles.toggleOff} onPress={() => {setLook(false)}}>
             <Text style={styles.smTxt}>Échange</Text>
@@ -122,8 +135,8 @@ const Home = ({navigation}) => {
                       <TouchableOpacity style={[styles.smBtnRound, basic.shadow]} onPress={() => {setCurrent(pop);modalRef.current.open();}}>
                         <Text style={styles.profileTxt}>Détail</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={[styles.smBtnRound, basic.shadow]}  onPress={() => {navigation.navigate('UserProfile');}}>
-                        <Text style={styles.profileTxt}>profil</Text>
+                      <TouchableOpacity onPress={() => {}}>
+                        <Icon name={pop.like == true ? 'heart' : 'heart-o'} size={20} color={color.pink} />
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => {Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as XXX je suis interessé' +'&phone=+33768628787')}}>
                         <Icon name={'send'} size={20} color={color.pink} />
@@ -142,6 +155,7 @@ const Home = ({navigation}) => {
         <Text style={styles.title}>{current && (current.name + ' - ' + current.model)}</Text>
         <Text style={styles.content}>{"Note du produit exemple: J'echange tout ceux qui sont entouré"}</Text>
         <Text style={styles.content}>{"L'utilisateur veut échanger"}</Text>
+        <Text style={styles.content}>{"Date d'ajout: 9 decembre 2023"}</Text>
         <View style={basic.break} />
         <TouchableOpacity
             style={basic.btn}
@@ -157,6 +171,59 @@ const Home = ({navigation}) => {
             }}>
             <Text style={basic.btnTxtOut}>Voir son profil</Text>
         </TouchableOpacity>
+      </Modal>
+      <Modal style={styles.modalSort} position={"bottom"} ref={modalSortRef} coverScreen={true}>
+        <Text style={styles.title}>Trier par:</Text>
+        <View style={styles.radioBox}>
+          <BouncyCheckbox
+              size={25}
+              style={styles.radio}
+              fillColor={color.pink}
+              unfillColor="#FFFFFF"
+              text="Date de mise à jour"
+              iconStyle={{ borderColor: "red" }}
+              innerIconStyle={{ borderWidth: 2 }}
+              textStyle={{textDecorationLine: "none"}}
+              isChecked={sorting == 'Date croissant'}
+              onPress={() => {changeRadio('Date croissant')}}
+          />
+          <BouncyCheckbox
+              size={25}
+              style={styles.radio}
+              fillColor={color.pink}
+              unfillColor="#FFFFFF"
+              text="Pertinence"
+              iconStyle={{ borderColor: "red" }}
+              innerIconStyle={{ borderWidth: 2 }}
+              textStyle={{textDecorationLine: "none"}}
+              isChecked={sorting == 'Pertinence'}
+              onPress={() => {changeRadio('Pertinence')}}
+          />
+          <BouncyCheckbox
+              size={25}
+              style={styles.radio}
+              fillColor={color.pink}
+              unfillColor="#FFFFFF"
+              text="Favoris"
+              iconStyle={{ borderColor: "red" }}
+              innerIconStyle={{ borderWidth: 2 }}
+              textStyle={{textDecorationLine: "none"}}
+              isChecked={sorting == 'Favoris'}
+              onPress={() => {changeRadio('Favoris')}}
+          />
+          <BouncyCheckbox
+              size={25}
+              style={styles.radio}
+              fillColor={color.pink}
+              unfillColor="#FFFFFF"
+              text="Non favoris"
+              iconStyle={{ borderColor: "red" }}
+              innerIconStyle={{ borderWidth: 2 }}
+              textStyle={{textDecorationLine: "none"}}
+              isChecked={sorting == 'Non favoris'}
+              onPress={() => {changeRadio('Non favoris')}}
+          />
+        </View>
       </Modal>
     </SafeAreaView>
   )
@@ -327,6 +394,12 @@ const styles = StyleSheet.create({
     height: '90%',
     width: '100%',
   },
+  modalSort: {
+    justifyContent: 'center',
+    borderRadius: 20,
+    height: '40%',
+    width: '100%',
+  },
   title: {
     fontSize: 22,
     fontFamily: 'Helvetica-Bold',
@@ -346,6 +419,13 @@ const styles = StyleSheet.create({
     height: '50%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+  radioBox: {
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  radio: {
+    marginBottom: 10,
   }
 });
 
