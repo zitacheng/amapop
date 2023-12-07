@@ -25,13 +25,15 @@
     "react-native-bouncy-checkbox": "^3.0.7",
     "react-native-device-info": "^10.11.0",
     "react-native-in-app-review": "^4.3.3",
+    "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-modalbox": "^2.0.2",
     "react-native-paper": "^5.11.1",
     "react-native-responsive-fontsize": "^0.5.1",
     "react-native-user-avatar": "^1.0.8",
     "react-native-vector-icons": "^10.0.2",
-    "react-native-web": "~0.19.6"
+    "react-native-web": "~0.19.6",
+    "expo-image-picker": "~14.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

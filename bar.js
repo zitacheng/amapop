@@ -21,6 +21,9 @@ export function TabScreen({navigation, route}) {
       initialRouteName="Home"
       activeColor={color.pink}
       inactiveColor={color.pink}
+      tabBarOptions={{
+        keyboardHidesTabBar: true
+      }}
       // barStyle={{backgroundColor:color.orange}}
     >
       <Tab.Screen

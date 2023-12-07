@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   StatusBar,
   Image,
-  FlatList,
+  ScrollView,
   KeyboardAvoidingView,
   TextInput,
   Text,
@@ -23,15 +23,21 @@ import {Load} from '../component/Load';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import { RadioButton, Checkbox } from 'react-native-paper';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { useHeaderHeight } from '@react-navigation/elements'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import * as ImagePicker from 'expo-image-picker';
 
 Icon.loadFont();
 
 const Creation = ({navigation, route}) => {
   const [name, setName] = useState('');
+  const [note, setNote] = useState('');
   const [other, setOther] = useState('');
   const [serie, setSerie] = useState('');
-  const [checked, setChecked] =useState('first');
-  const [prio, setPrio] =useState('first');
+  const [checked, setChecked] = useState('change');
+  const [prio, setPrio] = useState(false);
+  const [img1, setImg1] = useState(null);
+  const height = useHeaderHeight()
 
   const menu = [
     {id: 0, name: 'Labubu', selected: false},
@@ -45,6 +51,15 @@ const Creation = ({navigation, route}) => {
     {id: 8, name: 'Dimoo', selected: false},
     {id: 9, name: 'Autre', selected: false},
   ];
+
+  const cleanVariables = () => {
+    setImg1(null);
+    setSerie(null);
+    setName('');
+    setNote('');
+    setOther('');
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,90 +76,137 @@ const Creation = ({navigation, route}) => {
             <Text style={styles.title}>{(route.params && route.params.editMode) ? 'Modifier votre popmart' : 'Ajouter un popmart'}</Text>
             <View style={styles.empty}/>
         </View>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            enabled style={styles.container}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={styles.form}>
-                    <Text style={basic.label}>Ajouter des images</Text>
-                    <View style={styles.imgRow}>
-                        <TouchableOpacity style={styles.addImg}>
-                            <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.addImg}>
-                            <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.addImg}>
-                            <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.addImg}>
-                            <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={basic.label}>Série</Text>
-                    <View style={styles.btnRow}>
-                    {
-                         menu.map((item, id) => {
-                            return (
-                              <TouchableOpacity style={[styles.badge, {backgroundColor: item.id == serie ? color.pink : color.lightPurple}]}
-                                onPress={() => {
-                                  setSerie(item.id)
-                                }} key={id}>
-                                <Text style={styles.smTxt}>{item.name}</Text>
-                              </TouchableOpacity>
-                            )
-                          })
-                    }
-                    </View>
-                    {
-                        serie == 9 && <>
-                            <Text style={basic.label}>Autre serie</Text>
-                            <TextInput
-                                style={basic.input}
-                                autoCapitalize={'none'}
-                                keyboardType="email-address"
-                                onChangeText={setOther}
-                                value={other}
-                            />
+        <ScrollView style={styles.scroll}  contentContainerStyle={{ flex: 1, justifyContent: 'flex-end'}}>
+          <KeyboardAwareScrollView keyboardVerticalOffset={height}
+              behavior={Platform.OS === "ios" ? "padding" : 'height'}
+              style={{flex: 1}} enabled>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                  <View style={styles.form}>
+                      <Text style={basic.label}>Ajouter une image</Text>
+                      <View style={styles.imgRow}>
+                          <TouchableOpacity style={styles.addImg} onPress={async() => {
+                            let result = await ImagePicker.launchImageLibraryAsync({
+                              allowsEditing: true,
+                              quality: 1,
+                            });
+
+                            if (!result.canceled) {
+                              setImg1(result.assets[0]);
+                            } else {
+                              alert('You did not select any image.');
+                            }
+                          }}>
+                            {
+                              img1 ? <Image style={styles.addPic} source={{uri: img1.uri}} resizeMode="cover" />
+                              : <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
+                            }
+                          </TouchableOpacity>
+                          {/* <TouchableOpacity style={styles.addImg}>
+                              {
+                              img2 ? <Image style={styles.addPic} source={{uri: img2.uri}} resizeMode="cover" />
+                              : <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
+                            }
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.addImg}>
+                              {
+                              img3 ? <Image style={styles.addPic} source={{uri: img3.uri}} resizeMode="cover" />
+                              : <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
+                            }
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.addImg}>
+                              {
+                              img4 ? <Image style={styles.addPic} source={{uri: img4.uri}} resizeMode="cover" />
+                              : <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
+                            }
+                          </TouchableOpacity> */}
+                      </View>
+                      <Text style={basic.label}>Série</Text>
+                      <View style={styles.btnRow}>
+                      {
+                          menu.map((item, id) => {
+                              return (
+                                <TouchableOpacity style={[styles.badge, {backgroundColor: item.id == serie ? color.pink : color.lightPurple}]}
+                                  onPress={() => {
+                                    setSerie(item.id)
+                                  }} key={id}>
+                                  <Text style={styles.smTxt}>{item.name}</Text>
+                                </TouchableOpacity>
+                              )
+                            })
+                      }
+                      </View>
+                      {
+                          serie == 9 && <>
+                              <Text style={basic.label}>Autre serie</Text>
+                              <TextInput
+                                  style={basic.input}
+                                  autoCapitalize={'none'}
+                                  keyboardType="email-address"
+                                  onChangeText={setOther}
+                                  value={other}
+                              />
+                          </>
+                      }
+                      <Text style={basic.label}>Nom du popmart</Text>
+                      <TextInput
+                          style={basic.input}
+                          onChangeText={setName}
+                          value={name}
+                          placeholder='Exemple: Mime silent'
+                      />
+                      <Text style={basic.label}>Objectif de la publication</Text>
+                      <View style={styles.radioBox}>
+                      <RadioButton.Group onValueChange={newValue => setChecked(newValue)} value={checked}>
+                          <RadioButton.Item color={color.pink} label="Je veux l'échanger" value="change" />
+                          <RadioButton.Item color={color.pink} label="Je cherche ce modèle" value="look" />
+                      </RadioButton.Group>
+                      </View>
+                      {
+                        checked == 'look' &&
+                        <>
+                          <Text style={basic.label}>Priorité</Text>
+                          <BouncyCheckbox
+                              size={25}
+                              fillColor={color.pink}
+                              unfillColor="#FFFFFF"
+                              text="Recherche en priorité"
+                              iconStyle={{ borderColor: "red" }}
+                              innerIconStyle={{ borderWidth: 2 }}
+                              textStyle={{textDecorationLine: "none"}}
+                              onPress={() => {setPrio(!prio)}}
+                          />
                         </>
-                    }
-                    <Text style={basic.label}>Nom du popmart</Text>
-                    <TextInput
-                        style={basic.input}
-                        autoCapitalize={'none'}
-                        keyboardType="email-address"
-                        onChangeText={setName}
-                        value={name}
-                    />
-                    <Text style={basic.label}>Objectif de la publication</Text>
-                    <View style={styles.radioBox}>
-                    <RadioButton.Group onValueChange={newValue => setChecked(newValue)} value={checked}>
-                        <RadioButton.Item color={color.pink} label="Je veux l'échanger" value="first" />
-                        <RadioButton.Item color={color.pink} label="Je cherche ce modèle" value="second" />
-                    </RadioButton.Group>
-                    </View>
-                    <Text style={basic.label}>Priorité</Text>
-                    {/* <Checkbox.Item color={color.pink} label="Recherche en priorité" status={prio ? 'checked' : 'unchecked'} onPress={() => {
-                        setPrio(!prio);
-                    }}/> */}
-                    <BouncyCheckbox
-                        size={25}
-                        fillColor={color.pink}
-                        unfillColor="#FFFFFF"
-                        text="Recherche en priorité"
-                        iconStyle={{ borderColor: "red" }}
-                        innerIconStyle={{ borderWidth: 2 }}
-                        textStyle={{textDecorationLine: "none"}}
-                        onPress={() => {setPrio(!prio)}}
-                    />
-                    <TouchableOpacity
-                        style={basic.btn}
-                        onPress={() => {
-                        }}>
-                        <Text style={basic.btnTxt}>{(route.params && route.params.editMode) ? "Sauvegarder" : "Ajouter"}</Text>
-                    </TouchableOpacity>
-                </View>
-            </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+                      }
+                      <Text style={basic.label}>Une note</Text>
+                      <TextInput
+                          style={basic.input}
+                          onChangeText={setNote}
+                          value={note}
+                          placeholder="Exemple: Je l'échnge que contre le modele x"
+                      />
+                      <View style={basic.break} />
+                      <TouchableOpacity
+                          style={basic.btn}
+                          onPress={() => {
+                            cleanVariables();
+                          }}>
+                          <Text style={basic.btnTxt}>{(route.params && route.params.editMode) ? "Sauvegarder" : "Ajouter"}</Text>
+                      </TouchableOpacity>
+                      {
+                        (route.params && route.params.editMode) &&
+                          <TouchableOpacity
+                            style={basic.btn}
+                            onPress={() => {
+                              cleanVariables();
+                            }}>
+                            <Text style={basic.btnTxt}>Supprimer</Text>
+                        </TouchableOpacity>
+                      }
+                      <View style={basic.break} />
+                  </View>
+              </TouchableWithoutFeedback>
+          </KeyboardAwareScrollView>
+        </ScrollView>
     </SafeAreaView>
   )
 };
@@ -153,8 +215,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     display: 'flex',
-    alignItems: 'center',
     width: '100%',
+    backgroundColor: 'white'
   },
   back: {
     width: 30,
@@ -210,6 +272,12 @@ const styles = StyleSheet.create({
     marginRight: 10,
     justifyContent: 'center'
   },
+  addPic: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    marginRight: 10,
+  },
   badge: {
     borderRadius: 15,
     padding: 5,
@@ -229,8 +297,10 @@ const styles = StyleSheet.create({
   },
   radioBox: {
     backgroundColor: 'white',
+  },
+  scroll: {
+    width: '100%',
   }
-  
 });
 
 export default Creation;
