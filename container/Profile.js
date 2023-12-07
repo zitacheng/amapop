@@ -23,6 +23,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 const Profile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);
   const [look, setLooking] = useState(true);
+  const [favorite, setFavorite] = useState(false);
+
   const looking = [
       {id: 1, pic: images.gallery6, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
       {id: 2, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false, prio: false},
@@ -60,20 +62,34 @@ const Profile = ({navigation}) => {
         {/* <TouchableOpacity onPress={() => {navigation.navigate('Creation');}}>
           <Icon name={'add-circle'} size={40} color={'white'} />
         </TouchableOpacity> */}
-      </View>
-      <View  style={styles.textRow}>
-        <TouchableOpacity style={styles.col} onPress={() => {setLooking(false)}}>
-          <Text style={!look ? styles.colTxtBigOn : styles.colTxtBig}>J'échange</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.col} onPress={() => {setLooking(true)}}>
-          <Text style={look ? styles.colTxtBigOn : styles.colTxtBig}>Je recherche</Text>
+        <TouchableOpacity onPress={() => {setFavorite(!favorite)}}>
+          <Icon name={favorite ? 'heart-sharp' : 'heart-outline'} size={40} color={'white'} />
         </TouchableOpacity>
       </View>
-      <View  style={styles.iconBox}>
-        <Icon name={'triangle'} size={15} color={!look ? 'white' : 'transparent'} />
-        <Icon name={'triangle'} size={15} color={look ? 'white' : 'transparent'} />
-      </View>
-
+      {
+        favorite ?
+        <View  style={styles.textRow}>
+          <Text style={!look ? styles.colTxtBigOn : styles.colTxtBig}>Mes favoris</Text>
+        </View> :
+        <View  style={styles.textRow}>
+          <TouchableOpacity style={styles.col} onPress={() => {setLooking(false)}}>
+            <Text style={!look ? styles.colTxtBigOn : styles.colTxtBig}>J'échange</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.col} onPress={() => {setLooking(true)}}>
+            <Text style={look ? styles.colTxtBigOn : styles.colTxtBig}>Je recherche</Text>
+          </TouchableOpacity>
+        </View>
+      }
+      {
+         favorite ?
+         <View  style={styles.iconBox}>
+          <Icon name={'triangle'} size={15} color={'white'} />
+        </View> :
+        <View  style={styles.iconBox}>
+          <Icon name={'triangle'} size={15} color={!look ? 'white' : 'transparent'} />
+          <Icon name={'triangle'} size={15} color={look ? 'white' : 'transparent'} />
+        </View>
+      }
       <View style={styles.content}>
       <FlatList
         data={look == true ? looking : changing}
