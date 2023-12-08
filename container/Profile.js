@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -19,37 +19,38 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ScrollView } from 'react-native-gesture-handler';
+import Modal from 'react-native-modalbox';
 
 const Profile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);
-  const [look, setLooking] = useState(true);
-  const [favorite, setFavorite] = useState(false);
+  const [tabActive, setTabActive] = useState('change');
+  const [current, setCurrent] = useState(null);
+  const modalRef = useRef(null);
 
-  const looking = [
-      {id: 1, pic: images.gallery6, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
-      {id: 2, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false, prio: false},
-      {id: 3, pic: images.gallery3, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
-      {id: 4, pic: images.gallery5, looking: true, selling: false, changing: false, price: null, available: false, prio: false},
-      {id: 5, pic: images.gallery, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
-      {id: 6, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false, prio: false},
-      {id: 7, pic: images.gallery5, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
-      {id: 8, pic: images.gallery2, looking: true, selling: false, changing: false, price: null, available: false, prio: false},
-      {id: 9, pic: images.gallery4, looking: true, selling: false, changing: false, price: null, available: false, prio: true},
-    ];
-
-  const changing = [
+  const favs = [
       {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, favorite: 1},
       {id: 12, pic: images.gallery3, looking: false, selling: true, changing: true, price: 18, available: true, favorite: 2},
       {id: 13, pic: images.gallery5, looking: false, selling: true, changing: true, price: 28, available: true, favorite: 3},
       {id: 14, pic: images.gallery6, looking: false, selling: true, changing: true, price: 13, available: true, favorite: 0},
       {id: 15, pic: images.gallery2, looking: false, selling: true, changing: true, price: 18, available: true, favorite: 2},
-      {id: 16, pic: images.gallery, looking: false, selling: true, changing: true, price: 12, available: true, favorite: 2},
-      {id: 17, pic: images.gallery5, looking: false, selling: true, changing: true, price: 18, available: true, favorite: 2},
-      {id: 18, pic: images.gallery3, looking: false, selling: true, changing: true, price: 13, available: true, favorite: 2},
-      {id: 19, pic: images.gallery2, looking: false, selling: true, changing: true, price: 12, available: true, favorite: 1},
-      {id: 20, pic: images.gallery4, looking: false, selling: true, changing: true, price: 15, available: true, favorite: 2},
       {id: 21, pic: images.gallery2, looking: false, selling: true, changing: true, price: 17, available: true, favorite: 4},
       {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true, favorite: 2},
+    ];
+
+  const list = [
+      {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, look: false, prio: false},
+      {id: 12, pic: images.gallery3, looking: false, selling: true, changing: true, price: 18, available: true, look: true, prio: true},
+      {id: 13, pic: images.gallery5, looking: false, selling: true, changing: true, price: 28, available: true, look: false, prio: false},
+      {id: 14, pic: images.gallery6, looking: false, selling: true, changing: true, price: 13, available: true, look: true, prio: true},
+      {id: 15, pic: images.gallery2, looking: false, selling: true, changing: true, price: 18, available: true, look: false, prio: false},
+      {id: 16, pic: images.gallery, looking: false, selling: true, changing: true, price: 12, available: true, look: true, prio: true},
+      {id: 17, pic: images.gallery5, looking: false, selling: true, changing: true, price: 18, available: true, look: false, prio: false},
+      {id: 18, pic: images.gallery3, looking: false, selling: true, changing: true, price: 13, available: true, look: true, prio: false},
+      {id: 19, pic: images.gallery2, looking: false, selling: true, changing: true, price: 12, available: true, look: false, prio: false},
+      {id: 20, pic: images.gallery4, looking: false, selling: true, changing: true, price: 15, available: true, look: true, prio: false},
+      {id: 21, pic: images.gallery2, looking: false, selling: true, changing: true, price: 17, available: true, look: false, prio: false},
+      {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true, look: true, prio: false},
     ];
 
   return (
@@ -62,68 +63,103 @@ const Profile = ({navigation}) => {
         {/* <TouchableOpacity onPress={() => {navigation.navigate('Creation');}}>
           <Icon name={'add-circle'} size={40} color={'white'} />
         </TouchableOpacity> */}
-        <TouchableOpacity onPress={() => {setFavorite(!favorite)}}>
-          <Icon name={favorite ? 'heart-sharp' : 'heart-outline'} size={40} color={'white'} />
+        <TouchableOpacity onPress={() => {navigation.navigate('Settings')}}>
+          <Icon name={'settings-sharp'} size={30} color={'white'} />
         </TouchableOpacity>
       </View>
-      {
-        favorite ?
-        <View  style={styles.textRow}>
-          <Text style={!look ? styles.colTxtBigOn : styles.colTxtBig}>Mes favoris</Text>
-        </View> :
-        <View  style={styles.textRow}>
-          <TouchableOpacity style={styles.col} onPress={() => {setLooking(false)}}>
-            <Text style={!look ? styles.colTxtBigOn : styles.colTxtBig}>J'échange</Text>
+      <View  style={styles.textRow}>
+        <View style={styles.tab}>
+          <TouchableOpacity style={styles.col} onPress={() => {setTabActive('change')}}>
+            <Text style={tabActive == 'change' ? styles.colTxtBigOn : styles.colTxtBig}>J'échange</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.col} onPress={() => {setLooking(true)}}>
-            <Text style={look ? styles.colTxtBigOn : styles.colTxtBig}>Je recherche</Text>
+          {
+            tabActive == 'change' && <Icon name={'triangle'} size={15} color={'white'} />
+          }
+        </View>
+        <View style={styles.tab}>
+          <TouchableOpacity style={styles.col} onPress={() => {setTabActive('look')}}>
+            <Text style={tabActive == 'look' ? styles.colTxtBigOn : styles.colTxtBig}>Je recherche</Text>
           </TouchableOpacity>
+          {
+            tabActive == 'look' && <Icon name={'triangle'} size={15} color={'white'} />
+          }
         </View>
-      }
-      {
-         favorite ?
-         <View  style={styles.iconBox}>
-          <Icon name={'triangle'} size={15} color={'white'} />
-        </View> :
-        <View  style={styles.iconBox}>
-          <Icon name={'triangle'} size={15} color={!look ? 'white' : 'transparent'} />
-          <Icon name={'triangle'} size={15} color={look ? 'white' : 'transparent'} />
+        <View style={styles.tab}>
+          <TouchableOpacity style={styles.col} onPress={() => {setTabActive('fav')}}>
+            <Text style={tabActive == 'fav' ? styles.colTxtBigOn : styles.colTxtBig}>Favoris</Text>
+          </TouchableOpacity>
+          {
+            tabActive == 'fav' && <Icon name={'triangle'} size={15} color={'white'} />
+          }
         </View>
-      }
+      </View>
       <View style={styles.content}>
-      <FlatList
-        data={look == true ? looking : changing}
-        numColumns={2}
-        columnWrapperStyle={styles.row} 
-        renderItem={({item}) => {
-          return (
-          <View style={[styles.card, basic.shadow]}>
-            <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
-            <LinearGradient
-            colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
-              <Text style={styles.cardtitle}>Hirono Mischief - Destroyer</Text>
-            </LinearGradient>
-            <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Creation', {editMode: true});}}>
-              <IconMat name={'lead-pencil'} size={20} color={color.pink} />
-            </TouchableOpacity>
-            {
-              item.prio &&
-              <View style={[styles.prio, basic.shadow]}>
-                <Icon name={'star'} size={30} color={color.orange} />
-              </View>
-            }
-            {
-              look != true &&
-              <View style={[styles.prio, basic.shadow]}>
-                <Icon name={'heart'} size={30} color={color.pink} />
-                <Text style={styles.favNb}>{item.favorite}</Text>
-              </View>
-            }
-          </View>
-          )
-        }}
-        keyExtractor={item => item.id}
-      />
+      <ScrollView style={styles.scroll}>
+        <View style={styles.scrollContent}>
+        {
+          tabActive == 'fav' ?
+          favs.map((item, id) => {
+              return (
+                <View style={[styles.card, basic.shadow]}>
+                  <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
+                    <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
+                  </TouchableOpacity>
+                  <LinearGradient
+                  colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
+                    <Text style={styles.cardtitle}>Hirono Mischief - Destroyer</Text>
+                  </LinearGradient>
+                  <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Creation', {editMode: true});}}>
+                    <IconMat name={'lead-pencil'} size={20} color={color.pink} />
+                  </TouchableOpacity>
+                  <View style={[styles.prio, basic.shadow]}>
+                    <Icon name={'heart'} size={30} color={color.pink} />
+                    <Text style={styles.favNb}>{item.favorite}</Text>
+                  </View>
+                </View>
+              )
+          }) :
+          list.map((item, id) => {
+            if (tabActive == 'change' && item.look != true || tabActive == 'look' && item.look == true)
+              return (
+                <View style={[styles.card, basic.shadow]}>
+                  <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
+                    <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
+                  </TouchableOpacity>
+                  <LinearGradient
+                  colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
+                    <Text style={styles.cardtitle}>Hirono Mischief - Destroyer</Text>
+                  </LinearGradient>
+                  <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Creation', {editMode: true});}}>
+                    <IconMat name={'lead-pencil'} size={20} color={color.pink} />
+                  </TouchableOpacity>
+                  {
+                    item.prio &&
+                    <View style={[styles.prio, basic.shadow]}>
+                      <Icon name={'star'} size={30} color={color.orange} />
+                    </View>
+                  }
+                </View>
+              )
+          })
+        }
+        </View>
+      </ScrollView>
+      <Modal style={styles.modal} position={"bottom"} ref={modalRef} coverScreen={true}>
+        <Image style={styles.modalPic} source={(current && current.pic) && current.pic} resizeMode="cover" />
+        <Text style={styles.modalTitle}>{current && (current.name + ' - ' + current.model)}</Text>
+        <Text style={styles.desc}>{"Note du produit exemple: J'echange tout ceux qui sont entouré"}</Text>
+        <Text style={styles.desc}>{"L'utilisateur veut échanger"}</Text>
+        <Text style={styles.desc}>{"Date d'ajout: 9 decembre 2023"}</Text>
+        <View style={basic.break} />
+        <TouchableOpacity
+            style={basic.btnWhiteout}
+            onPress={() => {
+              modalRef.current.close();
+              navigation.navigate('Creation', {editMode: true});
+            }}>
+            <Text style={basic.btnTxtOut}>Modifier</Text>
+        </TouchableOpacity>
+      </Modal>
       </View>
     </SafeAreaView>
   );
@@ -239,7 +275,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-around',
     width: '95%',
-    paddingBottom: 20,
   },
   iconBox: {
     flexDirection: 'row',
@@ -264,14 +299,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 22,
     color: 'rgba(255, 255, 255, 0.4)',
-    marginTop: 10,
+    marginBottom: 10,
   },
   colTxtBigOn: {
     fontFamily: 'Helvetica-Bold',
     alignSelf: 'center',
     fontSize: 22,
     color: 'white',
-    marginTop: 10,
+    marginBottom: 10,
   },
   favNb: {
     fontFamily: 'Helvetica-Bold',
@@ -280,7 +315,49 @@ const styles = StyleSheet.create({
     shadowOffset: {width: -1, height: 2},
     shadowOpacity: 2,
     shadowRadius: 3,
-  }
+  },
+  tab: {
+    alignItems: 'center',
+    marginBottom: -2,
+  },
+  scroll: {
+    flex: 1,
+    width: '100%',
+    marginTop: 20
+  },
+  scrollContent: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    paddingRight: 10,
+    paddingLeft: 10,
+  },
+  modal: {
+    justifyContent: 'flex-start',
+    borderRadius: 20,
+    height: '90%',
+    width: '100%',
+  },
+  modalPic: {
+    width: '100%',
+    height: '50%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontFamily: 'Helvetica-Bold',
+    color: 'black',
+    padding: 20,
+  },
+  desc: {
+    fontSize: 22,
+    fontFamily: 'Helvetica',
+    color: 'black',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+  },
 });
 
 export default Profile;

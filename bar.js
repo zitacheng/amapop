@@ -12,6 +12,7 @@ import {basic} from './constant/basic.js';
 import {color} from './constant/color.js';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Badge } from 'react-native-paper';
+import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createMaterialBottomTabNavigator();
 export function TabScreen({navigation, route}) {
@@ -74,16 +75,12 @@ export function TabScreen({navigation, route}) {
         }}
       />
       <Tab.Screen
-        name="Settings"
+        name="Forun"
         component={Settings}
         options={{
           tabBarLabel: 'Settings',
           tabBarIcon: () => (
-            <Image
-              style={basic.barIcon}
-              source={pop}
-              resizeMode="contain"
-            />
+            <IconMat name={'forum'} size={20} color={color.pink} />
           ),
         }}
       />

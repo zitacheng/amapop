@@ -160,6 +160,7 @@ const Home = ({navigation}) => {
         <TouchableOpacity
             style={basic.btn}
             onPress={() => {
+              Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as XXX je suis interessé' +'&phone=+33768628787')
             }}>
             <Text style={basic.btnTxt}>Envoyer un message</Text>
         </TouchableOpacity>
