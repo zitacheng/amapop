@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Home from './container/Home.js';
 import Creation from './container/Creation.js';
-import Settings from './container/Settings.js';
+import Forum from './container/Forum.js';
 import Profile from './container/Profile.js';
 import {Image, View} from 'react-native';
 import user from './assets/userOn.png';
@@ -76,9 +76,9 @@ export function TabScreen({navigation, route}) {
       />
       <Tab.Screen
         name="Forun"
-        component={Settings}
+        component={Forum}
         options={{
-          tabBarLabel: 'Settings',
+          tabBarLabel: 'Forum',
           tabBarIcon: () => (
             <IconMat name={'forum'} size={20} color={color.pink} />
           ),
