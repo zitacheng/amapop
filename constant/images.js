@@ -1,4 +1,5 @@
 import logo from '../assets/logoLongP.png';
+import logoWhite from '../assets/logoLongW.png';
 import avatar from '../assets/gho.jpeg';
 import out from '../assets/out.png';
 import gallery from '../assets/gallery.png';
@@ -12,6 +13,7 @@ import exchange from '../assets/exchange.png';
 
 export const images = {
     logo: logo,
+    logoWhite: logoWhite,
     avatar: avatar,
     out: out,
     gallery: gallery,

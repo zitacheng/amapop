@@ -83,11 +83,12 @@ const Settings = ({navigation}) => {
           <Text style={basic.btnTxtOut}>{"Se déconnecter"}</Text>
         </TouchableOpacity>
       </ScrollView>
-      <Modal style={[styles.modal, styles.modal3]} position={"center"} ref={modalRef}>
-          <Text style={styles.title}>Bug ou une suggestion pour améliorer AMA POP</Text>
+      <Modal style={styles.modal} position={"center"} ref={modalRef}>
+          <Text style={styles.titleB}>Bug ou une suggestion pour améliorer AMA POP</Text>
           <TextInput
             style={styles.input}
             onChangeText={setBug}
+            multiline={true}
             value={bug}
             placeholder='Exemple: Une page pour les events'
           />
@@ -206,8 +207,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     borderRadius: 20,
-  },
-  modal3: {
     height: '50%',
     width: '80%'
   },
@@ -228,6 +227,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     color: 'white',
+    marginBottom: 10,
+    fontFamily: 'Helvetica-Bold',
+    width: '90%',
+    textAlign: 'center'
+  },
+  titleB: {
+    fontSize: 20,
+    color: 'black',
     marginBottom: 10,
     fontFamily: 'Helvetica-Bold',
     width: '90%',

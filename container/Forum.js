@@ -2,11 +2,11 @@ import React, {useState, useRef} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
-  Text,
+  TextInput,
   StatusBar,
   View,
   Image,
-  FlatList,
+  Text,
   SafeAreaView,
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
@@ -16,24 +16,75 @@ import {images} from '../constant/images';
 import {basic} from '../constant/basic';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import UserAvatar from 'react-native-user-avatar';
-import Icon from 'react-native-vector-icons/Ionicons';
-import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
-import { LinearGradient } from 'expo-linear-gradient';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import AntIcons from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
 
 const Forum = ({navigation}) => {
-  const [showNotif, setShowNotif] = useState(false);
-  const [tabActive, setTabActive] = useState('change');
-  const [current, setCurrent] = useState(null);
   const modalRef = useRef(null);
+  const [search, setSearch] = useState('');
+
+  const topics = [
+    {id: 1, title: 'histoire de hirono' , desc: 'Est ce que vous connaissez les histoire de chaque hirono?', likes: 32, answers: 14, views: 21},
+    {id: 2, title: 'date de sortie des dragon', desc: 'Quand sort la nouvelle collection de nouvel an chinois dragon en france?', likes: 1, answers: 1, views: 5},
+    {id: 3, title: 'Display de figurines', desc: 'Vous utilisez quoi comme display pour affichez vos figurines ?', likes: 5, answers: 5, views: 7},
+    {id: 3, title: 'Savoir si ce sont des vrai', desc: 'Comment vous différencier les figurines vrai ou faux ?', likes: 16, answers: 8, views: 11},
+    {id: 3, title: 'Comment trouver le modele television', desc: 'Vous avez des astuces pour trouver le secret tele de hirono ?', likes: 20, answers: 21, views: 35},
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <ScrollView>
-
+      <Image style={basic.logo} source={images.logo} resizeMode="cover" />
+      <View style={basic.search}>
+        <TouchableOpacity
+          style={styles.icon}
+          onPress={() => {
+          }}>
+          <Icon name={'search'} size={20} color={color.pink} />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          onChangeText={setSearch}
+          value={search}
+        />
+      </View>
+      <ScrollView style={styles.scroll}>
+          {
+            topics.map((item, id) => {
+                return (
+                <TouchableOpacity style={[styles.topic, basic.shadow]} onPress={() => {
+                    // navigation.navigate('Chatting');
+                    }}>
+                    <View style={styles.row}>
+                        <View style={styles.content}>
+                            <Text style={styles.title}>{item.title}</Text>
+                            <Text style={styles.desc} numberOfLines={2} ellipsizeMode='tail'>{item.desc}</Text>
+                        </View>
+                        <View>
+                            <Image style={styles.avatar} source={images.avatar} resizeMode="cover" key={id} />
+                        </View>
+                    </View>
+                    <View style={styles.row}>
+                        <Ionicons name={'chatbox'} size={15} color={color.pink} />
+                        <Text style={styles.bottom}>{item.answers}</Text>
+                        <AntIcons name={'like1'} size={15} color={color.pink} />
+                        <Text style={styles.bottom}>{item.likes}</Text>
+                        <Ionicons name={'time-outline'} size={15} color={color.pink} />
+                        <Text style={styles.bottom}>6d</Text>
+                        <Ionicons name={'eye'} size={15} color={color.pink} />
+                        <Text style={styles.bottom}>{item.views}</Text>
+                    </View>
+                </TouchableOpacity>
+              )
+            })
+          }
       </ScrollView>
+      <TouchableOpacity style={styles.add}>
+        <Ionicons name={'add'} size={30} color={'white'} />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -45,192 +96,65 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
+    // position: 'absolute'
+  },
+  add: {
     backgroundColor: color.pink,
-  },
-  header: {
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    width: '95%',
-  },
-  content: {
-    flex: 5,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    flexWrap: 'wrap',
-    backgroundColor: 'white',
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
-  },
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '95%',
-    marginTop: 20,
-    alignSelf: 'center'
-  },
-  title: {
-    color: 'white',
-    fontFamily: 'Helvetica-Bold',
-    fontSize: 28,
-    padding: 10,
-    flex: 1,
-  },
-  rounded: {
-    borderRadius: 25,
-    width: 50,
-    height: 50
-  },
-  card: {
-    width: '45%',
-    height: 260,
-    borderRadius: 10,
-    marginBottom: 15,
-    position: 'relative',
-    backgroundColor: 'white',
-  },
-  cardImg: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 10,
-    backgroundColor: color.ultraLightPurple
-  },
-  cardBottom: {
-    backgroundColor: 'white',
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
     width: 40,
     height: 40,
     borderRadius: 20,
-    padding: 10,
-    display: 'flex',
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
     justifyContent: 'center',
     alignItems: 'center'
   },
-  prio: {
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    width: 40,
-    height: 40,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row'
+  icon: {
+    padding: 2,
   },
-  cardtitleBg: {
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    paddingLeft: 2,
-    paddingRight: 2,
-    paddingBottom: 10,
-    paddingTop: 10,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+  input: {
+    padding: 10,
+    width: '80%',
   },
-  cardtitle: {
-    fontSize: 16,
-    fontFamily: 'Helvetica-Bold',
-    color: 'white',
-    textAlign: 'center',
+  topic: {
+    backgroundColor: 'white',
+    marginBottom: 15,
+    padding: 5,
   },
-  textRow: {
-    flexDirection: 'row',
-    display: 'flex',
-    justifyContent: 'space-around',
-    width: '95%',
+  content: {
+    flex: 5
   },
-  iconBox: {
-    flexDirection: 'row',
-    display: 'flex',
-    justifyContent: 'space-around',
-    width: '95%',
-    marginBottom: -2
-  },
-  col: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center'
-  },
-  colTxt: {
-    fontFamily: 'Helvetica-Bold',
-    alignSelf: 'center',
-    fontSize: 18,
-    color: color.grey
-  },
-  colTxtBig: {
-    fontFamily: 'Helvetica-Bold',
-    alignSelf: 'center',
-    fontSize: 22,
-    color: 'rgba(255, 255, 255, 0.4)',
-    marginBottom: 10,
-  },
-  colTxtBigOn: {
-    fontFamily: 'Helvetica-Bold',
-    alignSelf: 'center',
-    fontSize: 22,
-    color: 'white',
-    marginBottom: 10,
-  },
-  favNb: {
-    fontFamily: 'Helvetica-Bold',
-    color: 'white',
-    shadowColor: '#171717',
-    shadowOffset: {width: -1, height: 2},
-    shadowOpacity: 2,
-    shadowRadius: 3,
-  },
-  tab: {
-    alignItems: 'center',
-    marginBottom: -2,
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25
   },
   scroll: {
-    flex: 1,
     width: '100%',
-    marginTop: 20
-  },
-  scrollContent: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    paddingRight: 10,
-    paddingLeft: 10,
-  },
-  modal: {
-    justifyContent: 'flex-start',
-    borderRadius: 20,
-    height: '90%',
-    width: '100%',
-  },
-  modalPic: {
-    width: '100%',
-    height: '50%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  modalTitle: {
-    fontSize: 22,
-    fontFamily: 'Helvetica-Bold',
-    color: 'black',
+    marginTop: 20,
     padding: 20,
   },
-  desc: {
-    fontSize: 22,
-    fontFamily: 'Helvetica',
-    color: 'black',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 10,
+  row: {
+    flexDirection: 'row',
   },
+  title: {
+    fontFamily: 'Helvetica-Bold',
+    fontSize: 18,
+    color: color.pink
+  },
+  desc: {
+    fontFamily: 'Helvetica',
+    fontSize: 14,
+    paddingTop: 10,
+    paddingBottom: 10,
+    width: '90%',
+  },
+  bottom: {
+    marginRight: 10,
+    fontFamily: 'Helvetica-bold',
+    color: color.grey
+  }
 });
 
 export default Forum;
