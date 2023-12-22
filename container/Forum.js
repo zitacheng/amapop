@@ -60,7 +60,7 @@ const Forum = ({navigation}) => {
                     }}>
                     <View style={styles.row}>
                         <View style={styles.content}>
-                            <Text style={styles.title}>{item.title}</Text>
+                            <Text style={styles.title}  numberOfLines={1} ellipsizeMode='tail'>{item.title}</Text>
                             <Text style={styles.desc} numberOfLines={2} ellipsizeMode='tail'>{item.desc}</Text>
                         </View>
                         <View>
@@ -151,7 +151,8 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   bottom: {
-    marginRight: 10,
+    marginRight: 12,
+    marginLeft: 4,
     fontFamily: 'Helvetica-bold',
     color: color.grey
   }
