@@ -82,9 +82,12 @@ const Forum = ({navigation}) => {
             })
           }
       </ScrollView>
-      <TouchableOpacity style={styles.add}>
+      <TouchableOpacity style={styles.add} onPress={() => {modalRef.current.open();}}>
         <Ionicons name={'add'} size={30} color={'white'} />
       </TouchableOpacity>
+      <Modal style={styles.modalCreate} position={"center"} ref={modalRef} coverScreen={true}>
+        <Text style={styles.modalTitle}>Créer une discussion</Text>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -144,6 +147,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: color.pink
   },
+  modalTitle: {
+    fontFamily: 'rbt-Bold',
+    fontSize: 25,
+    color: color.pink,
+    textAlign: 'center'
+  },
   desc: {
     fontFamily: 'Helvetica',
     fontSize: 14,
@@ -157,6 +166,13 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     fontFamily: 'Helvetica',
     color: 'black'
+  },
+  modalCreate: {
+    justifyContent: 'space-between',
+    borderRadius: 20,
+    height: '45%',
+    width: '90%',
+    padding: 10,
   }
 });
 
