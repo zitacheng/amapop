@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   bottom: {
     marginRight: 12,
     marginLeft: 4,
-    fontFamily: 'Helvetica-bold',
+    fontFamily: 'Helvetica',
     color: 'black'
   }
 });
