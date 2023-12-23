@@ -10,6 +10,7 @@ import Creation from './container/Creation.js';
 import Settings from './container/Settings.js';
 import Chat from './container/Chat.js';
 import Chatting from './container/Chatting.js';
+import Topic from './container/Topic.js';
 import {TabScreen} from './bar.js';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -32,6 +33,7 @@ export default function App() {
         <Stack.Screen name="TabScreen" component={TabScreen} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="Topic" component={Topic} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="UserProfile" component={UserProfile} />
         <Stack.Screen name="Chat" component={Chat} />

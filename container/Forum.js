@@ -56,7 +56,7 @@ const Forum = ({navigation}) => {
             topics.map((item, id) => {
                 return (
                 <TouchableOpacity style={[styles.topic, basic.shadow]} onPress={() => {
-                    // navigation.navigate('Chatting');
+                    navigation.navigate('Topic', {topic: item});
                     }}>
                     <View style={styles.row}>
                         <View style={styles.content}>
@@ -70,7 +70,7 @@ const Forum = ({navigation}) => {
                     <View style={styles.row}>
                         <Ionicons name={'chatbox'} size={15} color={color.pink} />
                         <Text style={styles.bottom}>{item.answers}</Text>
-                        <AntIcons name={'like1'} size={15} color={color.pink} />
+                        <AntIcons name={'heart'} size={15} color={color.pink} />
                         <Text style={styles.bottom}>{item.likes}</Text>
                         <Ionicons name={'time-outline'} size={15} color={color.pink} />
                         <Text style={styles.bottom}>6d</Text>
@@ -120,7 +120,8 @@ const styles = StyleSheet.create({
   topic: {
     backgroundColor: 'white',
     marginBottom: 15,
-    padding: 5,
+    padding: 8,
+    borderRadius: 5
   },
   content: {
     flex: 5
@@ -149,12 +150,13 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     width: '90%',
+    color: color.grey,
   },
   bottom: {
     marginRight: 12,
     marginLeft: 4,
     fontFamily: 'Helvetica-bold',
-    color: color.grey
+    color: 'black'
   }
 });
 
