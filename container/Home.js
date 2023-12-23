@@ -28,12 +28,13 @@ Icon.loadFont();
 
 const Home = ({navigation}) => {
   const [search, setSearch] = useState('');
-  const [change, setChange] = useState(true);
+  const [selected, setSelected] = useState([]);
   const [look, setLook] = useState(false);
   const [current, setCurrent] = useState(null);
   const [sorting, setSorting] = useState('Date croissant');
   const modalRef = useRef(null);
   const modalSortRef = useRef(null);
+  const modalFilterRef = useRef(null);
   
 
   //TODO recuperer que ceux que les gens echange
@@ -47,6 +48,31 @@ const Home = ({navigation}) => {
     {id: 6, name: 'Hapuchichi', selected: false},
     {id: 7, name: 'Cry Baby', selected: false},
     {id: 8, name: 'Dimoo', selected: false},
+    {id: 9, name: 'Conan', selected: false},
+    {id: 10, name: 'League of ledengs', selected: false},
+    {id: 11, name: 'Pucky', selected: false},
+    {id: 12, name: 'Naruto', selected: false},
+    {id: 13, name: 'Disney', selected: false},
+    {id: 14, name: 'Minions', selected: false},
+    {id: 15, name: 'Pino Jelly', selected: false},
+    {id: 16, name: 'Zsiga', selected: false},
+    {id: 17, name: 'Hacipupu', selected: false},
+    {id: 18, name: 'Teletubbies', selected: false},
+    {id: 19, name: 'Friends', selected: false},
+    {id: 20, name: 'Bob eponge', selected: false},
+    {id: 21, name: 'Garfield', selected: false},
+    {id: 22, name: 'Peach riot', selected: false},
+    {id: 23, name: 'Spy x Family', selected: false},
+    {id: 24, name: 'Duckoo', selected: false},
+    {id: 25, name: 'Kubo', selected: false},
+    {id: 26, name: 'Harry potter', selected: false},
+    {id: 27, name: 'Lilios', selected: false},
+    {id: 28, name: 'Astro boy', selected: false},
+    {id: 29, name: 'Casper', selected: false},
+    {id: 30, name: 'Ultraman', selected: false},
+    {id: 31, name: 'Kiwiwi', selected: false},
+    {id: 32, name: 'Yoseku ueno', selected: false},
+    {id: 33, name: 'My little poeny', selected: false},
   ]);
 
   const pops = [
@@ -87,11 +113,16 @@ const Home = ({navigation}) => {
       </View>
       <View style={basic.break} />
       <View style={styles.btnSelect}>
-      <View style={styles.togglesBox}>
-        <TouchableOpacity style={!look ? styles.toggleOn : styles.toggleOff} onPress={() => {modalSortRef.current.open();}}>
-          <Text style={styles.smTxt}>{'Trie: ' + sorting}</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.togglesBox}>
+          <TouchableOpacity style={styles.toggleOn} onPress={() => {modalSortRef.current.open();}}>
+            <Text style={styles.smTxt}>{'Trie: ' + sorting}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.togglesBoxFilter}>
+          <TouchableOpacity style={selected.length >= 1 ? styles.toggleOn : styles.toggleOff} onPress={() => {modalFilterRef.current.open();}}>
+            <Text numberOfLines={1} ellipsizeMode='tail' style={[selected.length >= 1 ? styles.smTxt : styles.smTxtOff]}>{'Filtre' + (selected.length > 0 ? ': ' : ' ') + selected.toString()}</Text>
+          </TouchableOpacity>
+        </View>
         {/* <View style={styles.togglesBox}>
           <TouchableOpacity style={!look ? styles.toggleOn : styles.toggleOff} onPress={() => {setLook(false)}}>
             <Text style={styles.smTxt}>Échange</Text>
@@ -101,16 +132,16 @@ const Home = ({navigation}) => {
           </TouchableOpacity>
         </View> */}
         {
-          menu.map((item, id) => {
-            return (
-              <TouchableOpacity style={[styles.badge, basic.shadow, {backgroundColor: item.selected ? color.pink : color.lightPurple}]}
-                onPress={() => {
-                  onChangeMenu(item);
-                }} key={id}>
-                <Text style={styles.smTxt}>{item.name}</Text>
-              </TouchableOpacity>
-            )
-          })
+          // menu.map((item, id) => {
+          //   return (
+          //     <TouchableOpacity style={[styles.badge, basic.shadow, {backgroundColor: item.selected ? color.pink : color.lightPurple}]}
+          //       onPress={() => {
+          //         onChangeMenu(item);
+          //       }} key={id}>
+          //       <Text style={styles.smTxt}>{item.name}</Text>
+          //     </TouchableOpacity>
+          //   )
+          // })
         }
       </View>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -226,6 +257,39 @@ const Home = ({navigation}) => {
           />
         </View>
       </Modal>
+      <Modal style={styles.modalFilter} position={"center"} ref={modalFilterRef} coverScreen={true}>
+        <Text style={styles.modalTitle}>Filtrer par:</Text>
+        <ScrollView>
+        <View style={styles.btnSelect}>
+          {
+            menu.map((item, id) => {
+              return (
+                <TouchableOpacity style={[styles.badge, basic.shadow, {backgroundColor: selected.includes(item.name) ? color.pink : 'white'}]}
+                  onPress={() => {
+                      // onChangeMenu(item);
+                      let newArr = [...selected];
+                          if (selected.indexOf(item.name) == -1)
+                            newArr.push(item.name)
+                          else
+                            newArr.splice(selected.indexOf(item.name), 1)
+                          setSelected(newArr);
+
+                  }} key={id}>
+                  <Text style={[selected.includes(item.name) ? styles.smTxt :  styles.smTxtOff]}>{item.name}</Text>
+                </TouchableOpacity>
+              )
+            })
+          }
+        </View>
+        </ScrollView>
+        <TouchableOpacity
+            style={basic.btn}
+            onPress={() => {
+              setSelected([]);
+            }}>
+            <Text style={basic.btnTxt}>Effacer</Text>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   )
 };
@@ -322,6 +386,11 @@ const styles = StyleSheet.create({
     fontFamily: 'rbt-Bold',
     fontSize: 14
   },
+  smTxtOff: {
+    color: color.pink,
+    fontFamily: 'rbt-Bold',
+    fontSize: 14
+  },
   profileTxt: {
     color: 'white',
     fontFamily: 'rbt-Bold',
@@ -353,7 +422,7 @@ const styles = StyleSheet.create({
     width: '92%',
     marginTop: 5,
     flexWrap: 'wrap',
-    // justifyContent: 'center'
+    // justifyContent: 'center',
   },
   badge: {
     borderRadius: 15,
@@ -367,15 +436,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderColor: color.pink,
-    borderWidth: 1.5,
     borderRadius: 20,
     flexDirection: 'row',
-    backgroundColor: color.lightPurple,
+    backgroundColor: 'white',
     marginRight: 5,
   },
+  togglesBoxFilter: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderWidth: 1.5,
+    borderColor: color.pink,
+    borderRadius: 20,
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    marginRight: 5,
+    maxWidth: '50%'
+  },
   toggleOff: {
-    backgroundColor: color.lightPurple,
+    backgroundColor: 'white',
     padding: 6,
     borderRadius: 20,
   },
@@ -392,16 +472,27 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   modalSort: {
-    justifyContent: 'center',
     borderRadius: 20,
     height: '40%',
     width: '100%',
+  },
+  modalFilter: {
+    justifyContent: 'space-between',
+    borderRadius: 20,
+    height: '50%',
+    width: '95%',
+    padding: 20,
   },
   title: {
     fontSize: 22,
     fontFamily: 'rbt-Bold',
     color: 'black',
     padding: 20,
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontFamily: 'rbt-Bold',
+    color: 'black',
   },
   content: {
     fontSize: 22,
