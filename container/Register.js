@@ -55,7 +55,7 @@ const Register = ({navigation}) => {
             enabled
             style={styles.scrollContent}>
             <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center', paddingLeft: 30, paddingRight: 30,}}>
-              <Text style={basic.label}>{'Username'}</Text>
+              <Text style={basic.label}>{"Nom d'utilisateur"}</Text>
               <TextInput
                 style={basic.input}
                 onChangeText={setUsername}
@@ -70,7 +70,7 @@ const Register = ({navigation}) => {
                 value={email}
               />
               <Text style={basic.label}>
-                {'Password'}
+                {'Mot de passe'}
               </Text>
               <TextInput
                 style={basic.input}
@@ -79,7 +79,7 @@ const Register = ({navigation}) => {
                 value={password}
               />
               <Text style={basic.label}>
-                {'Phone'}
+                {'Téléphone'}
               </Text>
               <TextInput
                 style={basic.input}
@@ -94,7 +94,7 @@ const Register = ({navigation}) => {
                 onPress={() => {
                   registerUser();
                 }}>
-                <Text style={basic.btnTxt}>{'Registration'}</Text>
+                <Text style={basic.btnTxt}>{'Créer un compte'}</Text>
               </TouchableOpacity>
             </ScrollView>
           </KeyboardAvoidingView>

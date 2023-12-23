@@ -31,12 +31,13 @@ const Topic = ({navigation, route}) => {
   const [username, setUsername] = useState('Slashzita');
   const [avatar, setAvatar] = useState(images.avatar);
   const [msg, setMsg] = useState('');
-  const height = useHeaderHeight()
+  const [modalImg, setModalImg] = useState('');
+  const modalRef = useRef(null);
 
   const answers = [
-    {id: 1, user: 'Anna' , answer: 'Je pense que Lorem ipsum', likes: 32},
+    {id: 1, user: 'Anna' , answer: 'Je pense que Lorem ipsum', likes: 32, img: images.gallery6},
     {id: 2, user: 'Jean', answer: 'Je pense que Lorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum', likes: 1},
-    {id: 3, user: 'Marc', answer: 'Je pense que Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum', likes: 5},
+    {id: 3, user: 'Marc', answer: 'Je pense que Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum', likes: 5, img: images.gallery4},
   ];
 
   return (
@@ -67,7 +68,10 @@ const Topic = ({navigation, route}) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Text style={styles.contentTxt}>{ route.params.topic.desc}</Text>
+                <Text style={styles.contentDesc}>{ route.params.topic.desc}</Text>
+                <TouchableOpacity onPress={() => {setModalImg(images.gallery5); modalRef.current.open()}}>
+                  <Image style={styles.topicImg} source={images.gallery5} resizeMode="cover" />
+                </TouchableOpacity>
                 <Text style={styles.dateTxt}>{'24/02/2023'}</Text>
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={120}
             enabled style={styles.keyboardContainer}>
@@ -92,6 +96,12 @@ const Topic = ({navigation, route}) => {
                                         </View>
                                     </View>
                                     <Text style={styles.answer}>{item.answer}</Text>
+                                    {
+                                      item.img && 
+                                      <TouchableOpacity onPress={() => {setModalImg(item.img); modalRef.current.open()}}>
+                                        <Image style={styles.topicImg} source={item.img} resizeMode="cover" />
+                                      </TouchableOpacity>
+                                    }
                                 </View>
                             )
                         })
@@ -111,6 +121,9 @@ const Topic = ({navigation, route}) => {
                 </View>
             {/* </TouchableWithoutFeedback> */}
         </KeyboardAvoidingView>
+        <Modal style={styles.modalImg} position={"center"} ref={modalRef} coverScreen={true}>
+          <Image style={styles.bigImg} source={modalImg} resizeMode="contain" />
+        </Modal>
       </View>
     </SafeAreaView>
   );
@@ -173,6 +186,11 @@ const styles = StyleSheet.create({
     fontFamily: 'rbt-Medium',
     textAlign: 'center'
   },
+  contentDesc: {
+    fontSize: 16,
+    marginBottom: 10,
+    fontFamily: 'rbt-Medium',
+  },
   dateTxt: {
     fontSize: 16,
     marginBottom: 10,
@@ -183,6 +201,7 @@ const styles = StyleSheet.create({
   answer: {
     fontSize: 16,
     fontFamily: 'rbt-Regular',
+    marginBottom: 10,
   },
   username: {
     fontSize: 16,
@@ -218,10 +237,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 20,
     backgroundColor: color.pink,
-    // shadowColor: color.ligtGrey,
-    // shadowOffset: {width: -2, height: 4},
-    // shadowOpacity: 1,
-    // shadowRadius: 8,
     color: 'white',
   },
   row: {
@@ -237,6 +252,22 @@ const styles = StyleSheet.create({
   },
   keyboardContainer: {
     flex: 1,
+  },
+  topicImg: {
+    width: 60,
+    height: 60,
+    borderRadius: 5,
+  },
+  modalImg: {
+    justifyContent: 'center',
+    borderRadius: 20,
+    height: '55%',
+    width: '90%',
+  },
+  bigImg: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 20,
   }
 });
 

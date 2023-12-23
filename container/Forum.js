@@ -21,10 +21,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
+import * as ImagePicker from 'expo-image-picker';
 
 const Forum = ({navigation}) => {
   const modalRef = useRef(null);
   const [search, setSearch] = useState('');
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
+  const [img1, setImg1] = useState(null);
 
   const topics = [
     {id: 1, title: 'histoire de hirono' , desc: 'Est ce que vous connaissez les histoire de chaque hirono?', likes: 32, answers: 14, views: 21},
@@ -82,11 +86,52 @@ const Forum = ({navigation}) => {
             })
           }
       </ScrollView>
-      <TouchableOpacity style={styles.add} onPress={() => {modalRef.current.open();}}>
+      <TouchableOpacity style={styles.add} onPress={() => {setImg1(null);modalRef.current.open();}}>
         <Ionicons name={'add'} size={30} color={'white'} />
       </TouchableOpacity>
       <Modal style={styles.modalCreate} position={"center"} ref={modalRef} coverScreen={true}>
         <Text style={styles.modalTitle}>Créer une discussion</Text>
+        <View>
+            <Text style={basic.label}>Une image (optionnel)</Text>
+            <TouchableOpacity style={styles.addImg} onPress={async() => {
+                let result = await ImagePicker.launchImageLibraryAsync({
+                    allowsEditing: true,
+                    quality: 1,
+                });
+
+                if (!result.canceled) {
+                    setImg1(result.assets[0]);
+                } else {
+                    alert('You did not select any image.');
+                }
+                }}>
+                {
+                    img1 ? <Image style={styles.addPic} source={{uri: img1.uri}} resizeMode="cover" />
+                    : <AntIcons name={'plus'} size={30} color={'white'} style={styles.icon} />
+                }
+            </TouchableOpacity>
+            <Text style={basic.label}>Titre</Text>
+            <TextInput
+            style={basic.input}
+            autoCapitalize={'none'}
+            onChangeText={setTitle}
+            value={title}
+            />
+            <Text style={basic.label}>Description</Text>
+            <TextInput
+            style={basic.input}
+            autoCapitalize={'none'}
+            onChangeText={setDesc}
+            value={desc}
+            />
+        </View>
+        <TouchableOpacity
+            style={basic.btn}
+            onPress={() => {
+                modalRef.current.close();
+            }}>
+            <Text style={basic.btnTxt}>{"Publier"}</Text>
+        </TouchableOpacity>
       </Modal>
     </SafeAreaView>
   );
@@ -169,12 +214,30 @@ const styles = StyleSheet.create({
     color: 'black'
   },
   modalCreate: {
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     borderRadius: 20,
-    height: '45%',
+    height: '55%',
     width: '90%',
+    padding: 15,
+  },
+  addImg: {
+    backgroundColor: color.lightPurple,
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    marginRight: 10,
+    justifyContent: 'center'
+  },
+  icon: {
+    alignSelf: 'center',
     padding: 10,
-  }
+  },
+  addPic: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    marginRight: 10,
+  },
 });
 
 export default Forum;

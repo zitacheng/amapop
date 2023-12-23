@@ -39,7 +39,7 @@ const Login = ({navigation}) => {
       <Load loading={loading} />
       <View style={styles.centerBox}>
         <Image style={styles.logo} source={images.logo} resizeMode="contain" />
-        <Text style={basic.label}>E-mail</Text>
+        <Text style={basic.label}>E-mail / Nom d'utilisateur</Text>
         <TextInput
           style={basic.input}
           autoCapitalize={'none'}
@@ -49,7 +49,7 @@ const Login = ({navigation}) => {
         />
         {!passForgot && (
           <>
-            <Text style={basic.label}>{'Password'}</Text>
+            <Text style={basic.label}>{'Mot de passe'}</Text>
             <View style={styles.searchSection}>
               <TextInput
                 style={styles.inputPass}
@@ -92,7 +92,7 @@ const Login = ({navigation}) => {
               onPress={() => {
                 logUser();
               }}>
-              <Text style={basic.btnTxt}>{"Login"}</Text>
+              <Text style={basic.btnTxt}>{"Se connecter"}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={basic.btnWhiteout}
@@ -100,7 +100,7 @@ const Login = ({navigation}) => {
               onPress={() => {
                 navigation.navigate('Register');
               }}>
-              <Text style={basic.btnTxtOut}>{"Sign Up"}</Text>
+              <Text style={basic.btnTxtOut}>{"Créer un compte"}</Text>
             </TouchableOpacity>
           </>
         )}
