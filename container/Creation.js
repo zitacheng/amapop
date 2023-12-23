@@ -158,8 +158,8 @@ const Creation = ({navigation, route}) => {
                       <Text style={basic.label}>Objectif de la publication</Text>
                       <View style={styles.radioBox}>
                       <RadioButton.Group onValueChange={newValue => setChecked(newValue)} value={checked}>
-                          <RadioButton.Item color={color.pink} label="Je veux l'échanger" value="change" />
-                          <RadioButton.Item color={color.pink} label="Je cherche ce modèle" value="look" />
+                          <RadioButton.Item color={color.pink} labelStyle={{fontFamily: 'rbt-Bold'}} label="Je veux l'échanger" value="change" />
+                          <RadioButton.Item color={color.pink} labelStyle={{fontFamily: 'rbt-Bold'}} label="Je cherche ce modèle" value="look" />
                       </RadioButton.Group>
                       </View>
                       {
@@ -173,7 +173,7 @@ const Creation = ({navigation, route}) => {
                               text="Recherche en priorité"
                               iconStyle={{ borderColor: "red" }}
                               innerIconStyle={{ borderWidth: 2 }}
-                              textStyle={{textDecorationLine: "none"}}
+                              textStyle={{textDecorationLine: "none", fontFamily: 'rbt-Bold', fontSize: 18, color: 'black'}}
                               onPress={() => {setPrio(!prio)}}
                           />
                         </>
@@ -229,12 +229,12 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-between',
     backgroundColor: color.pink,
-    padding: 10,
+    padding: 5,
   },
   title: {
     padding: 10,
-    fontFamily: 'Helvetica-Bold',
-    fontSize: 24,
+    fontFamily: 'rbt-Bold',
+    fontSize: 28,
     width: '80%',
     textAlign: 'center',
     color: 'white'
@@ -307,13 +307,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: color.pink,
     marginBottom: 10,
-    fontFamily: 'Helvetica',
+    fontFamily: 'rbt-Bold',
     width: '100%',
     textAlign: 'center',
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 2},
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
   }
 });
 

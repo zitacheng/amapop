@@ -81,8 +81,8 @@ const Topic = ({navigation, route}) => {
                                     <View style={styles.row}>
                                         <Image style={styles.smAvatar} source={images.avatar} resizeMode="cover"/>
                                         <View style={styles.max}>
-                                            <Text>{item.user}</Text>
-                                            <Text>{'il y a 2h'}</Text>
+                                            <Text style={styles.username}>{item.user}</Text>
+                                            <Text style={styles.ago}>{'il y a 2h'}</Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={styles.icon}>
@@ -91,7 +91,7 @@ const Topic = ({navigation, route}) => {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <Text>{item.answer}</Text>
+                                    <Text style={styles.answer}>{item.answer}</Text>
                                 </View>
                             )
                         })
@@ -153,13 +153,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
     marginBottom: 10,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     width: '90%',
     textAlign: 'center'
   },
   headerTitle: {
     fontSize: 20,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
   },
   max: {
     flex: 1,
@@ -170,14 +170,28 @@ const styles = StyleSheet.create({
   contentTxt: {
     fontSize: 16,
     marginBottom: 10,
-    fontFamily: 'Helvetica',
+    fontFamily: 'rbt-Medium',
+    textAlign: 'center'
   },
   dateTxt: {
     fontSize: 16,
     marginBottom: 10,
-    fontFamily: 'Helvetica',
+    fontFamily: 'rbt-Light',
     textAlign: 'right',
     color: 'grey'
+  },
+  answer: {
+    fontSize: 16,
+    fontFamily: 'rbt-Regular',
+  },
+  username: {
+    fontSize: 16,
+    fontFamily: 'rbt-Medium',
+  },
+  ago: {
+    fontSize: 12,
+    marginBottom: 10,
+    fontFamily: 'rbt-Light',
   },
   avatar: {
     width: 50,
@@ -199,7 +213,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     width: '80%',
-    fontFamily: 'Helvetica',
+    fontFamily: 'rbt-Regular',
     fontSize: 18,
     marginRight: 10,
     borderRadius: 20,

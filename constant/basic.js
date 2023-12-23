@@ -23,16 +23,16 @@ export const basic = StyleSheet.create({
   },
   btnTxt: {
     color: 'white',
-    fontSize: RFValue(14),
+    fontSize: RFValue(16),
     alignSelf: 'center',
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     textTransform: 'uppercase',
   },
   btnTxtOut: {
     color: color.pink,
-    fontSize: RFValue(14),
+    fontSize: RFValue(16),
     alignSelf: 'center',
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     textTransform: 'uppercase',
   },
   btnDis: {
@@ -46,9 +46,9 @@ export const basic = StyleSheet.create({
   label: {
     marginTop: 20,
     fontSize: 16,
-    color: color.grey,
+    color: 'black',
     marginBottom: 10,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     width: '100%',
   },
   input: {
@@ -56,6 +56,7 @@ export const basic = StyleSheet.create({
     padding: 20,
     backgroundColor: color.lightPurple,
     width: '100%',
+    fontFamily: 'rbt-Regular'
   },
   break: {
     height: 20,
@@ -82,23 +83,6 @@ export const basic = StyleSheet.create({
     shadowOffset: {width: -2, height: 6},
     shadowOpacity: 0.1,
     shadowRadius: 8,
-  },
-  btnFutura: {
-    backgroundColor: 'black',
-    alignSelf: 'center',
-    paddingBottom: 5,
-    paddingRight: 10,
-    paddingLeft: 10,
-    marginBottom: 0,
-    justifyContent: 'center',
-    minWidth: '50%',
-  },
-  btnFull: {
-    backgroundColor: 'black',
-    alignSelf: 'center',
-    padding: 15,
-    width: '100%',
-    marginTop: 15,
   },
   btnOff: {
     backgroundColor: 'grey',
@@ -151,36 +135,7 @@ export const basic = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
-  smbtnOff: {
-    backgroundColor: 'grey',
-    padding: 10,
-    minWidth: '30%',
-    marginBottom: 10,
-    marginTop: 10,
-  },
-  btnTxtFutura: {
-    color: 'white',
-    fontSize: RFValue(12),
-    alignSelf: 'center',
-    paddingTop: 5,
-    paddingBottom: 5,
-    fontFamily: 'Futura-Medium',
-    textTransform: 'uppercase',
-  },
-  btnTxtDark: {
-    color: 'black',
-    fontSize: RFValue(14),
-    alignSelf: 'center',
-    fontFamily: 'Futura-Medium',
-    textTransform: 'uppercase',
-  },
-  smbtnTxt: {
-    color: 'white',
-    fontSize: RFValue(13),
-    alignSelf: 'center',
-    fontFamily: 'Futura-Medium',
-    textTransform: 'uppercase',
-  },
+
   barIcon: {
     width: 20,
     height: 20,
@@ -209,7 +164,7 @@ export const basic = StyleSheet.create({
   },
   spinnerTextStyle: {
     color: 'white',
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
   },
   upper: {
     textTransform: 'uppercase',
@@ -237,7 +192,7 @@ export const basic = StyleSheet.create({
   },
   modalText: {
     textAlign: 'center',
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     fontSize: RFValue(24),
   },
   center: {

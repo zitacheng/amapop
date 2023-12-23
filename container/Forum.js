@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
   input: {
     padding: 10,
     width: '80%',
+    fontFamily: 'rbt-Regular'
   },
   topic: {
     backgroundColor: 'white',
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   title: {
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     fontSize: 18,
     color: color.pink
   },
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   desc: {
-    fontFamily: 'Helvetica',
+    fontFamily: 'rbt-Regular',
     fontSize: 14,
     paddingTop: 10,
     paddingBottom: 10,
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
   bottom: {
     marginRight: 12,
     marginLeft: 4,
-    fontFamily: 'Helvetica',
+    fontFamily: 'rbt-Bold',
     color: 'black'
   },
   modalCreate: {

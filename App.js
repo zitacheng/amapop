@@ -35,7 +35,7 @@ export default function App() {
     'rbt-Regular': require('./assets/fonts/RobotoCondensed-Regular.otf'),
     'rbt-Bold': require('./assets/fonts/RobotoCondensed-Bold.otf'),
     'rbt-BoldItalic': require('./assets/fonts/RobotoCondensed-BoldItalic.otf'),
-    'rbt-Medium': require('./assets/fonts/RobotoCondensed-Light.otf'),
+    'rbt-Medium': require('./assets/fonts/RobotoCondensed-Medium.otf'),
     'rbt-MediumItalic': require('./assets/fonts/RobotoCondensed-MediumItalic.otf'),
     'rbt-Black': require('./assets/fonts/RobotoCondensed-Black.otf'),
     'rbt-BlackItalic': require('./assets/fonts/RobotoCondensed-BlackItalic.otf'),

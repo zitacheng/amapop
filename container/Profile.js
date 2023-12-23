@@ -100,7 +100,7 @@ const Profile = ({navigation}) => {
           tabActive == 'fav' ?
           favs.map((item, id) => {
               return (
-                <View style={[styles.card, basic.shadow]}>
+                <View style={[styles.card, basic.shadow]} id={id}>
                   <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
                     <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
                   </TouchableOpacity>
@@ -121,7 +121,7 @@ const Profile = ({navigation}) => {
           list.map((item, id) => {
             if (tabActive == 'change' && item.look != true || tabActive == 'look' && item.look == true)
               return (
-                <View style={[styles.card, basic.shadow]}>
+                <View style={[styles.card, basic.shadow]} id={id}>
                   <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
                     <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
                   </TouchableOpacity>
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'white',
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     fontSize: 28,
     padding: 10,
     flex: 1,
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
   },
   cardtitle: {
     fontSize: 16,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     color: 'white',
     textAlign: 'center',
   },
@@ -288,28 +288,22 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center'
   },
-  colTxt: {
-    fontFamily: 'Helvetica-Bold',
-    alignSelf: 'center',
-    fontSize: 18,
-    color: color.grey
-  },
   colTxtBig: {
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     alignSelf: 'center',
     fontSize: 22,
     color: 'rgba(255, 255, 255, 0.4)',
     marginBottom: 10,
   },
   colTxtBigOn: {
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     alignSelf: 'center',
     fontSize: 22,
     color: 'white',
     marginBottom: 10,
   },
   favNb: {
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-ExtraBold',
     color: 'white',
     shadowColor: '#171717',
     shadowOffset: {width: -1, height: 2},
@@ -346,13 +340,13 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 22,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     color: 'black',
     padding: 20,
   },
   desc: {
     fontSize: 22,
-    fontFamily: 'Helvetica',
+    fontFamily: 'rbt-Regular',
     color: 'black',
     paddingLeft: 20,
     paddingRight: 20,

@@ -184,7 +184,7 @@ const Home = ({navigation}) => {
               text="Date de mise à jour"
               iconStyle={{ borderColor: "red" }}
               innerIconStyle={{ borderWidth: 2 }}
-              textStyle={{textDecorationLine: "none"}}
+              textStyle={{textDecorationLine: "none", fontFamily: 'rbt-Light', fontSize: 18}}
               isChecked={sorting == 'Date croissant'}
               onPress={() => {changeRadio('Date croissant')}}
           />
@@ -196,7 +196,7 @@ const Home = ({navigation}) => {
               text="Pertinence"
               iconStyle={{ borderColor: "red" }}
               innerIconStyle={{ borderWidth: 2 }}
-              textStyle={{textDecorationLine: "none"}}
+              textStyle={{textDecorationLine: "none", fontFamily: 'rbt-Light', fontSize: 18}}
               isChecked={sorting == 'Pertinence'}
               onPress={() => {changeRadio('Pertinence')}}
           />
@@ -208,7 +208,7 @@ const Home = ({navigation}) => {
               text="Favoris"
               iconStyle={{ borderColor: "red" }}
               innerIconStyle={{ borderWidth: 2 }}
-              textStyle={{textDecorationLine: "none"}}
+              textStyle={{textDecorationLine: "none", fontFamily: 'rbt-Light', fontSize: 18}}
               isChecked={sorting == 'Favoris'}
               onPress={() => {changeRadio('Favoris')}}
           />
@@ -220,7 +220,7 @@ const Home = ({navigation}) => {
               text="Non favoris"
               iconStyle={{ borderColor: "red" }}
               innerIconStyle={{ borderWidth: 2 }}
-              textStyle={{textDecorationLine: "none"}}
+              textStyle={{textDecorationLine: "none", fontFamily: 'rbt-Light', fontSize: 18}}
               isChecked={sorting == 'Non favoris'}
               onPress={() => {changeRadio('Non favoris')}}
           />
@@ -285,16 +285,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   name: {
-    fontSize: 16,
-    fontFamily: 'Helvetica-Bold',
+    fontSize: 18,
+    fontFamily: 'rbt-ExtraBold',
     color: 'white',
     padding: 2,
     textAlign: 'center',
-  },
-  sub: {
-    fontSize: 16,
-    fontFamily: 'Helvetica',
-    color: color.grey
   },
   scroll: {
     flex: 1,
@@ -324,11 +319,12 @@ const styles = StyleSheet.create({
   },
   smTxt: {
     color: 'white',
-    fontFamily: 'Helvetica-Bold'
+    fontFamily: 'rbt-Bold',
+    fontSize: 14
   },
   profileTxt: {
     color: 'white',
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     padding: 5,
   },
   smBtnRound: {
@@ -403,13 +399,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     color: 'black',
     padding: 20,
   },
   content: {
     fontSize: 22,
-    fontFamily: 'Helvetica',
+    fontFamily: 'rbt-Regular',
     color: 'black',
     paddingLeft: 20,
     paddingRight: 20,

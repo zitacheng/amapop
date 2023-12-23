@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   label: {
     color: color.grey,
     fontSize: 18,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     alignSelf: 'center',
     marginBottom: 10,
   },
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
     marginBottom: 10,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'rbt-Bold',
     width: '90%',
     textAlign: 'center'
   },
