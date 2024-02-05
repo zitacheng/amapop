@@ -21,12 +21,14 @@ import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
+import { useSelector } from 'react-redux';
 
 const Profile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);
   const [tabActive, setTabActive] = useState('change');
   const [current, setCurrent] = useState(null);
   const modalRef = useRef(null);
+  const user = useSelector(state => state.user);
 
   const favs = [
       {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, favorite: 1},
@@ -59,7 +61,7 @@ const Profile = ({navigation}) => {
       <View style={[styles.header, basic.shadow]}>
         {/* <UserAvatar size={90} name="userPicture" bgColor={color.grey} src={images.avatar} /> */}
         <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
-        <Text style={styles.title}>SlashZita</Text>
+        <Text style={styles.title}>{user?.user?.username}</Text>
         {/* <TouchableOpacity onPress={() => {navigation.navigate('Creation');}}>
           <Icon name={'add-circle'} size={40} color={'white'} />
         </TouchableOpacity> */}
@@ -100,7 +102,7 @@ const Profile = ({navigation}) => {
           tabActive == 'fav' ?
           favs.map((item, id) => {
               return (
-                <View style={[styles.card, basic.shadow]} id={id}>
+                <View style={[styles.card, basic.shadow]} id={id} key={id}>
                   <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
                     <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
                   </TouchableOpacity>
@@ -121,7 +123,7 @@ const Profile = ({navigation}) => {
           list.map((item, id) => {
             if (tabActive == 'change' && item.look != true || tabActive == 'look' && item.look == true)
               return (
-                <View style={[styles.card, basic.shadow]} id={id}>
+                <View style={[styles.card, basic.shadow]} id={id} key={id}>
                   <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
                     <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
                   </TouchableOpacity>

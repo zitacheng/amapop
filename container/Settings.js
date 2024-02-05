@@ -20,6 +20,9 @@ import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
 import Modal from 'react-native-modalbox';
 import * as ImagePicker from 'expo-image-picker';
+import { useSelector } from 'react-redux';
+import { logout } from '../redux/actions/auth';
+import { useDispatch } from 'react-redux';
 
 Icon.loadFont();
 
@@ -32,7 +35,10 @@ const Settings = ({navigation}) => {
   const [bug, setBug] = useState('');
   const modalRef = useRef(null);
   const modalInfoRef = useRef(null);
+  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
+  console.log("user", user);
   return (
     <SafeAreaView style={styles.container}>
       <View style={basic.containerBg} />
@@ -50,9 +56,9 @@ const Settings = ({navigation}) => {
       </View>
       <ScrollView style={styles.center} contentContainerStyle={{justifyContent: 'center',alignItems: 'center'}}>
         <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
-        <Text style={styles.label}>{username}</Text>
-        <Text style={styles.label}>{email}</Text>
-        <Text style={styles.label}>{phone}</Text>
+        <Text style={styles.label}>{user?.user?.username}</Text>
+        <Text style={styles.label}>{user?.user?.email}</Text>
+        <Text style={styles.label}>{user?.user?.phone}</Text>
         <TouchableOpacity
           style={basic.btn}
           onPress={() => {
@@ -77,8 +83,10 @@ const Settings = ({navigation}) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={basic.btnWhiteout}
-          onPress={() => {
+          onPress={async () => {
+            await logout({dispatch: dispatch});
             navigation.navigate('Login');
+
           }}>
           <Text style={basic.btnTxtOut}>{"Se déconnecter"}</Text>
         </TouchableOpacity>
@@ -245,6 +253,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: color.lightPurple,
     width: '80%',
+    height: 200,
   }
 });
 

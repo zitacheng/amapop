@@ -20,6 +20,7 @@ import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconAnt from 'react-native-vector-icons/AntDesign';
 import { LinearGradient } from 'expo-linear-gradient';
 import Modal from 'react-native-modalbox';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
@@ -73,6 +74,11 @@ const Home = ({navigation}) => {
     {id: 31, name: 'Kiwiwi', selected: false},
     {id: 32, name: 'Yoseku ueno', selected: false},
     {id: 33, name: 'My little poeny', selected: false},
+    {id: 34, name: 'Casper', selected: false},
+    {id: 35, name: 'vita', selected: false},
+    {id: 36, name: 'satyr rory', selected: false},
+    {id: 37, name: 'fubobo', selected: false},
+    {id: 38, name: 'Duckyo', selected: false},
   ]);
 
   const pops = [
@@ -148,14 +154,14 @@ const Home = ({navigation}) => {
       <ScrollView style={styles.scroll}>
         <View style={styles.scrollContent}>
           {
-            pops.map((pop) => {
+            pops.map((pop, id) => {
               if ((menu.find((e) => {return (e.name === pop.name && e.selected == true)}) || !menu.find((e) => e.selected === true)) && 
               (!search || (search && (pop.name.toLowerCase().includes(search.toLocaleLowerCase()) || pop.model.toLowerCase().includes(search.toLocaleLowerCase()))))
               )
                 // && ((look == pop.look) || (pop.exchange == true && !look))) Filtre par echange ou recherche
               {
                 return (
-                  <View style={[styles.card, basic.shadow]}>
+                  <View style={[styles.card, basic.shadow]} key={id}>
                     <View style={styles.imgBox}>
                       <Image style={styles.cardImg} source={pop.pic} resizeMode="cover" />
                       <LinearGradient colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.nameBg}>
@@ -288,6 +294,13 @@ const Home = ({navigation}) => {
               setSelected([]);
             }}>
             <Text style={basic.btnTxt}>Effacer</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+        style={styles.close}
+            onPress={() => {
+              modalFilterRef.current.close()
+            }}>
+              <IconAnt name={'closecircle'} size={20} color={color.pink} />
         </TouchableOpacity>
       </Modal>
     </SafeAreaView>
@@ -422,6 +435,7 @@ const styles = StyleSheet.create({
     width: '92%',
     marginTop: 5,
     flexWrap: 'wrap',
+    // paddingRight: 10,
     // justifyContent: 'center',
   },
   badge: {
@@ -482,6 +496,7 @@ const styles = StyleSheet.create({
     height: '50%',
     width: '95%',
     padding: 20,
+    position: 'relative',
   },
   title: {
     fontSize: 22,
@@ -514,6 +529,11 @@ const styles = StyleSheet.create({
   },
   radio: {
     marginBottom: 10,
+  },
+  close: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
   }
 });
 

@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {color} from '../constant/color';
 import {basic} from '../constant/basic';
 import {Load} from '../component/Load';
+import axios from 'axios';
 
 Icon.loadFont();
 
@@ -34,7 +35,29 @@ const Register = ({navigation}) => {
 
   function registerUser() {
     console.log("REGISTER");
-  }
+
+    // Request API.
+    // Add your own code here to customize or restrict how the public can register new users.
+    axios
+      .post('http://localhost:1337/api/auth/local/register', {
+        username: username,
+        email: email,
+        password: password,
+        phone: phone,
+      })
+      .then(response => {
+        // Handle success.
+        console.log('User profile', response.data.user);
+        console.log('User token', response.data.jwt);
+        navigation.navigate('TabScreen');
+      })
+      .catch(error => {
+        // Handle error.
+        console.log('An erro:', error);
+        console.log('An error occurred:', error.response.data.error.message);
+        alert("Erreur de création de compte, veuillez essayer ultérieurement");
+      });
+    }
 
   return (
     <View style={styles.container}>
@@ -54,7 +77,7 @@ const Register = ({navigation}) => {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             enabled
             style={styles.scrollContent}>
-            <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center', paddingLeft: 30, paddingRight: 30,}}>
+            <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center', paddingLeft: 30, paddingRight: 30}}>
               <Text style={basic.label}>{"Nom d'utilisateur"}</Text>
               <TextInput
                 style={basic.input}
@@ -116,9 +139,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scrollContent: {
-    height: '100%',
+    flex: 1,
     width: '100%',
-    height: '65%',
     marginLeft: 'auto',
     marginRight: 'auto',
   },

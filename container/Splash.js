@@ -3,10 +3,13 @@ import {StyleSheet, View, Image, StatusBar} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {images} from '../constant/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
 
 const Splash = (props) => {
   const isFocused = useIsFocused();
+  const user = useSelector(state => state?.user);
 
+  console.log("ICI ", user)
   const checkUser = async (user) => {
     // const localPref = await AsyncStorage.getItem('local_pref');
     // await setI18nConfig(localPref);
@@ -27,7 +30,11 @@ const Splash = (props) => {
     // props.navigation.push('OnBoarding', {
     //   lang: localPref ? localPref : i18n.locale,
     // });
-    props.navigation.push('Login', {
+    console.log("user  ", user)
+    // console.log("user json ", user.json())
+    // console.log("user string ", user.user._j)
+    // console.log("user ", JSON.parse(user.user._j))
+    props.navigation.push(user && user.jwt ? 'TabScreen' : 'Login', {
         lang: 'fr',
       });
   };

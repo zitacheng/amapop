@@ -74,7 +74,7 @@ export function TabScreen({navigation, route}) {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Forun"
         component={Forum}
         options={{
@@ -83,7 +83,7 @@ export function TabScreen({navigation, route}) {
             <IconMat name={'forum'} size={20} color={color.pink} />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }

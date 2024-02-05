@@ -14,6 +14,9 @@ import {color} from '../constant/color';
 import {images} from '../constant/images';
 import {basic} from '../constant/basic';
 import {Load} from '../component/Load';
+import axios from 'axios';
+import { loginUser } from '../redux/actions/auth';
+import { useDispatch } from 'react-redux';
 
 Icon.loadFont();
 
@@ -23,10 +26,32 @@ const Login = ({navigation}) => {
   const [passForgot, setPassForgot] = useState(false);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
 
-  function logUser() {
-    navigation.navigate('TabScreen');
-  }
+  // const count = useSelector(state => state.count);
+
+  // function logUser() {
+
+      // Request API.
+      // axios
+      //   .post('http://localhost:1337/api/auth/local', {
+      //     identifier: email,
+      //     password: password,
+      //   })
+      //   .then(response => {
+      //     // Handle success.
+      //     console.log('User profile', response.data.user);
+      //     console.log('User token', response.data.jwt);
+      //     // alert('Log in successful');
+      //     navigation.navigate('TabScreen');
+
+      //   })
+      //   .catch(error => {
+      //     // Handle error.
+      //     console.log('An error occurred:', error.response);
+      //     alert("Erreur de connexion, vérifiez le mot de passe ou l'email / nom d'utilisateur");
+      //   });
+  // }
 
   function restPass() {
     setLoading(true);
@@ -89,8 +114,15 @@ const Login = ({navigation}) => {
             <TouchableOpacity
               style={basic.btn}
               // disabled={loading || !email || !password}
-              onPress={() => {
-                logUser();
+              onPress={async () => {
+                console.log("BEFORE LOGINUSER")
+                const res = await loginUser({username: email, password: password, dispatch: dispatch});
+                console.log("FINAL ", res);
+                if (res?.status === "success") {
+                  navigation.navigate('TabScreen');
+                  setEmail('')
+                  setPassword('')
+                }
               }}>
               <Text style={basic.btnTxt}>{"Se connecter"}</Text>
             </TouchableOpacity>

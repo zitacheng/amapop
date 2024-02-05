@@ -17,6 +17,9 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {createStackNavigator} from '@react-navigation/stack';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { Provider } from 'react-redux';
+import store from "./redux/store.js";
+// import { PersistGate } from 'redux-persist/integration/react'
 
 SplashScreen.preventAutoHideAsync();
 
@@ -56,28 +59,30 @@ export default function App() {
   }
   
   return (
-    <SafeAreaProvider onLayout={handleOnLayout}>
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-          gestureEnabled: false,
-        }}>
-        <Stack.Screen name="Splash" component={Splash} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="TabScreen" component={TabScreen} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Settings" component={Settings} />
-        <Stack.Screen name="Topic" component={Topic} />
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="UserProfile" component={UserProfile} />
-        <Stack.Screen name="Chat" component={Chat} />
-        <Stack.Screen name="Chatting" component={Chatting} />
-        <Stack.Screen name="Creation" component={Creation} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider onLayout={handleOnLayout}>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+              gestureEnabled: false,
+            }}>
+            <Stack.Screen name="Splash" component={Splash} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="TabScreen" component={TabScreen} />
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Settings" component={Settings} />
+            <Stack.Screen name="Topic" component={Topic} />
+            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="UserProfile" component={UserProfile} />
+            <Stack.Screen name="Chat" component={Chat} />
+            <Stack.Screen name="Chatting" component={Chatting} />
+            <Stack.Screen name="Creation" component={Creation} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </Provider>
   );
 }
 
@@ -89,32 +94,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
-// "plugins": [
-//   [
-//     "expo-font",
-//     {
-//       "fonts": [
-//         "./assets/fonts/RobotoCondensed-Light.otf",
-//         "./assets/fonts/RobotoCondensed-ExtraLight.otf",
-//         "./assets/fonts/RobotoCondensed-ExtraLightItalic.otf",
-//         "./assets/fonts/RobotoCondensed-LightItalic.otf",
-//         "./assets/fonts/RobotoCondensed-ExtraBold.otf",
-//         "./assets/fonts/RobotoCondensed-ExtraBoldItalic.otf",
-//         "./assets/fonts/RobotoCondensed-SemiBold.otf",
-//         "./assets/fonts/RobotoCondensed-SemiBoldItalic.otf",
-//         "./assets/fonts/RobotoCondensed-Regular.otf",
-//         "./assets/fonts/RobotoCondensed-Bold.otf",
-//         "./assets/fonts/RobotoCondensed-BoldItalic.otf",
-//         "./assets/fonts/RobotoCondensed-Medium.otf",
-//         "./assets/fonts/RobotoCondensed-MediumItalic.otf",
-//         "./assets/fonts/RobotoCondensed-Black.otf",
-//         "./assets/fonts/RobotoCondensed-BlackItalic.otf",
-//         "./assets/fonts/RobotoCondensed-Italic.otf",
-//         "./assets/fonts/RobotoCondensed-Thin.otf",
-//         "./assets/fonts/RobotoCondensed-ThinItalic.otf"
-//       ]
-//     }
-//   ]
-// ],

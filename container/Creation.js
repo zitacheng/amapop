@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   KeyboardAvoidingView,
+  Platform,
   TextInput,
   Text,
   TouchableOpacity,
@@ -82,7 +83,7 @@ const Creation = ({navigation, route}) => {
               style={{flex: 1}} enabled>
               <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                   <View style={styles.form}>
-                      <Text style={styles.info}>Ajouter une image qui représente le ou les popmarts que vous recherchez/échangez</Text>
+                      {/* <Text style={styles.info}>Ajouter une image qui représente le ou les popmarts que vous recherchez/échangez</Text> */}
                       <Text style={basic.label}>Ajouter une image</Text>
                       <View style={styles.imgRow}>
                           <TouchableOpacity style={styles.addImg} onPress={async() => {
@@ -155,11 +156,12 @@ const Creation = ({navigation, route}) => {
                           value={name}
                           placeholder='Exemple: Mime silent'
                       />
-                      <Text style={basic.label}>Objectif de la publication</Text>
+                      <Text style={basic.label}>Statut</Text>
                       <View style={styles.radioBox}>
                       <RadioButton.Group onValueChange={newValue => setChecked(newValue)} value={checked}>
                           <RadioButton.Item color={color.pink} labelStyle={{fontFamily: 'rbt-Bold'}} label="Je veux l'échanger" value="change" />
                           <RadioButton.Item color={color.pink} labelStyle={{fontFamily: 'rbt-Bold'}} label="Je cherche ce modèle" value="look" />
+                          <RadioButton.Item color={color.pink} labelStyle={{fontFamily: 'rbt-Bold'}} label="Elle est réservé" value="book" />
                       </RadioButton.Group>
                       </View>
                       {
@@ -183,7 +185,7 @@ const Creation = ({navigation, route}) => {
                           style={basic.input}
                           onChangeText={setNote}
                           value={note}
-                          placeholder="Exemple: Je l'échnge que contre le modele x"
+                          placeholder="Exemple: Je l'échange que contre le modele x"
                       />
                       <View style={basic.break} />
                       <TouchableOpacity
