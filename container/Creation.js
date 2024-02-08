@@ -28,6 +28,7 @@ import { useHeaderHeight } from '@react-navigation/elements'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import * as ImagePicker from 'expo-image-picker';
 import { useCreatePopMutation } from '../services/auth';
+import { useAuth } from '../hooks/useAuth';
 
 Icon.loadFont();
 
@@ -41,6 +42,9 @@ const Creation = ({navigation, route}) => {
   const [img1, setImg1] = useState(null);
   const [createPop] = useCreatePopMutation()
   const height = useHeaderHeight()
+  const user = useAuth();
+
+  console.log("user ", user);
 
   const menu = [
     {id: 0, name: 'Labubu', selected: false},
@@ -193,7 +197,23 @@ const Creation = ({navigation, route}) => {
                       <TouchableOpacity
                           style={basic.btn}
                           onPress={() => {
-                            createPop({data: {note: note, name: name, serie: serie.name, priority: prio, state: checked, image: img1}}).unwrap().then((res) => {
+                            let data = new FormData();
+                            console.log("img1 ", img1)
+                            data.append('files.image', {
+                              name: 'popImg',
+                              uri: img1.uri,
+                              type: 'images/jpeg'
+                            });
+                            data.append('data', JSON.stringify({
+                              name,
+                              note,
+                              serie: serie.name,
+                              priority: prio,
+                              state: checked,
+                              user: user.user.id
+                            }))
+
+                            createPop(data).unwrap().then((res) => {
                                 console.log("res ", res);
                             })
                             cleanVariables();

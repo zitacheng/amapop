@@ -23,7 +23,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
 import { useAuth } from '../hooks/useAuth';
 import { useGetPopsQuery } from '../services/auth';
-import { API_URL } from "../constant/back";
+import { API_URL, stateSentence } from "../constant/back";
 import Moment from 'react-moment';
 
 const qs = require("qs")
@@ -35,10 +35,12 @@ const Profile = ({navigation}) => {
   const modalRef = useRef(null);
   const user = useAuth()
   console.log("user ", user);
-  console.log("user ", user.user);
+  console.log("current ", current);
   const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
-    filters: {},
-    populate: '*'
+    filters: {
+      user: user?.user?.id
+    },
+    populate: ['user', 'image']
   }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
   
   console.log("fetchedPops lol", fetchedPops);
@@ -69,18 +71,18 @@ const Profile = ({navigation}) => {
   //     {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true, look: true, prio: false},
   //   ];
 
-  function stateSentence() {
-    switch (current.state) {
-      case "looking":
-        return "Je recherche ce modèle";
-      case "change":
-        return "À échanger";
-      case "booked":
-        return "Ce modèle est éservé";
-      default:
-        return "";
-    }
-  }
+  // function stateSentence() {
+  //   switch (current.state) {
+  //     case "looking":
+  //       return "Je recherche ce modèle";
+  //     case "change":
+  //       return "À échanger";
+  //     case "booked":
+  //       return "Ce modèle est éservé";
+  //     default:
+  //       return "";
+  //   }
+  // }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -147,21 +149,21 @@ const Profile = ({navigation}) => {
                 </View>
               )
           }) :
-          user && user.user?.pops?.map((item, id) => {
-            if (tabActive == 'change' && item.state != 'looking' || tabActive == 'look' && item.state == 'looking')
+          fetchedPops?.data?.map((item, id) => {
+            if ((tabActive == 'change' && item.attributes.state == 'change') || (tabActive == 'look' && item.attributes.state == 'looking'))
               return (
                 <View style={[styles.card, basic.shadow]} id={id} key={id}>
-                  <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
+                  <TouchableOpacity onPress={() => {setCurrent(item.attributes); modalRef.current.open();}}>
                     {
-                      item.image && item.image.length > 0 ?
-                      <Image style={styles.cardImg} source={{uri:API_URL + item.image[0].url}} resizeMode="cover" />
+                      item?.attributes?.image?.data && item.attributes.image.data.length > 0 ?
+                      <Image style={styles.cardImg} source={{uri:API_URL + item.attributes.image.data[0].attributes.url}} resizeMode="cover" />
                       :
                       <Image style={styles.cardImg} source={images.noimg} resizeMode="cover" />
                     }
                   </TouchableOpacity>
                   <LinearGradient
                   colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
-                    <Text style={styles.cardtitle}>{item.serie + ' - ' + item.name}</Text>
+                    <Text style={styles.cardtitle}>{item.attributes.serie + ' - ' + item.attributes.name}</Text>
                   </LinearGradient>
                   <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Creation', {editMode: true});}}>
                     <IconMat name={'lead-pencil'} size={20} color={color.pink} />
@@ -182,10 +184,10 @@ const Profile = ({navigation}) => {
           {
             current &&
             <>
-              <Image style={styles.modalPic} source={current.image && current.image.length > 0 ? {uri:API_URL + current.image[0].url} : mages.noimg} resizeMode="cover" />
+              <Image style={styles.modalPic} source={current?.image?.data && current.image.data.length > 0 ? {uri:API_URL + current.image.data[0].attributes.url} : images.noimg} resizeMode="cover" />
               <Text style={styles.modalTitle}>{current && (current.serie + ' - ' + current.name)}</Text>
               <Text style={styles.desc}>{"Note: " + (current.note ? current.note : "Pas de note")}</Text>
-              <Text style={styles.desc}>{stateSentence()}</Text>
+              <Text style={styles.desc}>{stateSentence(current.state)}</Text>
               <Text style={styles.desc}>{"Date d'ajout: " + new Date(current.createdAt).toLocaleDateString()}</Text>
               <View style={basic.break} />
               <TouchableOpacity

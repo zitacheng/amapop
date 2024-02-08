@@ -24,7 +24,9 @@ import IconAnt from 'react-native-vector-icons/AntDesign';
 import { LinearGradient } from 'expo-linear-gradient';
 import Modal from 'react-native-modalbox';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { useGetPopsQuery } from '../services/auth';
+import { useGetPopsQuery, useCreateSerieMutation } from '../services/auth';
+import { API_URL, stateSentence, popsSerie } from "../constant/back";
+
 const qs = require("qs")
 
 Icon.loadFont();
@@ -38,54 +40,19 @@ const Home = ({navigation}) => {
   const modalRef = useRef(null);
   const modalSortRef = useRef(null);
   const modalFilterRef = useRef(null);
+  const [createSerie] = useCreateSerieMutation()
   const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
-    filters: {},
-    populate: '*'
+    filters: {
+      state: {
+        $eq: 'change',
+      },
+    },
+    populate: ['user', 'image']
   }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
   
 console.log("fetchedPops", fetchedPops);
   //TODO recuperer que ceux que les gens echange
-  const [menu, setMenu] = useState([
-    {id: 0, name: 'Labubu', selected: false},
-    {id: 1, name: 'Azura', selected: false},
-    {id: 2, name: 'SkullPanda', selected: false},
-    {id: 3, name: 'Hirono', selected: false},
-    {id: 4, name: 'Nori', selected: false},
-    {id: 5, name: 'Molly', selected: false},
-    {id: 6, name: 'Hapuchichi', selected: false},
-    {id: 7, name: 'Cry Baby', selected: false},
-    {id: 8, name: 'Dimoo', selected: false},
-    {id: 9, name: 'Conan', selected: false},
-    {id: 10, name: 'League of ledengs', selected: false},
-    {id: 11, name: 'Pucky', selected: false},
-    {id: 12, name: 'Naruto', selected: false},
-    {id: 13, name: 'Disney', selected: false},
-    {id: 14, name: 'Minions', selected: false},
-    {id: 15, name: 'Pino Jelly', selected: false},
-    {id: 16, name: 'Zsiga', selected: false},
-    {id: 17, name: 'Hacipupu', selected: false},
-    {id: 18, name: 'Teletubbies', selected: false},
-    {id: 19, name: 'Friends', selected: false},
-    {id: 20, name: 'Bob eponge', selected: false},
-    {id: 21, name: 'Garfield', selected: false},
-    {id: 22, name: 'Peach riot', selected: false},
-    {id: 23, name: 'Spy x Family', selected: false},
-    {id: 24, name: 'Duckoo', selected: false},
-    {id: 25, name: 'Kubo', selected: false},
-    {id: 26, name: 'Harry potter', selected: false},
-    {id: 27, name: 'Lilios', selected: false},
-    {id: 28, name: 'Astro boy', selected: false},
-    {id: 29, name: 'Casper', selected: false},
-    {id: 30, name: 'Ultraman', selected: false},
-    {id: 31, name: 'Kiwiwi', selected: false},
-    {id: 32, name: 'Yoseku ueno', selected: false},
-    {id: 33, name: 'My little poeny', selected: false},
-    {id: 34, name: 'Casper', selected: false},
-    {id: 35, name: 'vita', selected: false},
-    {id: 36, name: 'satyr rory', selected: false},
-    {id: 37, name: 'fubobo', selected: false},
-    {id: 38, name: 'Duckyo', selected: false},
-  ]);
+  const [menu, setMenu] = useState(popsSerie);
 
   const pops = [
     {id: 1, name: 'Hirono',  pic: images.gallery, model: 'Destroyer', look: false, like: true},
@@ -106,6 +73,7 @@ console.log("fetchedPops", fetchedPops);
     modalSortRef.current.close();
   }
 
+  console.log("current ", current);
   return (
     <SafeAreaView style={styles.container}>
     <StatusBar barStyle="dark-content" />
@@ -160,27 +128,27 @@ console.log("fetchedPops", fetchedPops);
       <ScrollView style={styles.scroll}>
         <View style={styles.scrollContent}>
           {
-            pops.map((pop, id) => {
-              if ((menu.find((e) => {return (e.name === pop.name && e.selected == true)}) || !menu.find((e) => e.selected === true)) && 
-              (!search || (search && (pop.name.toLowerCase().includes(search.toLocaleLowerCase()) || pop.model.toLowerCase().includes(search.toLocaleLowerCase()))))
+            fetchedPops?.data.map((pop, id) => {
+              if ((selected.find((e) => {return (e === pop.attributes.serie)}) || selected.length <= 0) && 
+              (!search || (search && (pop.attributes.name.toLowerCase().includes(search.toLocaleLowerCase()) || pop.attributes.serie.toLowerCase().includes(search.toLocaleLowerCase()))))
               )
-                // && ((look == pop.look) || (pop.exchange == true && !look))) Filtre par echange ou recherche
+                // && ((look == pop.attributes.look) || (pop.attributes.exchange == true && !look))) Filtre par echange ou recherche
               {
                 return (
                   <View style={[styles.card, basic.shadow]} key={id}>
                     <View style={styles.imgBox}>
-                      <Image style={styles.cardImg} source={pop.pic} resizeMode="cover" />
+                      <Image style={styles.cardImg} source={pop.attributes.image.data && pop.attributes.image.data.length > 0 ? {uri:API_URL + pop.attributes.image.data[0].attributes.url} : images.noimg} resizeMode="cover" />
                       <LinearGradient colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.nameBg}>
-                        <Text style={styles.name}>{pop.name + ' - ' + pop.model}</Text>
+                        <Text style={styles.name}>{pop.attributes.serie + ' - ' + pop.attributes.name}</Text>
                       </LinearGradient>
                     </View>
                     <View style={[styles.btnRow, basic.shadow]}>
-                      <TouchableOpacity style={[styles.smBtnRound, basic.shadow]} onPress={() => {setCurrent(pop);modalRef.current.open();}}>
+                      <TouchableOpacity style={[styles.smBtnRound, basic.shadow]} onPress={() => {setCurrent(pop.attributes);modalRef.current.open();}}>
                         <Text style={styles.profileTxt}>Détail</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => {}}>
+                      {/* <TouchableOpacity onPress={() => {}}>
                         <Icon name={pop.like == true ? 'heart' : 'heart-o'} size={20} color={color.pink} />
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                       <TouchableOpacity onPress={() => {Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as XXX je suis interessé' +'&phone=+33768628787')}}>
                         <Icon name={'send'} size={20} color={color.pink} />
                       </TouchableOpacity>
@@ -194,27 +162,32 @@ console.log("fetchedPops", fetchedPops);
       </ScrollView>
       </TouchableWithoutFeedback>
       <Modal style={styles.modal} position={"bottom"} ref={modalRef} coverScreen={true}>
-        <Image style={styles.modalPic} source={(current && current.pic) && current.pic} resizeMode="cover" />
-        <Text style={styles.title}>{current && (current.name + ' - ' + current.model)}</Text>
-        <Text style={styles.content}>{"Note du produit exemple: J'echange tout ceux qui sont entouré"}</Text>
-        <Text style={styles.content}>{"L'utilisateur veut échanger"}</Text>
-        <Text style={styles.content}>{"Date d'ajout: 9 decembre 2023"}</Text>
-        <View style={basic.break} />
-        <TouchableOpacity
-            style={basic.btn}
-            onPress={() => {
-              Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as XXX je suis interessé' +'&phone=+33768628787')
-            }}>
-            <Text style={basic.btnTxt}>Envoyer un message</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            style={basic.btnWhiteout}
-            onPress={() => {
-              modalRef.current.close();
-              navigation.navigate('UserProfile');
-            }}>
-            <Text style={basic.btnTxtOut}>Voir son profil</Text>
-        </TouchableOpacity>
+        {
+          current &&
+          <>
+          <Image style={styles.modalPic} source={current.image && current.image.data.length > 0 ? {uri:API_URL + current.image.data[0].attributes.url} : images.noimg} resizeMode="cover" />
+            <Text style={styles.title}>{current && (current.serie + ' - ' + current.name)}</Text>
+            <Text style={styles.content}>{"Note du pop: " + current.note}</Text>
+            <Text style={styles.content}>{stateSentence(current.state)}</Text>
+            <Text style={styles.content}>{"Date d'ajout: " + new Date(current.createdAt).toLocaleDateString()}</Text>
+            <View style={basic.break} />
+            <TouchableOpacity
+                style={basic.btn}
+                onPress={() => {
+                  Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as XXX je suis interessé' +'&phone=+33768628787')
+                }}>
+                <Text style={basic.btnTxt}>Envoyer un message</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={basic.btnWhiteout}
+                onPress={() => {
+                  modalRef.current.close();
+                  navigation.navigate('UserProfile');
+                }}>
+                <Text style={basic.btnTxtOut}>Voir son profil</Text>
+            </TouchableOpacity>
+          </>
+        }
       </Modal>
       <Modal style={styles.modalSort} position={"bottom"} ref={modalSortRef} coverScreen={true}>
         <Text style={styles.title}>Trier par:</Text>
@@ -278,7 +251,6 @@ console.log("fetchedPops", fetchedPops);
               return (
                 <TouchableOpacity style={[styles.badge, basic.shadow, {backgroundColor: selected.includes(item.name) ? color.pink : 'white'}]}
                   onPress={() => {
-                      // onChangeMenu(item);
                       let newArr = [...selected];
                           if (selected.indexOf(item.name) == -1)
                             newArr.push(item.name)

@@ -15,7 +15,7 @@ export const api = createApi({
   }),
   refetchOnFocus: true,
   refetchOnMountOrArgChange: 30,
-  tagTypes: ['Votes', 'Reports'],
+  tagTypes: ['me'],
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
@@ -31,6 +31,13 @@ export const api = createApi({
         body: credentials,
       }),
     }),    
+    createSerie: builder.mutation({
+      query: (name) => ({
+        url: '/api/series',
+        method: 'POST',
+        body: name,
+      }),
+    }),    
     protected: builder.mutation({
       query: () => 'protected',
     }),
@@ -40,13 +47,22 @@ export const api = createApi({
           method: 'GET',
           // body: credentials,
         }),
+        providesTags: ['me'],
       }),
       createPop: builder.mutation({
-        query: (data) => ({
-          url: '/api/pops',
-          method: 'POST',
-          body: data,
-        }),
+        query: (data) =>{
+          console.log(data);
+          return ({
+            url: '/api/pops',
+            method: 'POST',
+            body: data,
+            formData:true,
+            headers: {
+              'Content-Type': 'multipart/form-data;'
+            },
+          })
+        },
+        invalidatesTags: ['me'],
       }),
     // getProjects: builder.query({
     //   query: (params) => ({
@@ -151,6 +167,7 @@ export const api = createApi({
         url: `/api/users/me?${params}`,
         method: 'GET',
       }),
+      providesTags: ['me'],
     }),
     // createReport: builder.mutation({
     //   query: (params) => ({
@@ -188,4 +205,4 @@ export const api = createApi({
 
 console.log('api', api);
 
-export const { useLoginMutation, useSignupMutation, useGetPopsQuery, useCreatePopMutation, useLazyGetMeQuery} = api
+export const { useLoginMutation, useSignupMutation, useGetPopsQuery, useCreatePopMutation, useLazyGetMeQuery, useGetMeQuery, useCreateSerieMutation} = api
