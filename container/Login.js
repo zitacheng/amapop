@@ -17,6 +17,9 @@ import {Load} from '../component/Load';
 import axios from 'axios';
 import { loginUser } from '../redux/actions/auth';
 import { useDispatch } from 'react-redux';
+import { useLoginMutation, useLazyGetMeQuery } from '../services/auth';
+import { setCredentials, setUser } from '../slices/authslice';
+const qs = require("qs")
 
 Icon.loadFont();
 
@@ -27,6 +30,8 @@ const Login = ({navigation}) => {
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
+  const [login] = useLoginMutation();
+  const [getMe] = useLazyGetMeQuery();
 
   // const count = useSelector(state => state.count);
 
@@ -116,13 +121,30 @@ const Login = ({navigation}) => {
               // disabled={loading || !email || !password}
               onPress={async () => {
                 console.log("BEFORE LOGINUSER")
-                const res = await loginUser({username: email, password: password, dispatch: dispatch});
-                console.log("FINAL ", res);
-                if (res?.status === "success") {
-                  navigation.navigate('TabScreen');
-                  setEmail('')
-                  setPassword('')
-                }
+                login({identifier: email, password: password}).unwrap().then((res) => {
+                  console.log(res);
+                  dispatch(setCredentials(res));
+                  getMe(qs.stringify({
+                    filters: {},
+                    populate: [
+                      'pops',
+                      'pops.image',
+                      'avatar',
+                    ],
+                  }, {encodeValuesOnly: true})).unwrap().then((res) => {
+                    console.log('res GETME', res);
+                    dispatch(setUser({user: res}));
+                    navigation.navigate('TabScreen');
+                  });
+
+                })
+                // const res = await loginUser({username: email, password: password, dispatch: dispatch});
+                // console.log("FINAL ", res);
+                // if (res?.status === "success") {
+                //   navigation.navigate('TabScreen');
+                //   setEmail('')
+                //   setPassword('')
+                // }
               }}>
               <Text style={basic.btnTxt}>{"Se connecter"}</Text>
             </TouchableOpacity>

@@ -24,6 +24,8 @@ import IconAnt from 'react-native-vector-icons/AntDesign';
 import { LinearGradient } from 'expo-linear-gradient';
 import Modal from 'react-native-modalbox';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { useGetPopsQuery } from '../services/auth';
+const qs = require("qs")
 
 Icon.loadFont();
 
@@ -36,8 +38,12 @@ const Home = ({navigation}) => {
   const modalRef = useRef(null);
   const modalSortRef = useRef(null);
   const modalFilterRef = useRef(null);
+  const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
+    filters: {},
+    populate: '*'
+  }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
   
-
+console.log("fetchedPops", fetchedPops);
   //TODO recuperer que ceux que les gens echange
   const [menu, setMenu] = useState([
     {id: 0, name: 'Labubu', selected: false},

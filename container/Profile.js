@@ -21,14 +21,28 @@ import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
-import { useSelector } from 'react-redux';
+import { useAuth } from '../hooks/useAuth';
+import { useGetPopsQuery } from '../services/auth';
+import { API_URL } from "../constant/back";
+import Moment from 'react-moment';
+
+const qs = require("qs")
 
 const Profile = ({navigation}) => {
   const [showNotif, setShowNotif] = useState(false);
   const [tabActive, setTabActive] = useState('change');
   const [current, setCurrent] = useState(null);
   const modalRef = useRef(null);
-  const user = useSelector(state => state.user);
+  const user = useAuth()
+  console.log("user ", user);
+  console.log("user ", user.user);
+  const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
+    filters: {},
+    populate: '*'
+  }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
+  
+  console.log("fetchedPops lol", fetchedPops);
+  console.log("fetchingPops", fetchingPops);
 
   const favs = [
       {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, favorite: 1},
@@ -40,20 +54,33 @@ const Profile = ({navigation}) => {
       {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true, favorite: 2},
     ];
 
-  const list = [
-      {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, look: false, prio: false},
-      {id: 12, pic: images.gallery3, looking: false, selling: true, changing: true, price: 18, available: true, look: true, prio: true},
-      {id: 13, pic: images.gallery5, looking: false, selling: true, changing: true, price: 28, available: true, look: false, prio: false},
-      {id: 14, pic: images.gallery6, looking: false, selling: true, changing: true, price: 13, available: true, look: true, prio: true},
-      {id: 15, pic: images.gallery2, looking: false, selling: true, changing: true, price: 18, available: true, look: false, prio: false},
-      {id: 16, pic: images.gallery, looking: false, selling: true, changing: true, price: 12, available: true, look: true, prio: true},
-      {id: 17, pic: images.gallery5, looking: false, selling: true, changing: true, price: 18, available: true, look: false, prio: false},
-      {id: 18, pic: images.gallery3, looking: false, selling: true, changing: true, price: 13, available: true, look: true, prio: false},
-      {id: 19, pic: images.gallery2, looking: false, selling: true, changing: true, price: 12, available: true, look: false, prio: false},
-      {id: 20, pic: images.gallery4, looking: false, selling: true, changing: true, price: 15, available: true, look: true, prio: false},
-      {id: 21, pic: images.gallery2, looking: false, selling: true, changing: true, price: 17, available: true, look: false, prio: false},
-      {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true, look: true, prio: false},
-    ];
+  // const list = [
+  //     {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, look: false, prio: false},
+  //     {id: 12, pic: images.gallery3, looking: false, selling: true, changing: true, price: 18, available: true, look: true, prio: true},
+  //     {id: 13, pic: images.gallery5, looking: false, selling: true, changing: true, price: 28, available: true, look: false, prio: false},
+  //     {id: 14, pic: images.gallery6, looking: false, selling: true, changing: true, price: 13, available: true, look: true, prio: true},
+  //     {id: 15, pic: images.gallery2, looking: false, selling: true, changing: true, price: 18, available: true, look: false, prio: false},
+  //     {id: 16, pic: images.gallery, looking: false, selling: true, changing: true, price: 12, available: true, look: true, prio: true},
+  //     {id: 17, pic: images.gallery5, looking: false, selling: true, changing: true, price: 18, available: true, look: false, prio: false},
+  //     {id: 18, pic: images.gallery3, looking: false, selling: true, changing: true, price: 13, available: true, look: true, prio: false},
+  //     {id: 19, pic: images.gallery2, looking: false, selling: true, changing: true, price: 12, available: true, look: false, prio: false},
+  //     {id: 20, pic: images.gallery4, looking: false, selling: true, changing: true, price: 15, available: true, look: true, prio: false},
+  //     {id: 21, pic: images.gallery2, looking: false, selling: true, changing: true, price: 17, available: true, look: false, prio: false},
+  //     {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true, look: true, prio: false},
+  //   ];
+
+  function stateSentence() {
+    switch (current.state) {
+      case "looking":
+        return "Je recherche ce modèle";
+      case "change":
+        return "À échanger";
+      case "booked":
+        return "Ce modèle est éservé";
+      default:
+        return "";
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,14 +113,14 @@ const Profile = ({navigation}) => {
             tabActive == 'look' && <Icon name={'triangle'} size={15} color={'white'} />
           }
         </View>
-        <View style={styles.tab}>
+        {/* <View style={styles.tab}>
           <TouchableOpacity style={styles.col} onPress={() => {setTabActive('fav')}}>
             <Text style={tabActive == 'fav' ? styles.colTxtBigOn : styles.colTxtBig}>Favoris</Text>
           </TouchableOpacity>
           {
             tabActive == 'fav' && <Icon name={'triangle'} size={15} color={'white'} />
           }
-        </View>
+        </View> */}
       </View>
       <View style={styles.content}>
       <ScrollView style={styles.scroll}>
@@ -120,22 +147,27 @@ const Profile = ({navigation}) => {
                 </View>
               )
           }) :
-          list.map((item, id) => {
-            if (tabActive == 'change' && item.look != true || tabActive == 'look' && item.look == true)
+          user && user.user?.pops?.map((item, id) => {
+            if (tabActive == 'change' && item.state != 'looking' || tabActive == 'look' && item.state == 'looking')
               return (
                 <View style={[styles.card, basic.shadow]} id={id} key={id}>
                   <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
-                    <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
+                    {
+                      item.image && item.image.length > 0 ?
+                      <Image style={styles.cardImg} source={{uri:API_URL + item.image[0].url}} resizeMode="cover" />
+                      :
+                      <Image style={styles.cardImg} source={images.noimg} resizeMode="cover" />
+                    }
                   </TouchableOpacity>
                   <LinearGradient
                   colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
-                    <Text style={styles.cardtitle}>Hirono Mischief - Destroyer</Text>
+                    <Text style={styles.cardtitle}>{item.serie + ' - ' + item.name}</Text>
                   </LinearGradient>
                   <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Creation', {editMode: true});}}>
                     <IconMat name={'lead-pencil'} size={20} color={color.pink} />
                   </TouchableOpacity>
                   {
-                    item.prio &&
+                    item.priority &&
                     <View style={[styles.prio, basic.shadow]}>
                       <Icon name={'star'} size={30} color={color.orange} />
                     </View>
@@ -146,22 +178,27 @@ const Profile = ({navigation}) => {
         }
         </View>
       </ScrollView>
-      <Modal style={styles.modal} position={"bottom"} ref={modalRef} coverScreen={true}>
-        <Image style={styles.modalPic} source={(current && current.pic) && current.pic} resizeMode="cover" />
-        <Text style={styles.modalTitle}>{current && (current.name + ' - ' + current.model)}</Text>
-        <Text style={styles.desc}>{"Note du produit exemple: J'echange tout ceux qui sont entouré"}</Text>
-        <Text style={styles.desc}>{"L'utilisateur veut échanger"}</Text>
-        <Text style={styles.desc}>{"Date d'ajout: 9 decembre 2023"}</Text>
-        <View style={basic.break} />
-        <TouchableOpacity
-            style={basic.btnWhiteout}
-            onPress={() => {
-              modalRef.current.close();
-              navigation.navigate('Creation', {editMode: true});
-            }}>
-            <Text style={basic.btnTxtOut}>Modifier</Text>
-        </TouchableOpacity>
-      </Modal>
+        <Modal style={styles.modal} position={"bottom"} ref={modalRef} coverScreen={true}>
+          {
+            current &&
+            <>
+              <Image style={styles.modalPic} source={current.image && current.image.length > 0 ? {uri:API_URL + current.image[0].url} : mages.noimg} resizeMode="cover" />
+              <Text style={styles.modalTitle}>{current && (current.serie + ' - ' + current.name)}</Text>
+              <Text style={styles.desc}>{"Note: " + (current.note ? current.note : "Pas de note")}</Text>
+              <Text style={styles.desc}>{stateSentence()}</Text>
+              <Text style={styles.desc}>{"Date d'ajout: " + new Date(current.createdAt).toLocaleDateString()}</Text>
+              <View style={basic.break} />
+              <TouchableOpacity
+                  style={basic.btnWhiteout}
+                  onPress={() => {
+                    modalRef.current.close();
+                    navigation.navigate('Creation', {editMode: true});
+                  }}>
+                  <Text style={basic.btnTxtOut}>Modifier</Text>
+              </TouchableOpacity>
+            </>
+          }
+        </Modal>
       </View>
     </SafeAreaView>
   );

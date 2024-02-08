@@ -21,8 +21,10 @@ import {Load} from '../component/Load';
 import Modal from 'react-native-modalbox';
 import * as ImagePicker from 'expo-image-picker';
 import { useSelector } from 'react-redux';
-import { logout } from '../redux/actions/auth';
+// import { logout } from '../redux/actions/auth';
 import { useDispatch } from 'react-redux';
+import { logout } from '../slices/authslice';
+import { useAuth } from '../hooks/useAuth';
 
 Icon.loadFont();
 
@@ -35,7 +37,7 @@ const Settings = ({navigation}) => {
   const [bug, setBug] = useState('');
   const modalRef = useRef(null);
   const modalInfoRef = useRef(null);
-  const user = useSelector(state => state.user);
+  const user = useAuth()
   const dispatch = useDispatch();
 
   console.log("user", user);
@@ -84,7 +86,7 @@ const Settings = ({navigation}) => {
         <TouchableOpacity
           style={basic.btnWhiteout}
           onPress={async () => {
-            await logout({dispatch: dispatch});
+            dispatch(logout())
             navigation.navigate('Login');
 
           }}>

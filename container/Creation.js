@@ -27,6 +27,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useHeaderHeight } from '@react-navigation/elements'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import * as ImagePicker from 'expo-image-picker';
+import { useCreatePopMutation } from '../services/auth';
 
 Icon.loadFont();
 
@@ -38,6 +39,7 @@ const Creation = ({navigation, route}) => {
   const [checked, setChecked] = useState('change');
   const [prio, setPrio] = useState(false);
   const [img1, setImg1] = useState(null);
+  const [createPop] = useCreatePopMutation()
   const height = useHeaderHeight()
 
   const menu = [
@@ -127,9 +129,9 @@ const Creation = ({navigation, route}) => {
                       {
                           menu.map((item, id) => {
                               return (
-                                <TouchableOpacity style={[styles.badge, {backgroundColor: item.id == serie ? color.pink : color.lightPurple}]}
+                                <TouchableOpacity style={[styles.badge, {backgroundColor: (serie && item.id == serie.id) ? color.pink : color.lightPurple}]}
                                   onPress={() => {
-                                    setSerie(item.id)
+                                    setSerie(item)
                                   }} key={id}>
                                   <Text style={styles.smTxt}>{item.name}</Text>
                                 </TouchableOpacity>
@@ -138,7 +140,7 @@ const Creation = ({navigation, route}) => {
                       }
                       </View>
                       {
-                          serie == 9 && <>
+                          serie && serie.id == 9 && <>
                               <Text style={basic.label}>Autre serie</Text>
                               <TextInput
                                   style={basic.input}
@@ -160,8 +162,8 @@ const Creation = ({navigation, route}) => {
                       <View style={styles.radioBox}>
                       <RadioButton.Group onValueChange={newValue => setChecked(newValue)} value={checked}>
                           <RadioButton.Item color={color.pink} labelStyle={{fontFamily: 'rbt-Bold'}} label="Je veux l'échanger" value="change" />
-                          <RadioButton.Item color={color.pink} labelStyle={{fontFamily: 'rbt-Bold'}} label="Je cherche ce modèle" value="look" />
-                          <RadioButton.Item color={color.pink} labelStyle={{fontFamily: 'rbt-Bold'}} label="Elle est réservé" value="book" />
+                          <RadioButton.Item color={color.pink} labelStyle={{fontFamily: 'rbt-Bold'}} label="Je cherche ce modèle" value="looking" />
+                          <RadioButton.Item color={color.pink} labelStyle={{fontFamily: 'rbt-Bold'}} label="Elle est réservé" value="booked" />
                       </RadioButton.Group>
                       </View>
                       {
@@ -191,6 +193,9 @@ const Creation = ({navigation, route}) => {
                       <TouchableOpacity
                           style={basic.btn}
                           onPress={() => {
+                            createPop({data: {note: note, name: name, serie: serie.name, priority: prio, state: checked, image: img1}}).unwrap().then((res) => {
+                                console.log("res ", res);
+                            })
                             cleanVariables();
                           }}>
                           <Text style={basic.btnTxt}>{(route.params && route.params.editMode) ? "Sauvegarder" : "Ajouter"}</Text>

@@ -18,7 +18,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { Provider } from 'react-redux';
-import store from "./redux/store.js";
+import {store, persistor} from "./store.js";
+import { PersistGate } from 'redux-persist/integration/react';
 // import { PersistGate } from 'redux-persist/integration/react'
 
 SplashScreen.preventAutoHideAsync();
@@ -60,6 +61,7 @@ export default function App() {
   
   return (
     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
       <SafeAreaProvider onLayout={handleOnLayout}>
         <NavigationContainer>
           <Stack.Navigator
@@ -82,6 +84,7 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
+      </PersistGate>
     </Provider>
   );
 }

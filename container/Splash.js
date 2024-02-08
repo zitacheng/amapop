@@ -4,10 +4,12 @@ import {useIsFocused} from '@react-navigation/native';
 import {images} from '../constant/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector } from 'react-redux';
+import {useAuth} from '../hooks/useAuth'
 
 const Splash = (props) => {
   const isFocused = useIsFocused();
-  const user = useSelector(state => state?.user);
+  // const user = useSelector(state => state?.user);
+  const user = useAuth()
 
   console.log("ICI ", user)
   const checkUser = async (user) => {
@@ -25,16 +27,7 @@ const Splash = (props) => {
   };
 
   const goOnBoard = async () => {
-    const localPref = await AsyncStorage.getItem('local_pref');
-    // await setI18nConfig(localPref);
-    // props.navigation.push('OnBoarding', {
-    //   lang: localPref ? localPref : i18n.locale,
-    // });
-    console.log("user  ", user)
-    // console.log("user json ", user.json())
-    // console.log("user string ", user.user._j)
-    // console.log("user ", JSON.parse(user.user._j))
-    props.navigation.push(user && user.jwt ? 'TabScreen' : 'Login', {
+    props.navigation.push((user && user.user) ? 'TabScreen' : 'Login', {
         lang: 'fr',
       });
   };
