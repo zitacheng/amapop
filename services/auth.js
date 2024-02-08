@@ -31,13 +31,13 @@ export const api = createApi({
         body: credentials,
       }),
     }),    
-    createSerie: builder.mutation({
-      query: (name) => ({
-        url: '/api/series',
-        method: 'POST',
-        body: name,
-      }),
-    }),    
+    // createSerie: builder.mutation({
+    //   query: (name) => ({
+    //     url: '/api/series',
+    //     method: 'POST',
+    //     body: name,
+    //   }),
+    // }),    
     protected: builder.mutation({
       query: () => 'protected',
     }),
@@ -48,6 +48,12 @@ export const api = createApi({
           // body: credentials,
         }),
         providesTags: ['me'],
+      }),
+    getSeries: builder.query({
+        query: (params) => ({
+          url: `/api/series?${params}`,
+          method: 'GET',
+        }),
       }),
       createPop: builder.mutation({
         query: (data) =>{
@@ -205,4 +211,4 @@ export const api = createApi({
 
 console.log('api', api);
 
-export const { useLoginMutation, useSignupMutation, useGetPopsQuery, useCreatePopMutation, useLazyGetMeQuery, useGetMeQuery, useCreateSerieMutation} = api
+export const { useLoginMutation, useSignupMutation, useGetPopsQuery, useCreatePopMutation, useLazyGetMeQuery, useGetMeQuery, useGetSeriesQuery} = api

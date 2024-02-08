@@ -24,7 +24,7 @@ import IconAnt from 'react-native-vector-icons/AntDesign';
 import { LinearGradient } from 'expo-linear-gradient';
 import Modal from 'react-native-modalbox';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { useGetPopsQuery, useCreateSerieMutation } from '../services/auth';
+import { useGetPopsQuery, useGetSeriesQuery } from '../services/auth';
 import { API_URL, stateSentence, popsSerie } from "../constant/back";
 
 const qs = require("qs")
@@ -34,13 +34,11 @@ Icon.loadFont();
 const Home = ({navigation}) => {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState([]);
-  const [look, setLook] = useState(false);
   const [current, setCurrent] = useState(null);
   const [sorting, setSorting] = useState('Date croissant');
   const modalRef = useRef(null);
   const modalSortRef = useRef(null);
   const modalFilterRef = useRef(null);
-  const [createSerie] = useCreateSerieMutation()
   const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
     filters: {
       state: {
@@ -49,8 +47,11 @@ const Home = ({navigation}) => {
     },
     populate: ['user', 'image']
   }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
+
+  const {data: fetchedSeries, fetchingSeries, error: errorSeries} = useGetSeriesQuery(qs.stringify({
+    sort: ['name']
+  }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
   
-console.log("fetchedPops", fetchedPops);
   //TODO recuperer que ceux que les gens echange
   const [menu, setMenu] = useState(popsSerie);
 
@@ -247,19 +248,19 @@ console.log("fetchedPops", fetchedPops);
         <ScrollView>
         <View style={styles.btnSelect}>
           {
-            menu.map((item, id) => {
+            fetchedSeries?.data?.map((item, id) => {
               return (
-                <TouchableOpacity style={[styles.badge, basic.shadow, {backgroundColor: selected.includes(item.name) ? color.pink : 'white'}]}
+                <TouchableOpacity style={[styles.badge, basic.shadow, {backgroundColor: selected.includes(item.attributes.name) ? color.pink : 'white'}]}
                   onPress={() => {
                       let newArr = [...selected];
-                          if (selected.indexOf(item.name) == -1)
-                            newArr.push(item.name)
+                          if (selected.indexOf(item.attributes.name) == -1)
+                            newArr.push(item.attributes.name)
                           else
-                            newArr.splice(selected.indexOf(item.name), 1)
+                            newArr.splice(selected.indexOf(item.attributes.name), 1)
                           setSelected(newArr);
 
                   }} key={id}>
-                  <Text style={[selected.includes(item.name) ? styles.smTxt :  styles.smTxtOff]}>{item.name}</Text>
+                  <Text style={[selected.includes(item.attributes.name) ? styles.smTxt :  styles.smTxtOff]}>{item.attributes.name}</Text>
                 </TouchableOpacity>
               )
             })

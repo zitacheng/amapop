@@ -27,9 +27,10 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useHeaderHeight } from '@react-navigation/elements'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import * as ImagePicker from 'expo-image-picker';
-import { useCreatePopMutation } from '../services/auth';
+import { useCreatePopMutation, useGetSeriesQuery } from '../services/auth';
 import { useAuth } from '../hooks/useAuth';
 
+const qs = require("qs")
 Icon.loadFont();
 
 const Creation = ({navigation, route}) => {
@@ -43,8 +44,12 @@ const Creation = ({navigation, route}) => {
   const [createPop] = useCreatePopMutation()
   const height = useHeaderHeight()
   const user = useAuth();
-
-  console.log("user ", user);
+  const {data: fetchedSeries, fetchingSeries, error: errorSeries} = useGetSeriesQuery(qs.stringify({
+    sort: ['name']
+  }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
+  
+  console.log("fetchedSeries ", fetchedSeries);
+  console.log("errorSeries ", errorSeries);
 
   const menu = [
     {id: 0, name: 'Labubu', selected: false},
@@ -131,13 +136,13 @@ const Creation = ({navigation, route}) => {
                       <Text style={basic.label}>Série</Text>
                       <View style={styles.btnRow}>
                       {
-                          menu.map((item, id) => {
+                          fetchedSeries?.data?.map((item, id) => {
                               return (
                                 <TouchableOpacity style={[styles.badge, {backgroundColor: (serie && item.id == serie.id) ? color.pink : color.lightPurple}]}
                                   onPress={() => {
                                     setSerie(item)
                                   }} key={id}>
-                                  <Text style={styles.smTxt}>{item.name}</Text>
+                                  <Text style={styles.smTxt}>{item.attributes.name}</Text>
                                 </TouchableOpacity>
                               )
                             })
@@ -171,7 +176,7 @@ const Creation = ({navigation, route}) => {
                       </RadioButton.Group>
                       </View>
                       {
-                        checked == 'look' &&
+                        checked == 'looking' &&
                         <>
                           <Text style={basic.label}>Priorité</Text>
                           <BouncyCheckbox
