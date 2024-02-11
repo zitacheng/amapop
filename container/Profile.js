@@ -38,38 +38,17 @@ const Profile = ({navigation}) => {
   console.log("current ", current);
   const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
     filters: {
-      user: user?.user?.id
+      user: {id: user?.user?.id}
     },
     populate: ['user', 'image']
   }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
   
   console.log("fetchedPops lol", fetchedPops);
-  console.log("fetchingPops", fetchingPops);
+  console.log("errorPop ", error);
 
   const favs = [
-      {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, favorite: 1},
-      {id: 12, pic: images.gallery3, looking: false, selling: true, changing: true, price: 18, available: true, favorite: 2},
-      {id: 13, pic: images.gallery5, looking: false, selling: true, changing: true, price: 28, available: true, favorite: 3},
-      {id: 14, pic: images.gallery6, looking: false, selling: true, changing: true, price: 13, available: true, favorite: 0},
-      {id: 15, pic: images.gallery2, looking: false, selling: true, changing: true, price: 18, available: true, favorite: 2},
-      {id: 21, pic: images.gallery2, looking: false, selling: true, changing: true, price: 17, available: true, favorite: 4},
-      {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true, favorite: 2},
+      // {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, favorite: 1},
     ];
-
-  // const list = [
-  //     {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, look: false, prio: false},
-  //     {id: 12, pic: images.gallery3, looking: false, selling: true, changing: true, price: 18, available: true, look: true, prio: true},
-  //     {id: 13, pic: images.gallery5, looking: false, selling: true, changing: true, price: 28, available: true, look: false, prio: false},
-  //     {id: 14, pic: images.gallery6, looking: false, selling: true, changing: true, price: 13, available: true, look: true, prio: true},
-  //     {id: 15, pic: images.gallery2, looking: false, selling: true, changing: true, price: 18, available: true, look: false, prio: false},
-  //     {id: 16, pic: images.gallery, looking: false, selling: true, changing: true, price: 12, available: true, look: true, prio: true},
-  //     {id: 17, pic: images.gallery5, looking: false, selling: true, changing: true, price: 18, available: true, look: false, prio: false},
-  //     {id: 18, pic: images.gallery3, looking: false, selling: true, changing: true, price: 13, available: true, look: true, prio: false},
-  //     {id: 19, pic: images.gallery2, looking: false, selling: true, changing: true, price: 12, available: true, look: false, prio: false},
-  //     {id: 20, pic: images.gallery4, looking: false, selling: true, changing: true, price: 15, available: true, look: true, prio: false},
-  //     {id: 21, pic: images.gallery2, looking: false, selling: true, changing: true, price: 17, available: true, look: false, prio: false},
-  //     {id: 21, pic: images.gallery5, looking: false, selling: true, changing: true, price: 17, available: true, look: true, prio: false},
-  //   ];
 
   // function stateSentence() {
   //   switch (current.state) {

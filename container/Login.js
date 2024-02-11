@@ -14,8 +14,6 @@ import {color} from '../constant/color';
 import {images} from '../constant/images';
 import {basic} from '../constant/basic';
 import {Load} from '../component/Load';
-import axios from 'axios';
-import { loginUser } from '../redux/actions/auth';
 import { useDispatch } from 'react-redux';
 import { useLoginMutation, useLazyGetMeQuery } from '../services/auth';
 import { setCredentials, setUser } from '../slices/authslice';
@@ -136,7 +134,6 @@ const Login = ({navigation}) => {
                     dispatch(setUser({user: res}));
                     navigation.navigate('TabScreen');
                   });
-
                 })
                 // const res = await loginUser({username: email, password: password, dispatch: dispatch});
                 // console.log("FINAL ", res);

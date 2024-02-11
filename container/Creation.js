@@ -51,19 +51,6 @@ const Creation = ({navigation, route}) => {
   console.log("fetchedSeries ", fetchedSeries);
   console.log("errorSeries ", errorSeries);
 
-  const menu = [
-    {id: 0, name: 'Labubu', selected: false},
-    {id: 1, name: 'Azura', selected: false},
-    {id: 2, name: 'SkullPanda', selected: false},
-    {id: 3, name: 'Hirono', selected: false},
-    {id: 4, name: 'Nori', selected: false},
-    {id: 5, name: 'Molly', selected: false},
-    {id: 6, name: 'Hapuchichi', selected: false},
-    {id: 7, name: 'Cry Baby', selected: false},
-    {id: 8, name: 'Dimoo', selected: false},
-    {id: 9, name: 'Autre', selected: false},
-  ];
-
   const cleanVariables = () => {
     setImg1(null);
     setSerie(null);

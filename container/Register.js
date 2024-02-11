@@ -19,7 +19,10 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {color} from '../constant/color';
 import {basic} from '../constant/basic';
 import {Load} from '../component/Load';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { useSignupMutation, useLazyGetMeQuery } from '../services/auth';
+import { setCredentials, setUser } from '../slices/authslice';
+const qs = require("qs")
 
 Icon.loadFont();
 
@@ -32,31 +35,28 @@ const Register = ({navigation}) => {
   const [created, setCreated] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
   const [showPdf, setShowPdf] = useState(false);
+  const dispatch = useDispatch();
+  const [signup] = useSignupMutation();
+  const [getMe] = useLazyGetMeQuery();
+  const refMail = useRef(null);
+  const refPass = useRef(null);
+  const refPhone = useRef(null);
 
   function registerUser() {
-    console.log("REGISTER");
-
-    // Request API.
-    // Add your own code here to customize or restrict how the public can register new users.
-    axios
-      .post('http://localhost:1337/api/auth/local/register', {
-        username: username,
-        email: email,
-        password: password,
-        phone: phone,
-      })
-      .then(response => {
-        // Handle success.
-        console.log('User profile', response.data.user);
-        console.log('User token', response.data.jwt);
+    signup({username, password, email, phone}).unwrap().then((res) => {
+      dispatch(setCredentials(res));
+      getMe(qs.stringify({
+        filters: {},
+        populate: [
+          'pops',
+          'pops.image',
+          'avatar',
+        ],
+      }, {encodeValuesOnly: true})).unwrap().then((res) => {
+        dispatch(setUser({user: res}));
         navigation.navigate('TabScreen');
-      })
-      .catch(error => {
-        // Handle error.
-        console.log('An erro:', error);
-        console.log('An error occurred:', error.response.data.error.message);
-        alert("Erreur de création de compte, veuillez essayer ultérieurement");
       });
+    })
     }
 
   return (
@@ -83,6 +83,7 @@ const Register = ({navigation}) => {
                 style={basic.input}
                 onChangeText={setUsername}
                 value={username}
+                onSubmitEditing={() => refMail?.current?.focus()}
               />
               <Text style={basic.label}>E-mail</Text>
               <TextInput
@@ -91,6 +92,8 @@ const Register = ({navigation}) => {
                 keyboardType="email-address"
                 onChangeText={setEmail}
                 value={email}
+                ref={refMail}
+                onSubmitEditing={() => refPass?.current?.focus()}
               />
               <Text style={basic.label}>
                 {'Mot de passe'}
@@ -100,6 +103,8 @@ const Register = ({navigation}) => {
                 onChangeText={setPassword}
                 secureTextEntry={true}
                 value={password}
+                ref={refPass}
+                onSubmitEditing={() => refPhone?.current?.focus()}
               />
               <Text style={basic.label}>
                 {'Téléphone'}
@@ -109,6 +114,7 @@ const Register = ({navigation}) => {
                 keyboardType='phone-pad'
                 onChangeText={setPhone}
                 value={phone}
+                ref={refPhone}
               />
               <View style={basic.break} />
               <TouchableOpacity
