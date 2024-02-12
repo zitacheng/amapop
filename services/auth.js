@@ -70,6 +70,15 @@ export const api = createApi({
         },
         invalidatesTags: ['me'],
       }),
+    updateUser: builder.mutation({
+      query: (params) => {
+        return ({
+          url: `/api/users/${params.id}`,
+          method: 'PUT',
+          body: params.data
+        })
+      }
+    }),
     // getProjects: builder.query({
     //   query: (params) => ({
     //     url: `/api/projects?${params}`,
@@ -158,16 +167,16 @@ export const api = createApi({
     //     body: params,
     //   }),
     // }),
-    // uploadFile: builder.mutation({
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    //   query: (params) => ({
-    //     url: `/api/upload`,
-    //     method: 'POST',
-    //     body: params,
-    //   }),
-    // }),
+    uploadFile: builder.mutation({
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      query: (data) => ({
+        url: `/api/upload`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
     getMe: builder.query({
       query: (params) => ({
         url: `/api/users/me?${params}`,
@@ -211,4 +220,8 @@ export const api = createApi({
 
 console.log('api', api);
 
-export const { useLoginMutation, useSignupMutation, useGetPopsQuery, useCreatePopMutation, useLazyGetMeQuery, useGetMeQuery, useGetSeriesQuery} = api
+export const { 
+                useLoginMutation, useSignupMutation, useGetPopsQuery, useCreatePopMutation,
+                useLazyGetMeQuery, useGetMeQuery, useGetSeriesQuery, useUpdateUserMutation,
+                useUploadFileMutation
+              } = api

@@ -68,7 +68,7 @@ const Profile = ({navigation}) => {
       <StatusBar barStyle="light-content" />
       <View style={[styles.header, basic.shadow]}>
         {/* <UserAvatar size={90} name="userPicture" bgColor={color.grey} src={images.avatar} /> */}
-        <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
+        <Image style={styles.rounded} source={user?.user?.avatar && user?.user?.avatar.length > 0 ? {uri:API_URL + user.user.avatar[0].url} : images.noimg} resizeMode="cover" />
         <Text style={styles.title}>{user?.user?.username}</Text>
         {/* <TouchableOpacity onPress={() => {navigation.navigate('Creation');}}>
           <Icon name={'add-circle'} size={40} color={'white'} />

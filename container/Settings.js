@@ -9,6 +9,8 @@ import {
   TextInput,
   ScrollView,
   Linking,
+  Keyboard,
+  TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
 import {images} from '../constant/images';
@@ -20,27 +22,61 @@ import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
 import Modal from 'react-native-modalbox';
 import * as ImagePicker from 'expo-image-picker';
-import { useSelector } from 'react-redux';
-// import { logout } from '../redux/actions/auth';
 import { useDispatch } from 'react-redux';
-import { logout } from '../slices/authslice';
+import { logout, setUser} from '../slices/authslice';
 import { useAuth } from '../hooks/useAuth';
+import { useUpdateUserMutation, useUploadFileMutation, useLazyGetMeQuery } from '../services/auth';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import { useHeaderHeight } from '@react-navigation/elements'
+import { API_URL } from "../constant/back";
+const qs = require("qs")
 
 Icon.loadFont();
 
 const Settings = ({navigation}) => {
-  const [username, setUsername] = useState('Slashzita');
-  const [avatar, setAvatar] = useState(images.avatar);
-  const [phone, setPhone] = useState('+33620296517');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('chengxiedan@gmail.com');
   const [bug, setBug] = useState('');
   const modalRef = useRef(null);
   const modalInfoRef = useRef(null);
-  const user = useAuth()
+  const user = useAuth();
+  const [username, setUsername] = useState(user?.user?.username);
+  const [avatar, setAvatar] = useState(null);
+  const [phone, setPhone] = useState(user?.user?.phone);
+  const [password, setPassword] = useState(null);
+  const [email, setEmail] = useState(user?.user?.email);
   const dispatch = useDispatch();
+  const [updateUser] = useUpdateUserMutation();
+  const [updateFile] = useUploadFileMutation();
+  const [getMe] = useLazyGetMeQuery();
+
+  const height = useHeaderHeight()
 
   console.log("user", user);
+
+  function fillData(data) {
+    if (username != user.user.username)
+      data.append('username', username);
+    if (email != user.user.email)
+      data.append('email', email);
+    if (phone != user.user.phone)
+      data.append('phone', phone);
+    if (password != null)
+      data.append('password', password);
+    console.log("data ", data._parts)
+    if (data._parts && data._parts.length > 0)
+      updateUser({data: data, id: user.user.id}).unwrap().then((res) => {
+          console.log("res ", res);
+          getMe(qs.stringify({
+            filters: {},
+            populate: [
+              'pops',
+              'pops.image',
+              'avatar',
+            ],
+          }, {encodeValuesOnly: true})).unwrap().then((res) => {
+            dispatch(setUser({user: res}));
+          });
+      })
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={basic.containerBg} />
@@ -57,7 +93,7 @@ const Settings = ({navigation}) => {
           <View style={styles.empty}/>
       </View>
       <ScrollView style={styles.center} contentContainerStyle={{justifyContent: 'center',alignItems: 'center'}}>
-        <Image style={styles.rounded} source={images.avatar} resizeMode="cover" />
+        <Image style={styles.rounded} source={user?.user?.avatar && user?.user?.avatar.length > 0 ? {uri:API_URL + user.user.avatar[0].url} : images.noimg} resizeMode="cover" />
         <Text style={styles.label}>{user?.user?.username}</Text>
         <Text style={styles.label}>{user?.user?.email}</Text>
         <Text style={styles.label}>{user?.user?.phone}</Text>
@@ -112,6 +148,12 @@ const Settings = ({navigation}) => {
         </Modal>
       <Modal style={styles.modalInfo} position={"bottom"} ref={modalInfoRef} coverScreen={true}>
         {/* <ScrollView> */}
+        <KeyboardAwareScrollView keyboardVerticalOffset={height}
+              behavior={Platform.OS === "ios" ? "padding" : 'height'}
+              contentContainerStyle={{alignItems: 'center'}}
+              style={{flex: 1}} enabled>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <>
           <TouchableOpacity onPress={async() => {
             let result = await ImagePicker.launchImageLibraryAsync({
               allowsEditing: true,
@@ -124,7 +166,7 @@ const Settings = ({navigation}) => {
               alert('You did not select any image.');
             }
           }}>
-          <Image style={styles.rounded} source={avatar && avatar.uri ? {uri: avatar.uri} : images.avatar} resizeMode="cover" />
+          <Image style={styles.rounded} source={user?.user?.avatar && user?.user?.avatar.length > 0 ? {uri:API_URL + user.user.avatar[0].url} : images.noimg} resizeMode="cover" />
           </TouchableOpacity>
             <Text style={basic.label}>{'Username'}</Text>
             <TextInput
@@ -161,10 +203,30 @@ const Settings = ({navigation}) => {
             <TouchableOpacity
               style={basic.btn}
               onPress={() => {
-                modalRef.current.close();
+                let data = new FormData();
+                  console.log("data ", data)
+                  if (avatar)
+                  {
+                    data.append('files', {
+                      name: 'avatar',
+                      uri: avatar.uri,
+                      type: 'images/jpeg'
+                    });
+                    updateFile(data).unwrap().then((res) => {
+                      console.log("res UPLOAD FILE", res);
+                      if (res && res.length > 0)
+                        data.append('avatar', res[0].id)
+                      fillData(data);
+                    })
+                  } 
+                  else
+                    fillData(data);
               }}>
-              <Text style={basic.btnTxt}>{"Sauvegareder"}</Text>
+              <Text style={basic.btnTxt}>{"Sauvegarder"}</Text>
             </TouchableOpacity>
+            </>
+            </TouchableWithoutFeedback>
+            </KeyboardAwareScrollView>
           {/* </ScrollView> */}
         </Modal>
     </SafeAreaView>
