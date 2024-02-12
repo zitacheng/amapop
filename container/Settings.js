@@ -25,7 +25,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { useDispatch } from 'react-redux';
 import { logout, setUser} from '../slices/authslice';
 import { useAuth } from '../hooks/useAuth';
-import { useUpdateUserMutation, useUploadFileMutation, useLazyGetMeQuery } from '../services/auth';
+import { useUpdateUserMutation, useUploadFileMutation, useLazyGetMeQuery,
+        useCreateSuggestionMutation} from '../services/auth';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import { useHeaderHeight } from '@react-navigation/elements'
 import { API_URL } from "../constant/back";
@@ -46,6 +47,7 @@ const Settings = ({navigation}) => {
   const dispatch = useDispatch();
   const [updateUser] = useUpdateUserMutation();
   const [updateFile] = useUploadFileMutation();
+  const [createSuggestion] = useCreateSuggestionMutation();
   const [getMe] = useLazyGetMeQuery();
 
   const height = useHeaderHeight()
@@ -141,6 +143,10 @@ const Settings = ({navigation}) => {
           <TouchableOpacity
             style={basic.btn}
             onPress={() => {
+              if (bug)
+                createSuggestion({data: {suggestion: bug, user: user.user.id}}).unwrap().then((res) => {
+                  console.log("res ", res);
+                });
               modalRef.current.close();
             }}>
             <Text style={basic.btnTxt}>{"Envoyer"}</Text>

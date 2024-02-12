@@ -70,6 +70,16 @@ export const api = createApi({
         },
         invalidatesTags: ['me'],
       }),
+      createSuggestion: builder.mutation({
+        query: (data) =>{
+          console.log("data , data", data)
+          return ({
+            url: '/api/suggestions',
+            method: 'POST',
+            body: data,
+          })
+        },
+      }),
     updateUser: builder.mutation({
       query: (params) => {
         return ({
@@ -223,5 +233,5 @@ console.log('api', api);
 export const { 
                 useLoginMutation, useSignupMutation, useGetPopsQuery, useCreatePopMutation,
                 useLazyGetMeQuery, useGetMeQuery, useGetSeriesQuery, useUpdateUserMutation,
-                useUploadFileMutation
+                useUploadFileMutation, useCreateSuggestionMutation
               } = api
