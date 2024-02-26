@@ -6,7 +6,7 @@ export const Load = ({loading}) => {
   return (
     <Spinner
       visible={loading}
-      textContent={'Loading...'}
+      textContent={'Chargement...'}
       textStyle={basic.spinnerTextStyle}
     />
   );

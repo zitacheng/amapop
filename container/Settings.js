@@ -5,11 +5,13 @@ import {
   Text,
   StatusBar,
   Image,
+  Alert,
   SafeAreaView,
   TextInput,
   ScrollView,
   Linking,
   Keyboard,
+  ActivityIndicator,
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
@@ -30,11 +32,13 @@ import { useUpdateUserMutation, useUploadFileMutation, useLazyGetMeQuery,
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import { useHeaderHeight } from '@react-navigation/elements'
 import { API_URL } from "../constant/back";
+
 const qs = require("qs")
 
 Icon.loadFont();
 
 const Settings = ({navigation}) => {
+  const [loading, setLoading] = useState(false);
   const [bug, setBug] = useState('');
   const modalRef = useRef(null);
   const modalInfoRef = useRef(null);
@@ -52,8 +56,6 @@ const Settings = ({navigation}) => {
 
   const height = useHeaderHeight()
 
-  console.log("user", user);
-
   function fillData(data) {
     if (username != user.user.username)
       data.append('username', username);
@@ -63,10 +65,12 @@ const Settings = ({navigation}) => {
       data.append('phone', phone);
     if (password != null)
       data.append('password', password);
-    console.log("data ", data._parts)
     if (data._parts && data._parts.length > 0)
       updateUser({data: data, id: user.user.id}).unwrap().then((res) => {
-          console.log("res ", res);
+        setLoading(false);
+        Alert.alert('Action réussi', 'Vos modifications ont bien été prise en compte.', [
+          {text: 'OK'},
+        ]);
           getMe(qs.stringify({
             filters: {},
             populate: [
@@ -77,6 +81,11 @@ const Settings = ({navigation}) => {
           }, {encodeValuesOnly: true})).unwrap().then((res) => {
             dispatch(setUser({user: res}));
           });
+      }).catch((err) => {
+        setLoading(false);
+        Alert.alert('Erreur', 'Erreur de serveur, veuillez réessayer ultérieurement.', [
+          {text: 'OK'},
+        ]);
       })
   }
   return (
@@ -172,7 +181,11 @@ const Settings = ({navigation}) => {
               alert('You did not select any image.');
             }
           }}>
-          <Image style={styles.rounded} source={user?.user?.avatar && user?.user?.avatar.length > 0 ? {uri:API_URL + user.user.avatar[0].url} : images.noimg} resizeMode="cover" />
+            {
+              avatar ?
+              <Image style={styles.rounded} source={{uri: avatar.uri}} resizeMode="cover" /> :
+              <Image style={styles.rounded} source={user?.user?.avatar && user?.user?.avatar.length > 0 ? {uri:API_URL + user.user.avatar[0].url} : images.noimg} resizeMode="cover" />
+            }
           </TouchableOpacity>
             <Text style={basic.label}>{'Username'}</Text>
             <TextInput
@@ -207,10 +220,11 @@ const Settings = ({navigation}) => {
               value={phone}
             />
             <TouchableOpacity
-              style={basic.btn}
+              style={loading ? basic.btnDisable : basic.btn}
+              disabled={loading}
               onPress={() => {
+                setLoading(true);
                 let data = new FormData();
-                  console.log("data ", data)
                   if (avatar)
                   {
                     data.append('files', {
@@ -218,12 +232,20 @@ const Settings = ({navigation}) => {
                       uri: avatar.uri,
                       type: 'images/jpeg'
                     });
-                    updateFile(data).unwrap().then((res) => {
-                      console.log("res UPLOAD FILE", res);
-                      if (res && res.length > 0)
-                        data.append('avatar', res[0].id)
-                      fillData(data);
-                    })
+                     updateFile(data).unwrap().then((res) => {
+                        setLoading(false);
+                        Alert.alert('Action réussi', 'Vos modifications ont bien été prise en compte.', [
+                          {text: 'OK'},
+                        ]);
+                        if (res && res.length > 0)
+                          data.append('avatar', res[0].id)
+                        fillData(data);
+                      }).catch((err) => {
+                        setLoading(false);
+                        Alert.alert('Erreur', 'Erreur de serveur, veuillez réessayer ultérieurement.', [
+                          {text: 'OK'},
+                        ]);
+                      });
                   } 
                   else
                     fillData(data);
@@ -234,6 +256,12 @@ const Settings = ({navigation}) => {
             </TouchableWithoutFeedback>
             </KeyboardAwareScrollView>
           {/* </ScrollView> */}
+          {
+            loading &&
+            <View style={styles.loadBox}>
+              <ActivityIndicator size="large" style={styles.spinner} />
+            </View>
+          }
         </Modal>
     </SafeAreaView>
   );
@@ -273,6 +301,7 @@ const styles = StyleSheet.create({
     width: 140,
     height: 140,
     marginBottom: 20,
+    marginTop: 30,
   },
   label: {
     color: color.grey,
@@ -294,7 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     height: '90%',
     width: '100%',
-    padding: 20,
+    // padding: 20,
   },
   btn: {
     margin: 10,
@@ -324,6 +353,19 @@ const styles = StyleSheet.create({
     backgroundColor: color.lightPurple,
     width: '80%',
     height: 200,
+  },
+  loadBox: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    zIndex: 100,
+  },
+  spinner: {
+    zIndex: 10,
+    position: 'absolute',
+    top: '50%',
+    left: '45%',
   }
 });
 

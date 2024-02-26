@@ -47,9 +47,6 @@ const Creation = ({navigation, route}) => {
   const {data: fetchedSeries, fetchingSeries, error: errorSeries} = useGetSeriesQuery(qs.stringify({
     sort: ['name']
   }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
-  
-  console.log("fetchedSeries ", fetchedSeries);
-  console.log("errorSeries ", errorSeries);
 
   const cleanVariables = () => {
     setImg1(null);
@@ -190,7 +187,6 @@ const Creation = ({navigation, route}) => {
                           style={basic.btn}
                           onPress={() => {
                             let data = new FormData();
-                            console.log("img1 ", img1)
                             data.append('files.image', {
                               name: 'popImg',
                               uri: img1.uri,

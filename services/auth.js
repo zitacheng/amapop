@@ -57,7 +57,6 @@ export const api = createApi({
       }),
       createPop: builder.mutation({
         query: (data) =>{
-          console.log(data);
           return ({
             url: '/api/pops',
             method: 'POST',
@@ -72,7 +71,6 @@ export const api = createApi({
       }),
       createSuggestion: builder.mutation({
         query: (data) =>{
-          console.log("data , data", data)
           return ({
             url: '/api/suggestions',
             method: 'POST',
@@ -227,8 +225,6 @@ export const api = createApi({
     // }),
   }),
 })
-
-console.log('api', api);
 
 export const { 
                 useLoginMutation, useSignupMutation, useGetPopsQuery, useCreatePopMutation,

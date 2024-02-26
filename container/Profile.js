@@ -34,17 +34,13 @@ const Profile = ({navigation}) => {
   const [current, setCurrent] = useState(null);
   const modalRef = useRef(null);
   const user = useAuth()
-  console.log("user ", user);
-  console.log("current ", current);
   const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
     filters: {
       user: {id: user?.user?.id}
     },
     populate: ['user', 'image']
   }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
-  
-  console.log("fetchedPops lol", fetchedPops);
-  console.log("errorPop ", error);
+
 
   const favs = [
       // {id: 10, pic: images.gallery2, looking: false, selling: true, changing: true, price: 14, available: true, favorite: 1},

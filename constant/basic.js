@@ -11,6 +11,14 @@ export const basic = StyleSheet.create({
     marginTop: 15,
     borderRadius: 6,
   },
+  btnDisable: {
+    backgroundColor: color.grey,
+    alignSelf: 'center',
+    padding: 15,
+    minWidth: '75%',
+    marginTop: 15,
+    borderRadius: 6,
+  },
   btnWhiteout: {
     backgroundColor: 'transparent',
     alignSelf: 'center',

@@ -1,4 +1,5 @@
 import logo from '../assets/logoLongP.png';
+import logoPink from '../assets/logoPink.png';
 import logoWhite from '../assets/logoLongW.png';
 import avatar from '../assets/gho.jpeg';
 import out from '../assets/out.png';
@@ -14,6 +15,7 @@ import noimg from '../assets/noimg.jpg';
 
 export const images = {
     logo: logo,
+    logoPink: logoPink,
     logoWhite: logoWhite,
     avatar: avatar,
     out: out,
