@@ -7,6 +7,7 @@ import Register from './container/Register.js';
 import Profile from './container/Profile.js';
 import UserProfile from './container/UserProfile.js';
 import Creation from './container/Creation.js';
+import Edit from './container/Edit.js';
 import Settings from './container/Settings.js';
 import Chat from './container/Chat.js';
 import Chatting from './container/Chatting.js';
@@ -75,6 +76,7 @@ export default function App() {
             <Stack.Screen name="TabScreen" component={TabScreen} />
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Settings" component={Settings} />
+            <Stack.Screen name="Edit" component={Edit} />
             <Stack.Screen name="Topic" component={Topic} />
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="UserProfile" component={UserProfile} />

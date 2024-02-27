@@ -11,7 +11,6 @@ const Splash = (props) => {
   // const user = useSelector(state => state?.user);
   const user = useAuth()
 
-  console.log("ICI ", user)
   const checkUser = async (user) => {
     // const localPref = await AsyncStorage.getItem('local_pref');
     // await setI18nConfig(localPref);

@@ -8,6 +8,9 @@ import {
   Image,
   TextInput,
   SafeAreaView,
+  ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -46,77 +49,81 @@ const Login = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <Load loading={loading} />
-      <View style={styles.centerBox}>
-      <KeyboardAwareScrollView keyboardVerticalOffset={height}
+      <ScrollView style={styles.centerBox} contentContainerStyle={{ flex: 1, justifyContent: 'center'}}>
+        <KeyboardAwareScrollView keyboardVerticalOffset={height}
           behavior={Platform.OS === "ios" ? "padding" : 'height'}
+          contentContainerStyle={{ flex: 1, justifyContent: 'center'}}
           style={{flex: 1}} enabled>
-        <Image style={styles.logo} source={images.logoPink} resizeMode="contain" />
-        <Text style={basic.label}>E-mail / Nom d'utilisateur</Text>
-        <TextInput
-          style={basic.input}
-          autoCapitalize={'none'}
-          keyboardType="email-address"
-          onChangeText={setEmail}
-          value={email}
-          onSubmitEditing={() => refPass?.current?.focus()}
-        />
-        <Text style={basic.label}>{'Mot de passe'}</Text>
-        <View style={styles.searchSection}>
-          <TextInput
-            ref={refPass}
-            style={styles.inputPass}
-            onChangeText={setPassword}
-            secureTextEntry={!show}
-            value={password}
-          />
-          <TouchableOpacity
-            style={styles.eye}
-            onPress={() => {
-              setShow(!show);
-            }}>
-            <Icon name={show ? 'eye' : 'eye-off'} size={20} color={color.pink} />
-          </TouchableOpacity>
-        </View>
-        <View style={basic.break} />
-        <TouchableOpacity
-          style={(loading || !email || !password) ? basic.btnDisable : basic.btn}
-          disabled={loading || !email || !password}
-          onPress={() => {
-            setLoading(true);
-            login({identifier: email, password: password}).unwrap().then((res) => {
-              setLoading(false);
-              dispatch(setCredentials(res));
-              getMe(qs.stringify({
-                filters: {},
-                populate: [
-                  'pops',
-                  'pops.image',
-                  'avatar',
-                ],
-              }, {encodeValuesOnly: true})).unwrap().then((res) => {
-                dispatch(setUser({user: res}));
-                navigation.navigate('TabScreen');
-              });
-            }).catch((err) => {
-              console.log("Err", err)
-              setLoading(false);
-              Alert.alert('Erreur', err.data?.error?.message?.includes('Invalid') ? "Identifiant incorrect." : 'Erreur de serveur, veuillez réessayer ultérieurement.', [
-                {text: 'OK'},
-              ]);
-            })
-          }}>
-            <Text style={basic.btnTxt}>{"Se connecter"}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={basic.btnWhiteout}
-            disabled={loading}
-            onPress={() => {
-              navigation.navigate('Register');
-            }}>
-            <Text style={basic.btnTxtOut}>{"Créer un compte"}</Text>
-          </TouchableOpacity>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <>
+            <Image style={styles.logo} source={images.logoPink} resizeMode="contain" />
+            <Text style={basic.label}>E-mail / Nom d'utilisateur</Text>
+            <TextInput
+              style={basic.input}
+              autoCapitalize={'none'}
+              keyboardType="email-address"
+              onChangeText={setEmail}
+              value={email}
+              onSubmitEditing={() => refPass?.current?.focus()}
+            />
+            <Text style={basic.label}>{'Mot de passe'}</Text>
+            <View style={styles.searchSection}>
+              <TextInput
+                ref={refPass}
+                style={styles.inputPass}
+                onChangeText={setPassword}
+                secureTextEntry={!show}
+                value={password}
+              />
+              <TouchableOpacity
+                style={styles.eye}
+                onPress={() => {
+                  setShow(!show);
+                }}>
+                <Icon name={show ? 'eye' : 'eye-off'} size={20} color={color.pink} />
+              </TouchableOpacity>
+            </View>
+            <View style={basic.break} />
+            <TouchableOpacity
+              style={(loading || !email || !password) ? basic.btnDisable : basic.btn}
+              disabled={loading || !email || !password}
+              onPress={() => {
+                setLoading(true);
+                login({identifier: email, password: password}).unwrap().then((res) => {
+                  setLoading(false);
+                  dispatch(setCredentials(res));
+                  getMe(qs.stringify({
+                    filters: {},
+                    populate: [
+                      'pops',
+                      'pops.image',
+                      'avatar',
+                    ],
+                  }, {encodeValuesOnly: true})).unwrap().then((res) => {
+                    dispatch(setUser({user: res}));
+                    navigation.navigate('TabScreen');
+                  });
+                }).catch((err) => {
+                  setLoading(false);
+                  Alert.alert('Erreur', err.data?.error?.message?.includes('Invalid') ? "Identifiant incorrect." : 'Erreur de serveur, veuillez réessayer ultérieurement.', [
+                    {text: 'OK'},
+                  ]);
+                })
+              }}>
+                <Text style={basic.btnTxt}>{"Se connecter"}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={basic.btnWhiteout}
+                disabled={loading}
+                onPress={() => {
+                  navigation.navigate('Register');
+                }}>
+                <Text style={basic.btnTxtOut}>{"Créer un compte"}</Text>
+              </TouchableOpacity>
+              </>
+            </TouchableWithoutFeedback>
           </KeyboardAwareScrollView>
-        </View>
+        </ScrollView>
       <TouchableOpacity
         style={styles.passForgot}
         disabled={loading}
@@ -137,7 +144,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   logo: {
-    height: '30%',
+    height: '15%',
     alignSelf: 'center',
     marginBottom: 40,
   },

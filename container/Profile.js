@@ -112,9 +112,9 @@ const Profile = ({navigation}) => {
                   </TouchableOpacity>
                   <LinearGradient
                   colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
-                    <Text style={styles.cardtitle}>Hirono Mischief - Destroyer</Text>
+                    <Text style={styles.cardtitle}>{item.serie + ' - ' + item.name}</Text>
                   </LinearGradient>
-                  <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Creation', {editMode: true});}}>
+                  <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Edit', {editMode: true});}}>
                     <IconMat name={'lead-pencil'} size={20} color={color.pink} />
                   </TouchableOpacity>
                   <View style={[styles.prio, basic.shadow]}>
@@ -140,7 +140,7 @@ const Profile = ({navigation}) => {
                   colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
                     <Text style={styles.cardtitle}>{item.attributes.serie + ' - ' + item.attributes.name}</Text>
                   </LinearGradient>
-                  <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Creation', {editMode: true});}}>
+                  <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Edit', {editMode: true, pop: item});}}>
                     <IconMat name={'lead-pencil'} size={20} color={color.pink} />
                   </TouchableOpacity>
                   {

@@ -27,25 +27,27 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useHeaderHeight } from '@react-navigation/elements'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import * as ImagePicker from 'expo-image-picker';
-import { useCreatePopMutation, useGetSeriesQuery } from '../services/auth';
+import { useGetSeriesQuery, useUpdatePopMutation, useRemovePopMutation } from '../services/auth';
 import { useAuth } from '../hooks/useAuth';
+import { API_URL } from "../constant/back";
 
 const qs = require("qs")
 Icon.loadFont();
 
-const Creation = ({navigation, route}) => {
+const Edit = ({navigation, route}) => {
   const [loading,setLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [note, setNote] = useState('');
+  const [name, setName] = useState(route?.params?.pop.attributes.name);
+  const [note, setNote] = useState(route?.params?.pop.attributes.note);
   const [other, setOther] = useState('');
   const [serie, setSerie] = useState('');
-  const [checked, setChecked] = useState('change');
-  const [prio, setPrio] = useState(false);
+  const [checked, setChecked] = useState(route?.params?.pop.attributes.state);
+  const [prio, setPrio] = useState(route?.params?.pop.attributes.priority);
   const [img1, setImg1] = useState(null);
-  const [createPop] = useCreatePopMutation()
-  const height = useHeaderHeight()
+  const [updatePop] = useUpdatePopMutation();
+  const [removePop] = useRemovePopMutation();
+  const height = useHeaderHeight();
   const user = useAuth();
-  const {data: fetchedSeries, fetchingSeries, error: errorSeries} = useGetSeriesQuery(qs.stringify({
+  const {data: fetchedSeries, error: errorSeries, isLoading: loadingSeries, isFetching: fetchingSeries} = useGetSeriesQuery(qs.stringify({
     sort: ['name']
   }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
 
@@ -64,7 +66,14 @@ const Creation = ({navigation, route}) => {
         <View style={basic.containerBgBotWhite} />
         <StatusBar barStyle="light-content" />
         <View style={styles.header}>
-          <Text style={styles.title}>{'Ajouter un popmart'}</Text>
+          <TouchableOpacity style={styles.backUp}
+              onPress={() => {
+                cleanVariables();
+                navigation.goBack();
+              }}>
+              <Icon name={'arrow-left'} size={20} color={'white'} style={styles.icon} />
+          </TouchableOpacity>
+          <Text style={styles.title}>{'Modifier votre popmart'}</Text>
           <View style={styles.empty}/>
         </View>
         <ScrollView style={styles.scroll}  contentContainerStyle={{ flex: 1, justifyContent: 'flex-end'}}>
@@ -84,38 +93,27 @@ const Creation = ({navigation, route}) => {
 
                             if (!result.canceled) {
                               setImg1(result.assets[0]);
-                            } else {
-                              alert('You did not select any image.');
                             }
                           }}>
                             {
-                              img1 ? <Image style={styles.addPic} source={{uri: img1.uri}} resizeMode="cover" />
-                              : <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
+                                route?.params?.pop?.attributes?.image?.data?.length > 0 ?
+                                <Image style={styles.addPic} source={{uri: API_URL + route.params.pop.attributes.image.data[0].attributes.url}} resizeMode="cover" /> :
+                              (img1 ? <Image style={styles.addPic} source={{uri: img1.uri}} resizeMode="cover" />
+                              : <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />)
                             }
                           </TouchableOpacity>
-                          {/* <TouchableOpacity style={styles.addImg}>
-                              {
-                              img2 ? <Image style={styles.addPic} source={{uri: img2.uri}} resizeMode="cover" />
-                              : <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
-                            }
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.addImg}>
-                              {
-                              img3 ? <Image style={styles.addPic} source={{uri: img3.uri}} resizeMode="cover" />
-                              : <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
-                            }
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.addImg}>
-                              {
-                              img4 ? <Image style={styles.addPic} source={{uri: img4.uri}} resizeMode="cover" />
-                              : <IconAnt name={'plus'} size={30} color={'white'} style={styles.icon} />
-                            }
-                          </TouchableOpacity> */}
                       </View>
                       <Text style={basic.label}>Série<Text style={basic.mandatory}>*</Text></Text>
                       <View style={styles.btnRow}>
                       {
                           fetchedSeries?.data?.map((item, id) => {
+                            if (route?.params?.pop.attributes.serie == item.attributes.name && !serie) {
+                                setSerie(item);
+                            }
+                            if (id == (fetchedSeries.data.length -1) && !serie) {
+                                setSerie({id: -1, name: 'Autre'})
+                                setOther(route?.params?.pop.attributes.serie);
+                            }
                               return (
                                 <TouchableOpacity style={[styles.badge, {backgroundColor: (serie && item.id == serie.id) ? color.pink : color.lightPurple}]}
                                   onPress={() => {
@@ -186,8 +184,8 @@ const Creation = ({navigation, route}) => {
                       />
                       <View style={basic.break} />
                       <TouchableOpacity
-                          style={((!serie && !other) || !name || (serie.id == -1 && !other)) ? basic.btnDisable : basic.btn}
-                          disabled={(!serie && !other) || !name || (serie.id == -1 && !other)}
+                          style={(!serie || !name || (serie.id == -1 && !other)) ? basic.btnDisable : basic.btn}
+                          disabled={!serie || !name || (serie.id == -1 && !other)}
                           onPress={() => {
                             setLoading(true);
                             let data = new FormData();
@@ -207,18 +205,58 @@ const Creation = ({navigation, route}) => {
                               user: user.user.id
                             }))
 
-                            createPop(data).unwrap().then((res) => {
+                            updatePop({data: data, id: route?.params?.pop.id}).unwrap().then((res) => {
                                 setLoading(false);
-                                Alert.alert('Action réussi', 'Le pop mart a bien été modifié', [
+                                Alert.alert('Action réussi', 'Vos modifications ont bien été prise en compte.', [
                                   {text: 'OK'},
                                 ]);
-                            }).catch((err) => {
-                              setLoading(false);
-                            })
+                              }).catch((err) => {
+                                setLoading(false);
+                                Alert.alert('Erreur', 'Erreur de serveur, veuillez réessayer ultérieurement.', [
+                                  {text: 'OK'},
+                                ]);
+                              })
                             cleanVariables();
                           }}>
-                          <Text style={basic.btnTxt}>{"Ajouter"}</Text>
+                          <Text style={basic.btnTxt}>Modifier</Text>
                       </TouchableOpacity>
+                        <TouchableOpacity
+                            style={basic.btn}
+                            onPress={() => {
+                                Alert.alert('Supression de popmart', 'Êtes vous sûre de vouloir supprimer ce popmart ?', [
+                                    {
+                                        text: 'Annuler',
+                                        style: 'cancel',
+                                    },
+                                    {
+                                        text: 'Oui',
+                                        onPress: () => {
+                                            setLoading(true);
+                                            removePop({id: route?.params?.pop.id}).unwrap().then((res) => {
+                                                setLoading(false);
+                                                cleanVariables();
+                                                Alert.alert('Action réussi', 'Votre popmart a bien été supprimé', [
+                                                {
+                                                    text: 'Ok',
+                                                    onPress: () => {
+                                                        cleanVariables();
+                                                        navigation.goBack();   
+                                                    },
+                                                }
+                                                ]);
+                                             }).catch((err) => {
+                                                setLoading(false);
+                                                Alert.alert('Erreur', 'Erreur de serveur, veuillez réessayer ultérieurement.', [
+                                                  {text: 'OK'},
+                                                ]);
+                                              })
+                                        },
+                                    },
+                                      
+                                  ]);
+                            }}>
+                            <Text style={basic.btnTxt}>Supprimer</Text>
+                        </TouchableOpacity>
                       <View style={basic.break} />
                   </View>
               </TouchableWithoutFeedback>
@@ -258,7 +296,7 @@ const styles = StyleSheet.create({
   backUp: {
     justifyContent: 'center',
     width: '10%',
-    opacity: 0
+    opacity: 1
   },
   empty: {
     width: '10%',
@@ -329,4 +367,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Creation;
+export default Edit;

@@ -87,6 +87,25 @@ export const api = createApi({
         })
       }
     }),
+    updatePop: builder.mutation({
+      query: (params) => {
+        return ({
+          url: `/api/pops/${params.id}`,
+          method: 'PUT',
+          body: params.data,
+          formData:true,
+          headers: {
+            'Content-Type': 'multipart/form-data;'
+          },
+        })
+      }
+    }),
+    removePop: builder.mutation({
+      query: (params) => ({
+        url: `/api/pops/${params.id}`,
+        method: 'DELETE',
+      }),
+    }),
     // getProjects: builder.query({
     //   query: (params) => ({
     //     url: `/api/projects?${params}`,
@@ -229,5 +248,5 @@ export const api = createApi({
 export const { 
                 useLoginMutation, useSignupMutation, useGetPopsQuery, useCreatePopMutation,
                 useLazyGetMeQuery, useGetMeQuery, useGetSeriesQuery, useUpdateUserMutation,
-                useUploadFileMutation, useCreateSuggestionMutation
+                useUploadFileMutation, useCreateSuggestionMutation, useRemovePopMutation, useUpdatePopMutation
               } = api

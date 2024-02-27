@@ -59,6 +59,11 @@ export const basic = StyleSheet.create({
     fontFamily: 'rbt-Bold',
     width: '100%',
   },
+  mandatory: {
+    fontSize: 16,
+    color: 'red',
+    fontFamily: 'rbt-Bold',
+  },
   input: {
     borderRadius: 6,
     padding: 20,

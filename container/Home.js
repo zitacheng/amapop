@@ -26,6 +26,7 @@ import Modal from 'react-native-modalbox';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useGetPopsQuery, useGetSeriesQuery } from '../services/auth';
 import { API_URL, stateSentence, popsSerie } from "../constant/back";
+import { useAuth } from '../hooks/useAuth';
 
 const qs = require("qs")
 
@@ -36,6 +37,7 @@ const Home = ({navigation}) => {
   const [selected, setSelected] = useState([]);
   const [current, setCurrent] = useState(null);
   const [sorting, setSorting] = useState('Date croissant');
+  const user = useAuth()
   const modalRef = useRef(null);
   const modalSortRef = useRef(null);
   const modalFilterRef = useRef(null);
@@ -44,6 +46,9 @@ const Home = ({navigation}) => {
       state: {
         $eq: 'change',
       },
+      $not: {
+        user: user?.user?.id,
+      }
     },
     populate: ['user', 'image']
   }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
@@ -74,7 +79,6 @@ const Home = ({navigation}) => {
     modalSortRef.current.close();
   }
 
-  console.log("current ", current);
   return (
     <SafeAreaView style={styles.container}>
     <StatusBar barStyle="dark-content" />

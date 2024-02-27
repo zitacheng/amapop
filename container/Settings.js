@@ -153,8 +153,17 @@ const Settings = ({navigation}) => {
             style={basic.btn}
             onPress={() => {
               if (bug)
+                setLoading(true);
                 createSuggestion({data: {suggestion: bug, user: user.user.id}}).unwrap().then((res) => {
-                  console.log("res ", res);
+                  setLoading(false);
+                  Alert.alert('Message envoyé', 'Merci de votre soutiens.', [
+                    {text: 'OK'},
+                  ]);
+                }).catch((err) => {
+                  setLoading(false);
+                  Alert.alert('Erreur de serveur', 'Veuillez réessayer ultérieurement', [
+                    {text: 'OK'},
+                  ]);
                 });
               modalRef.current.close();
             }}>
