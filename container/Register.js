@@ -25,6 +25,7 @@ import { setCredentials, setUser } from '../slices/authslice';
 import PhoneInput from "react-native-phone-number-input";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import { useHeaderHeight } from '@react-navigation/elements'
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const qs = require("qs")
 
@@ -37,7 +38,7 @@ const Register = ({navigation}) => {
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [created, setCreated] = useState(false);
-  const [showNotif, setShowNotif] = useState(false);
+  const [accept, setAccept] = useState(false);
   const [showPdf, setShowPdf] = useState(false);
   const dispatch = useDispatch();
   const [signup] = useSignupMutation();
@@ -142,6 +143,16 @@ const Register = ({navigation}) => {
             }}
           />
           <View style={basic.break} />
+          {/* <BouncyCheckbox
+              size={25}
+              fillColor={color.pink}
+              unfillColor="#FFFFFF"
+              text="J'accepte les conditions générale d'utilisation, voir le CGU"
+              iconStyle={{ borderColor: "red" }}
+              innerIconStyle={{ borderWidth: 2 }}
+              textStyle={{textDecorationLine: "none", fontFamily: 'rbt', fontSize: 14, color: 'black', width: '70%'}}
+              onPress={() => {setAccept(!accept)}}
+          /> */}
           <TouchableOpacity
             style={((!username || !password || !email) || loading) ? basic.btnDisable : basic.btn}
             disabled={(!username || !password || !email) || loading}

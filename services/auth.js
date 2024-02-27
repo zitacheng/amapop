@@ -98,13 +98,15 @@ export const api = createApi({
             'Content-Type': 'multipart/form-data;'
           },
         })
-      }
+      },
+      invalidatesTags: ['me'],
     }),
     removePop: builder.mutation({
       query: (params) => ({
         url: `/api/pops/${params.id}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['me'],
     }),
     // getProjects: builder.query({
     //   query: (params) => ({

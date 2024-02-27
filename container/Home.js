@@ -154,7 +154,7 @@ const Home = ({navigation}) => {
                       {/* <TouchableOpacity onPress={() => {}}>
                         <Icon name={pop.like == true ? 'heart' : 'heart-o'} size={20} color={color.pink} />
                       </TouchableOpacity> */}
-                      <TouchableOpacity onPress={() => {Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as XXX je suis interessé' +'&phone=+33768628787')}}>
+                      <TouchableOpacity onPress={() => {Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as ' + pop.attributes.serie + ' - ' + pop.attributes.name + ' je suis interessé' +'&phone=+33768628787')}}>
                         <Icon name={'send'} size={20} color={color.pink} />
                       </TouchableOpacity>
                     </View>
