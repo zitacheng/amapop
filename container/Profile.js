@@ -6,7 +6,7 @@ import {
   StatusBar,
   View,
   Image,
-  FlatList,
+  Alert,
   SafeAreaView,
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
@@ -22,17 +22,19 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
 import { useAuth } from '../hooks/useAuth';
-import { useGetPopsQuery } from '../services/auth';
+import { useGetPopsQuery, useRemovePopMutation } from '../services/auth';
 import { API_URL, stateSentence } from "../constant/back";
 import Moment from 'react-moment';
+import {Load} from '../component/Load';
 
 const qs = require("qs")
 
 const Profile = ({navigation}) => {
-  const [showNotif, setShowNotif] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [tabActive, setTabActive] = useState('change');
   const [current, setCurrent] = useState(null);
   const modalRef = useRef(null);
+  const [removePop] = useRemovePopMutation();
   const user = useAuth()
   const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
     filters: {
@@ -62,6 +64,7 @@ const Profile = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
+      <Load loading={loading} />
       <View style={[styles.header, basic.shadow]}>
         {/* <UserAvatar size={90} name="userPicture" bgColor={color.grey} src={images.avatar} /> */}
         <Image style={styles.rounded} source={user?.user?.avatar && user?.user?.avatar.length > 0 ? {uri:API_URL + user.user.avatar[0].url} : images.noimg} resizeMode="cover" />
@@ -125,7 +128,7 @@ const Profile = ({navigation}) => {
               )
           }) :
           fetchedPops?.data?.map((item, id) => {
-            if ((tabActive == 'change' && item.attributes.state == 'change') || (tabActive == 'look' && item.attributes.state == 'looking'))
+            if ((tabActive == 'change' && (item.attributes.state == 'change' || item.attributes.state == 'booked')) || (tabActive == 'look' && item.attributes.state == 'looking'))
               return (
                 <View style={[styles.card, basic.shadow]} id={id} key={id}>
                   <TouchableOpacity onPress={() => {setCurrent(item.attributes); modalRef.current.open();}}>
@@ -140,8 +143,40 @@ const Profile = ({navigation}) => {
                   colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
                     <Text style={styles.cardtitle}>{item.attributes.serie + ' - ' + item.attributes.name}</Text>
                   </LinearGradient>
+                  {
+                    item.attributes.state == 'booked' &&
+                    <Image style={styles.booked} source={images.booked} resizeMode="cover" />
+                  }
                   <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Edit', {editMode: true, pop: item});}}>
                     <IconMat name={'lead-pencil'} size={20} color={color.pink} />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[styles.cardBottomLeft, basic.shadow]} onPress={() => {
+                     Alert.alert('Supression de popmart', 'Êtes vous sûre de vouloir supprimer ce popmart ?', [
+                      {
+                          text: 'Annuler',
+                          style: 'cancel',
+                      },
+                      {
+                          text: 'Oui',
+                          onPress: () => {
+                              setLoading(true);
+                              removePop({id: item.id}).unwrap().then((res) => {
+                                  setLoading(false);
+                                  Alert.alert('Action réussi', 'Votre popmart a bien été supprimé', [
+                                  {text: 'Ok'}
+                                  ]);
+                               }).catch((err) => {
+                                  setLoading(false);
+                                  Alert.alert('Erreur', 'Erreur de serveur, veuillez réessayer ultérieurement.', [
+                                    {text: 'OK'},
+                                  ]);
+                                })
+                          },
+                      },
+                        
+                    ]);
+                  }}>
+                    <IconMat name={'delete'} size={20} color={color.pink} />
                   </TouchableOpacity>
                   {
                     item.priority &&
@@ -257,6 +292,27 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  cardBottomLeft: {
+    backgroundColor: 'white',
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    padding: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  booked: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    zIndex: 10,
+    width: '80%',
+    objectFit: 'contain'
   },
   prio: {
     position: 'absolute',

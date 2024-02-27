@@ -12,6 +12,7 @@ import gallery6 from '../assets/skull.png';
 import looking from '../assets/looking.png';
 import exchange from '../assets/exchange.png';
 import noimg from '../assets/noimg.jpg';
+import booked from '../assets/booked.png';
 
 export const images = {
     logo: logo,
@@ -28,5 +29,6 @@ export const images = {
     looking: looking,
     exchange: exchange,
     noimg: noimg,
+    booked: booked,
   };
   
