@@ -11,6 +11,7 @@ import {
   ScrollView,
   Dimensions,
   KeyboardAvoidingView,
+  Linking,
   TouchableOpacity,
 } from 'react-native';
 import {images} from '../constant/images';
@@ -143,19 +144,24 @@ const Register = ({navigation}) => {
             }}
           />
           <View style={basic.break} />
-          {/* <BouncyCheckbox
-              size={25}
-              fillColor={color.pink}
-              unfillColor="#FFFFFF"
-              text="J'accepte les conditions générale d'utilisation, voir le CGU"
-              iconStyle={{ borderColor: "red" }}
-              innerIconStyle={{ borderWidth: 2 }}
-              textStyle={{textDecorationLine: "none", fontFamily: 'rbt', fontSize: 14, color: 'black', width: '70%'}}
-              onPress={() => {setAccept(!accept)}}
-          /> */}
+          <View style={styles.rowPolitic}>
+            <BouncyCheckbox
+                size={25}
+                fillColor={color.pink}
+                unfillColor="#FFFFFF"
+                text=""
+                style={{width: '10%', marginRight: 10,}}
+                innerIconStyle={{ borderWidth: 2}}
+                textStyle={{textDecorationLine: "none"}}
+                onPress={() => {setAccept(!accept)}}
+            />
+            <TouchableOpacity onPress={() => {Linking.openURL('http://amapop.fr/defaultsite')}}>
+              <Text style={{fontFamily: 'rbt-Regular'}}>J'accepte les conditions générale d'utilisation, <Text style={{fontFamily: 'rbt-Bold'}}>voir le CGU</Text></Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
-            style={((!username || !password || !email) || loading) ? basic.btnDisable : basic.btn}
-            disabled={(!username || !password || !email) || loading}
+            style={((!username || !password || !email) || loading || !accept) ? basic.btnDisable : basic.btn}
+            disabled={(!username || !password || !email) || loading || !accept}
             onPress={() => {
               registerUser();
             }}>
@@ -218,6 +224,12 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+  },
+  rowPolitic: {
+    flexDirection: 'row',
+    marginTop: 10, 
+    marginBottom: 10,
+    width: '80%',
   },
   back: {
     width: 30,

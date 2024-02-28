@@ -131,7 +131,7 @@ const Profile = ({navigation}) => {
             if ((tabActive == 'change' && (item.attributes.state == 'change' || item.attributes.state == 'booked')) || (tabActive == 'look' && item.attributes.state == 'looking'))
               return (
                 <View style={[styles.card, basic.shadow]} id={id} key={id}>
-                  <TouchableOpacity onPress={() => {setCurrent(item.attributes); modalRef.current.open();}}>
+                  <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
                     {
                       item?.attributes?.image?.data && item.attributes.image.data.length > 0 ?
                       <Image style={styles.cardImg} source={{uri:API_URL + item.attributes.image.data[0].attributes.url}} resizeMode="cover" />
@@ -194,17 +194,17 @@ const Profile = ({navigation}) => {
           {
             current &&
             <>
-              <Image style={styles.modalPic} source={current?.image?.data && current.image.data.length > 0 ? {uri:API_URL + current.image.data[0].attributes.url} : images.noimg} resizeMode="cover" />
-              <Text style={styles.modalTitle}>{current && (current.serie + ' - ' + current.name)}</Text>
-              <Text style={styles.desc}>{"Note: " + (current.note ? current.note : "Pas de note")}</Text>
-              <Text style={styles.desc}>{stateSentence(current.state)}</Text>
-              <Text style={styles.desc}>{"Date d'ajout: " + new Date(current.createdAt).toLocaleDateString()}</Text>
+              <Image style={styles.modalPic} source={current.attributes?.image?.data && current.attributes.image.data.length > 0 ? {uri:API_URL + current.attributes.image.data[0].attributes.url} : images.noimg} resizeMode="cover" />
+              <Text style={styles.modalTitle}>{current.attributes && (current.attributes.serie + ' - ' + current.attributes.name)}</Text>
+              <Text style={styles.desc}>{"Note: " + (current.attributes.note ? current.attributes.note : "Pas de note")}</Text>
+              <Text style={styles.desc}>{stateSentence(current.attributes.state)}</Text>
+              <Text style={styles.desc}>{"Date d'ajout: " + new Date(current.attributes.createdAt).toLocaleDateString()}</Text>
               <View style={basic.break} />
               <TouchableOpacity
                   style={basic.btnWhiteout}
                   onPress={() => {
                     modalRef.current.close();
-                    navigation.navigate('Creation', {editMode: true});
+                    navigation.navigate('Edit', {editMode: true, pop: current});
                   }}>
                   <Text style={basic.btnTxtOut}>Modifier</Text>
               </TouchableOpacity>
