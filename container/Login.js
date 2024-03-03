@@ -23,6 +23,7 @@ import { useLoginMutation, useLazyGetMeQuery } from '../services/auth';
 import { setCredentials, setUser } from '../slices/authslice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import { useHeaderHeight } from '@react-navigation/elements'
+import { API_URL } from "../constant/back";
 
 const qs = require("qs")
 
@@ -57,7 +58,7 @@ const Login = ({navigation}) => {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <>
             <Image style={styles.logo} source={images.logoPink} resizeMode="contain" />
-            <Text style={basic.label}>E-mail / Nom d'utilisateur</Text>
+            <Text style={basic.label}>{passForgot ? "E-mail" : "E-mail / Nom d'utilisateur"}</Text>
             <TextInput
               style={basic.input}
               autoCapitalize={'none'}
@@ -66,52 +67,55 @@ const Login = ({navigation}) => {
               value={email}
               onSubmitEditing={() => refPass?.current?.focus()}
             />
-            <Text style={basic.label}>{'Mot de passe'}</Text>
-            <View style={styles.searchSection}>
-              <TextInput
-                ref={refPass}
-                style={styles.inputPass}
-                onChangeText={setPassword}
-                secureTextEntry={!show}
-                value={password}
-              />
+            {
+              !passForgot ?
+              <>
+              <Text style={basic.label}>{'Mot de passe'}</Text>
+              <View style={styles.searchSection}>
+                <TextInput
+                  ref={refPass}
+                  style={styles.inputPass}
+                  onChangeText={setPassword}
+                  secureTextEntry={!show}
+                  value={password}
+                />
+                <TouchableOpacity
+                  style={styles.eye}
+                  onPress={() => {
+                    setShow(!show);
+                  }}>
+                  <Icon name={show ? 'eye' : 'eye-off'} size={20} color={color.pink} />
+                </TouchableOpacity>
+              </View>
+              <View style={basic.break} />
               <TouchableOpacity
-                style={styles.eye}
+                style={(loading || !email || !password) ? basic.btnDisable : basic.btn}
+                disabled={loading || !email || !password}
                 onPress={() => {
-                  setShow(!show);
+                  setLoading(true);
+                  login({identifier: email, password: password}).unwrap().then((res) => {
+                    setLoading(false);
+                    dispatch(setCredentials(res));
+                    getMe(qs.stringify({
+                      filters: {},
+                      populate: [
+                        'pops',
+                        'pops.image',
+                        'avatar',
+                      ],
+                    }, {encodeValuesOnly: true})).unwrap().then((res) => {
+                      dispatch(setUser({user: res}));
+                      navigation.navigate('TabScreen');
+                    });
+                  }).catch((err) => {
+                    setLoading(false);
+                    Alert.alert('Erreur', err.data?.error?.message?.includes('Invalid') ? "Identifiant incorrect." : 'Erreur de serveur, veuillez réessayer ultérieurement.', [
+                      {text: 'OK'},
+                    ]);
+                  })
                 }}>
-                <Icon name={show ? 'eye' : 'eye-off'} size={20} color={color.pink} />
-              </TouchableOpacity>
-            </View>
-            <View style={basic.break} />
-            <TouchableOpacity
-              style={(loading || !email || !password) ? basic.btnDisable : basic.btn}
-              disabled={loading || !email || !password}
-              onPress={() => {
-                setLoading(true);
-                login({identifier: email, password: password}).unwrap().then((res) => {
-                  setLoading(false);
-                  dispatch(setCredentials(res));
-                  getMe(qs.stringify({
-                    filters: {},
-                    populate: [
-                      'pops',
-                      'pops.image',
-                      'avatar',
-                    ],
-                  }, {encodeValuesOnly: true})).unwrap().then((res) => {
-                    dispatch(setUser({user: res}));
-                    navigation.navigate('TabScreen');
-                  });
-                }).catch((err) => {
-                  setLoading(false);
-                  Alert.alert('Erreur', err.data?.error?.message?.includes('Invalid') ? "Identifiant incorrect." : 'Erreur de serveur, veuillez réessayer ultérieurement.', [
-                    {text: 'OK'},
-                  ]);
-                })
-              }}>
-                <Text style={basic.btnTxt}>{"Se connecter"}</Text>
-              </TouchableOpacity>
+                  <Text style={basic.btnTxt}>{"Se connecter"}</Text>
+                </TouchableOpacity>
               <TouchableOpacity
                 style={basic.btnWhiteout}
                 disabled={loading}
@@ -120,18 +124,51 @@ const Login = ({navigation}) => {
                 }}>
                 <Text style={basic.btnTxtOut}>{"Créer un compte"}</Text>
               </TouchableOpacity>
+              </> :
+              <TouchableOpacity
+              style={(passForgot && !email) ? basic.btnDisable : basic.btn}
+              disabled={passForgot && !email}
+              onPress={() => {
+                setLoading(true);
+                fetch(API_URL + '/api/auth/forgot-password', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    email: email
+                  })
+                })
+                .then(response => {setLoading(false);return response.json()})
+                .then(data => {console.log("DATAAA", data)});
+              }}>
+                <Text style={basic.btnTxt}>{"Rénitialiser"}</Text>
+              </TouchableOpacity>
+            }
               </>
             </TouchableWithoutFeedback>
           </KeyboardAwareScrollView>
         </ScrollView>
-      <TouchableOpacity
-        style={styles.passForgot}
-        disabled={loading}
-        onPress={() => {
-          
-        }}>
-        <Text style={styles.passTxt}>Mot de passe oublié?</Text>
-      </TouchableOpacity>
+        {
+          !passForgot &&
+          <TouchableOpacity
+          style={styles.passForgot}
+          disabled={loading}
+          onPress={() => {
+            setPassForgot(true);
+          }}>
+          <Text style={styles.passTxt}>Mot de passe oublié?</Text>
+        </TouchableOpacity>
+        }
+      {
+        passForgot &&
+        <TouchableOpacity style={styles.backUp}
+          onPress={() => {
+            setPassForgot(false);
+          }}>
+          <Icon name={'chevron-back-outline'} size={30} color={'black'} style={styles.icon} />
+        </TouchableOpacity>
+      }
     </SafeAreaView>
   );
 };
@@ -214,7 +251,14 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
     width: '100%',
-  }
+  },
+  backUp: {
+    position: 'absolute',
+    top: 35,
+    left: 0,
+    justifyContent: 'center',
+    padding: 20,
+  },
 });
 
 export default Login;

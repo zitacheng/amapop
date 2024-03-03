@@ -155,7 +155,7 @@ const Register = ({navigation}) => {
                 textStyle={{textDecorationLine: "none"}}
                 onPress={() => {setAccept(!accept)}}
             />
-            <TouchableOpacity onPress={() => {Linking.openURL('http://amapop.fr/defaultsite')}}>
+            <TouchableOpacity onPress={() => {Linking.openURL('http://amapop.fr/politic')}}>
               <Text style={{fontFamily: 'rbt-Regular'}}>J'accepte les conditions générale d'utilisation, <Text style={{fontFamily: 'rbt-Bold'}}>voir le CGU</Text></Text>
             </TouchableOpacity>
           </View>
