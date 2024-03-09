@@ -162,8 +162,12 @@ const Home = ({navigation}) => {
                         navigation.navigate('Chatting',
                         {
                           pop: pop,
+                          popId: pop.id,
+                          ownerId: pop.attributes.user.data.id,
+                          userId: user?.user?.id,
                           image:  pop.attributes.image,
-                          username: pop.attributes.user.data.attributes.username
+                          username: pop.attributes.user.data.attributes.username,
+                          home: true,
                         }
                         )}}>
                         <Icon name={'send'} size={20} color={color.pink} />

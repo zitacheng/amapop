@@ -17,22 +17,45 @@ import {color} from '../constant/color';
 import {basic} from '../constant/basic';
 import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
+import { useGetConversationsQuery } from "../services/auth";
+import { useAuth } from '../hooks/useAuth';
+import { API_URL } from "../constant/back";
+
+const qs = require("qs");
 
 Icon.loadFont();
 
-const Chat = ({navigation}) => {
+const Chat = ({route, navigation}) => {
   const [search, setSearch] = useState('');
-  const contacts = [
-    {id: 1, name: 'Matthieu',  pic: images.gallery, msg: 'Est ce que tu veux echanger ?'},
-    {id: 2, name: 'Puuline',  pic: images.gallery2, msg: 'Bonjour !'},
-    {id: 3, name: 'Justine',  pic: images.gallery3, msg: 'À quel heure'},
-  ];
+  const user = useAuth();
+
+  const {
+    data: fetchedConvs,
+    error,
+    isLoading: fetchingConvs,
+  } = useGetConversationsQuery(
+    qs.stringify(
+      {
+        filters: {
+          users: {
+              id: {
+                $in: [user.id],
+              }
+          },
+
+        },
+        populate: ['users', 'pop', 'pop.image', 'messages.sender.avatar']
+      },
+      { encodeValuesOnly: true }
+    ),
+    { refetchOnMountOrArgChange: true, refetchOnFocus: true }
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <Image style={basic.logo} source={images.logo} resizeMode="cover" />
-      <View style={basic.search}>
+      <Image style={basic.logo} source={images.logoWhite} resizeMode="cover" />
+      {/* <View style={basic.search}>
         <TouchableOpacity
           style={styles.icon}
           onPress={() => {
@@ -44,18 +67,28 @@ const Chat = ({navigation}) => {
           onChangeText={setSearch}
           value={search}
         />
-      </View>
+      </View> */}
       <View style={[styles.list, basic.shadow]}>
-        <Text style={styles.title}>Conversation</Text>
+        <Text style={styles.title}>{fetchedConvs?.data.length > 0 ? "Conversation" : "Vous n'avez pas encore de conversation" }</Text>
         <ScrollView style={styles.scroll}>
           {
-            contacts.map((item, id) => {
+            fetchedConvs &&
+            fetchedConvs.data.map((item, id) => {
+              console.log("ITEM ", item)
+              console.log("user ", user)
                 return (
-                  <TouchableOpacity style={styles.contactLane} onPress={() => {navigation.navigate('Chatting');        }}>
-                  <Image style={styles.contactImg} source={item.pic} resizeMode="cover" key={id} />
+                <TouchableOpacity style={styles.contactLane} onPress={() => {navigation.navigate('Chatting', {
+                  userId: user.user.id,
+                  image:  item.attributes.pop.data.attributes.image,
+                  home: false,
+                  convId: item.id,
+                  pop: item.attributes.pop.data,
+                  popId: item.attributes.pop.data.id
+                });}} key={item.id}>
+                  <Image style={styles.contactImg} source={item.attributes.pop.data.attributes.image.data.length > 0 ? {uri:API_URL + item.attributes.pop.data.attributes.image.data[0].attributes.url} : images.noimg} resizeMode="cover" key={id} />
                   <View style={styles.contactInfo}>
-                    <Text style={styles.contactTitle}>{item.name}</Text>
-                    <Text style={styles.contactTxt}>{item.msg}</Text>
+                    <Text style={styles.contactTitle}>{item.attributes.pop.data.attributes.serie + ' - ' + item.attributes.pop.data.attributes.name}</Text>
+                    <Text style={styles.contactTxt}>{item.attributes.messages.data.length > 0 ? item.attributes.messages.data[0].attributes.msg : ''}</Text>
                   </View>
                 </TouchableOpacity>
               )
@@ -73,7 +106,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    backgroundColor: 'white'
+    backgroundColor: color.pink
   },
   icon: {
     padding: 2,
@@ -94,14 +127,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontFamily: 'Helvetica',
-    color: color.grey,
+    color: 'white',
     marginBottom: 20,
   },
   contactLane: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '90%',
+    width: '100%',
     marginBottom: 20,
     alignSelf: 'center',
     backgroundColor: 'white',
@@ -116,7 +149,7 @@ const styles = StyleSheet.create({
   contactImg: {
     width: 50,
     height: 50,
-    borderRadius: 25
+    borderRadius: 5
   },
   contactTitle: {
     fontFamily: 'Helvetica-Bold',

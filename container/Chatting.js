@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -12,46 +12,161 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import { images } from "../constant/images";
-import arrow from "../assets/arrow.png";
+import { Load } from "../component/Load";
 import Icon from "react-native-vector-icons/Ionicons";
 import { color } from "../constant/color";
 import { basic } from "../constant/basic";
 import IconSim from "react-native-vector-icons/SimpleLineIcons";
 import { API_URL } from "../constant/back";
+import {
+  useLazyGetMessagesQuery,
+  useCreateConversationsMutation,
+  useCreateMessageMutation,
+  useLazyGetConversationsQuery,
+} from "../services/auth";
+const qs = require("qs");
 
 Icon.loadFont();
 
 const Chatting = ({ navigation, route }) => {
-  console.log("route ", route)
-  const [msg, setMsg] = useState();
-  const messages = [
-    {
-      id: 1,
-      name: "Matthieu",
-      pic: images.user,
-      msg: "Bonjour",
-      time: "14:00",
-    },
-    {
-      id: 2,
-      name: "user",
-      pic: images.user,
-      msg: "Bonjour !",
-      time: "14:30",
-    },
-    {
-      id: 3,
-      name: "Matthieu",
-      pic: images.user,
-      msg: "Est ce que tu veux echanger ?anticonstitutionellement",
-      time: "15:17",
-    },
-  ];
+  const [msg, setMsg] = useState("");
+  const [convId, setConvId] = useState(undefined);
+  const [messages, setMessages] = useState([]);
+  const [createMsg] = useCreateMessageMutation();
+  const [createConv] = useCreateConversationsMutation();
+  const [getConvs] = useLazyGetConversationsQuery();
+  const [getMsgs] = useLazyGetMessagesQuery();
+
+  const getMessages = () => {
+    getMsgs(
+      qs.stringify(
+        {
+          filters: {
+            conversation: {
+              id: {
+                $eq: convId,
+              },
+            },
+          },
+          populate: [
+            "sender",
+            "sender.avatar",
+          ],
+          sort: ['updatedAt'],
+        },
+        { encodeValuesOnly: true }
+      )
+    )
+      .unwrap()
+      .then((res) => {
+        console.log("res MSG", res);
+        if (res.data.length > 0) {
+          setMessages(res.data)
+        }
+      })
+      .catch((err) => {
+        console.log("getmess err ", err)
+        Alert.alert("Erreur", " Veuillez réessayer ultérieurement", [
+          { text: "OK" },
+        ]);
+      });
+  }
+
+  useEffect(() => {
+    console.log("route ", route);
+    if (route.params.home) {
+      getConvs(
+        qs.stringify(
+          {
+            filters: {
+              pop: {
+                id: {
+                  $eq: route.params.popId,
+                },
+              },
+              users: {
+                id: {
+                  $in: [route.params.ownerId, route.params.userId],
+                },
+              },
+            },
+            populate: [
+              "users",
+              "pop",
+            ],
+          },
+          { encodeValuesOnly: true }
+        )
+      )
+        .unwrap()
+        .then((res) => {
+          console.log("res ", res);
+          if (res.data.length > 0) {
+            setConvId(res[0].data.id);
+            getMessages();
+          }
+        })
+        .catch((err) => {
+          console.log('error getConvs ', err)
+          Alert.alert("Erreur", " Veuillez réessayer ultérieurement", [
+            { text: "OK" },
+          ]);
+        });
+    } else {
+      setConvId(route.params.convId);
+      getMessages();
+    }
+  }, [route]);
+
+  const sendMessage = (convId) => {
+    createMsg({
+      data: { msg: msg, sender: route.params.userId, conversation: convId },
+    })
+      .unwrap()
+      .then((res) => {})
+      .catch((err) => {
+        Alert.alert("Erreur de serveur", "Veuillez renvoyer ultérieurement", [
+          { text: "OK" },
+        ]);
+      });
+  };
+
+  const checkConv = () => {
+    //IF conv EXIST
+    if (convId) {
+      //CREATE MESSAGE
+      sendMessage(convId);
+    }
+    //ELSE CREATE CONV
+    else {
+      createConv({
+        data: {
+          pop: route.params.popId,
+          users: [route.params.ownerId, route.params.userId],
+        },
+      })
+        .unwrap()
+        .then((res) => {
+          //THEN CREATE MEssage
+          sendMessage(res.data.id);
+        })
+        .catch((err) => {
+          Alert.alert(
+            "Erreur de serveur",
+            "Veuillez réessayer ultérieurement",
+            [{ text: "OK" }]
+          );
+        });
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
+      {/* <Load loading={fetchingConvs} /> */}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         enabled
@@ -75,9 +190,25 @@ const Chatting = ({ navigation, route }) => {
               </TouchableOpacity>
               {/* <Text style={styles.title}>{route.params.username}</Text> */}
               <View style={styles.popModal} position={"center"}>
-                <Image style={styles.popImg} source={route.params.image.data && route.params.image.data.length > 0 ? {uri:API_URL + route.params.image.data[0].attributes.url} : images.noimg} resizeMode="cover" />
+                <Image
+                  style={styles.popImg}
+                  source={
+                    route.params.image.data &&
+                    route.params.image.data.length > 0
+                      ? {
+                          uri:
+                            API_URL + route.params.image.data[0].attributes.url,
+                        }
+                      : images.noimg
+                  }
+                  resizeMode="cover"
+                />
                 <View style={styles.popRightBox}>
-                  <Text style={styles.popTitle}>{route.params.pop.attributes.serie + ' - ' + route.params.pop.attributes.name }</Text>
+                  <Text style={styles.popTitle}>
+                    {route.params.pop.attributes.serie +
+                      " - " +
+                      route.params.pop.attributes.name}
+                  </Text>
                   <Text style={styles.popSub}>{route.params.username}</Text>
                   <TouchableOpacity onPress={() => {}} style={styles.btn}>
                     <Text>Détail</Text>
@@ -89,36 +220,60 @@ const Chatting = ({ navigation, route }) => {
               data={messages}
               style={styles.flatBox}
               renderItem={({ item }) => {
-                if (item.name != "user") {
+                if (item.attributes.sender.data.id != route.params.userId) {
+                  console.log("item A ", item)
                   return (
                     <View style={styles.chat}>
-                      <View style={styles.msgtInfo}>
+                      <View style={styles.msgRow}>
                         <Image
                           style={styles.avatar}
-                          source={item.pic}
+                          source={
+                            item.attributes.sender.data.attributes.avatar.data
+                              .length > 0
+                              ? {
+                                  uri:
+                                    API_URL +
+                                    item.attributes.sender.data.attributes
+                                      .avatar.data[0].attributes.url,
+                                }
+                              : images.noimg
+                          }
                           resizeMode="cover"
                         />
-                        <Text style={styles.time}>{item.time}</Text>
+                        <View style={styles.msgContact}>
+                          <Text style={styles.txt}>
+                            {item.attributes.msg}
+                          </Text>
+                        </View>
                       </View>
-                      <View>
-                        <Text style={styles.msgContact}>{item.msg}</Text>
-                      </View>
+                      <Text style={[styles.time, {textAlign: 'left'}]}>{new Date(item.attributes.createdAt).toLocaleString()}</Text>
                     </View>
                   );
                 } else {
+                  console.log("item B ", item)
                   return (
-                    <View style={[styles.chat, { justifyContent: "flex-end" }]}>
-                      <View>
-                        <Text style={styles.msg}>{item.msg}</Text>
-                      </View>
-                      <View style={styles.msgtInfo}>
+                    <View style={styles.chat}>
+                      <View style={[styles.msgRow,  {justifyContent: "flex-end"}]}>
+                        <View style={styles.msg}>
+                          <Text style={styles.txt}>{item.attributes.msg}</Text>
+                        </View>
                         <Image
                           style={styles.avatar}
-                          source={item.pic}
+                          source={
+                            item.attributes.sender.data.attributes.avatar.data
+                              .length > 0
+                              ? {
+                                  uri:
+                                    API_URL +
+                                    item.attributes.sender.data.attributes
+                                      .avatar.data[0].attributes.url,
+                                }
+                              : images.noimg
+                          }
                           resizeMode="cover"
                         />
-                        <Text style={styles.time}>{item.time}</Text>
                       </View>
+                      <Text style={styles.time}>{new Date(item.attributes.createdAt).toLocaleString()}</Text>
                     </View>
                   );
                 }
@@ -134,7 +289,12 @@ const Chatting = ({ navigation, route }) => {
                 multiline={true}
                 editable={true}
               />
-              <TouchableOpacity style={styles.icon}>
+              <TouchableOpacity
+                style={styles.icon}
+                onPress={() => {
+                  checkConv();
+                }}
+              >
                 <Icon name={"send"} size={20} color={color.pink} />
               </TouchableOpacity>
             </View>
@@ -193,16 +353,16 @@ const styles = StyleSheet.create({
   chat: {
     width: "100%",
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     padding: 5,
+    marginBottom: 5,
   },
   flatBox: {
     width: "90%",
     marginTop: 20,
   },
-  msgtInfo: {
-    display: "flex",
-    flexDirection: "column",
+  msgRow: {
+    flexDirection: "row",
   },
   header: {
     display: "flex",
@@ -220,29 +380,31 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
   },
-  msgContact: {
+  txt: {
     color: "white",
     fontSize: 18,
     fontFamily: "Helvetica",
+  },
+  msgContact: {
     backgroundColor: color.pink,
-    padding: 5,
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 15,
+    padding: 6,
+    borderWidth: 1,
+    overflow: "hidden",
+    borderColor: "transparent",
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
     marginLeft: 10,
-    borderWidth: 1,
-    borderRadius: 10,
-    overflow: "hidden",
-    borderColor: "transparent",
   },
   msg: {
     color: "white",
+    alignSelf: 'center',
     fontSize: 18,
     fontFamily: "Helvetica",
     backgroundColor: color.lightPurple,
     padding: 5,
-    borderTopRightRadius: 5,
+    borderTopRightRadius: 6,
     borderTopLeftRadius: 15,
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
@@ -256,14 +418,14 @@ const styles = StyleSheet.create({
     width: "10%",
   },
   popModal: {
-   flexDirection: 'row',
-   display: 'flex',
-   borderRadius: 10,
-   height: 80,
-   shadowColor: "#171717",
-   shadowOffset: { width: -2, height: 6 },
-   shadowOpacity: 0.1,
-   shadowRadius: 8,
+    flexDirection: "row",
+    display: "flex",
+    borderRadius: 10,
+    height: 80,
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
   },
   popImg: {
     width: 80,
@@ -273,24 +435,28 @@ const styles = StyleSheet.create({
   popTitle: {
     fontFamily: "Helvetica",
     fontSize: 18,
-    color: 'white'
+    color: "white",
   },
   popSub: {
     fontFamily: "Helvetica",
     fontSize: 14,
-    color: 'white'
+    color: "white",
   },
   popRightBox: {
-    flexDirection: 'column',
-    display: 'flex',
-    justifyContent: 'space-between',
+    flexDirection: "column",
+    display: "flex",
+    justifyContent: "space-between",
     marginLeft: 10,
   },
   btn: {
     backgroundColor: color.orange,
     borderRadius: 5,
     padding: 5,
-    alignSelf: 'flex-start'
+    alignSelf: "flex-start",
+  },
+  time: {
+    textAlign: 'right',
+    marginTop: 5,
   }
 });
 
