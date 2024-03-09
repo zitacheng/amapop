@@ -28,7 +28,6 @@ Icon.loadFont();
 const Chat = ({route, navigation}) => {
   const [search, setSearch] = useState('');
   const user = useAuth();
-
   const {
     data: fetchedConvs,
     error,

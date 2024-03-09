@@ -93,9 +93,9 @@ export const basic = StyleSheet.create({
     padding: 8,
     backgroundColor: 'white',
     shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 6},
+    shadowOffset: {width: -1, height: 4},
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: 2,
   },
   btnOff: {
     backgroundColor: 'grey',

@@ -82,7 +82,7 @@ const Home = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
     <StatusBar barStyle="dark-content" />
-      <Image style={basic.logo} source={images.logo} resizeMode="cover" />
+      <Image style={basic.logo} source={images.logoWhite} resizeMode="cover" />
       <View style={basic.search}>
         <TouchableOpacity
           style={styles.icon}
@@ -269,7 +269,7 @@ const Home = ({navigation}) => {
           {
             fetchedSeries?.data?.map((item, id) => {
               return (
-                <TouchableOpacity style={[styles.badge, basic.shadow, {backgroundColor: selected.includes(item.attributes.name) ? color.pink : 'white'}]}
+                <TouchableOpacity style={[styles.badge, {backgroundColor: selected.includes(item.attributes.name) ? color.pink : 'white'}]}
                   onPress={() => {
                       let newArr = [...selected];
                           if (selected.indexOf(item.attributes.name) == -1)
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: color.pink
   },
   icon: {
     padding: 2,
@@ -369,7 +369,11 @@ const styles = StyleSheet.create({
   scroll: {
     flex: 1,
     width: '100%',
-    marginTop: 20
+    marginTop: 20,
+    backgroundColor: 'white',
+    paddingTop: 15,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   scrollContent: {
     flexDirection: 'row',
@@ -442,6 +446,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginRight: 5,
     marginBottom: 6,
+    borderColor: color.pink,
+    borderWidth: 1,
   },
   togglesBox: {
     display: 'flex',
@@ -472,7 +478,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   toggleOn: {
-    backgroundColor: color.pink,
+    backgroundColor: color.orange,
     color: 'white',
     padding: 9,
     borderRadius: 20,
@@ -495,6 +501,7 @@ const styles = StyleSheet.create({
     width: '95%',
     padding: 20,
     position: 'relative',
+    backgroundColor: 'white'
   },
   title: {
     fontSize: 22,

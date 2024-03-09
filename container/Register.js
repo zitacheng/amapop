@@ -76,7 +76,7 @@ const Register = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
         <View style={styles.first}>
           <Image style={styles.logo} source={images.logo} resizeMode="contain" />
         </View>
