@@ -47,7 +47,7 @@ const Creation = ({navigation, route}) => {
   const user = useAuth();
   const {data: fetchedSeries, fetchingSeries, error: errorSeries} = useGetSeriesQuery(qs.stringify({
     sort: ['name']
-  }, {encodeValuesOnly: true}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
+  }, {encodeValuesOnly: false}), {refetchOnMountOrArgChange: true, refetchOnFocus: true});
 
   const cleanVariables = () => {
     setImg1(null);
@@ -56,6 +56,7 @@ const Creation = ({navigation, route}) => {
     setNote('');
     setOther('');
   }
+
 
   return (
     <SafeAreaView style={styles.container}>

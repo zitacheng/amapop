@@ -55,9 +55,9 @@ const Chatting = ({ navigation, route }) => {
             "sender",
             "sender.avatar",
           ],
-          sort: ['createdAt'],
+          sort: ['createdAt:desc'],
         },
-        { encodeValuesOnly: true }
+        { encodeValuesOnly: false }
       )
     )
       .unwrap()
@@ -124,7 +124,10 @@ const Chatting = ({ navigation, route }) => {
       data: { msg: msg, sender: route.params.userId, conversation: convId },
     })
       .unwrap()
-      .then((res) => {})
+      .then((res) => {
+        setMsg('');
+        getMessages();
+      })
       .catch((err) => {
         Alert.alert("Erreur de serveur", "Veuillez renvoyer ultérieurement", [
           { text: "OK" },
