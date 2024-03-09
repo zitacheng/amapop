@@ -78,6 +78,16 @@ export const api = createApi({
           })
         },
       }),
+      createMsg: builder.mutation({
+        query: (data) =>{
+          return ({
+            url: '/api/messages',
+            method: 'POST',
+            body: data,
+          })
+        },
+        invalidatesTags: ['me'],
+      }),
     updateUser: builder.mutation({
       query: (params) => {
         return ({
@@ -250,5 +260,5 @@ export const api = createApi({
 export const { 
                 useLoginMutation, useSignupMutation, useGetPopsQuery, useCreatePopMutation,
                 useLazyGetMeQuery, useGetMeQuery, useGetSeriesQuery, useUpdateUserMutation,
-                useUploadFileMutation, useCreateSuggestionMutation, useRemovePopMutation, useUpdatePopMutation
+                useUploadFileMutation, useCreateSuggestionMutation, useRemovePopMutation, useUpdatePopMutation, useCreateMsgMutation
               } = api

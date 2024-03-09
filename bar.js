@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import Home from './container/Home.js';
+import Chat from './container/Chat.js';
 import Creation from './container/Creation.js';
 import Forum from './container/Forum.js';
 import Profile from './container/Profile.js';
 import {Image, View} from 'react-native';
 import user from './assets/userOn.png';
 import gift from './assets/giftOn.png';
-import pop from './assets/popOn.png';
+import chat from './assets/chat.png';
 import plus from './assets/plus.png';
 import {basic} from './constant/basic.js';
 import {color} from './constant/color.js';
@@ -38,7 +39,7 @@ export function TabScreen({navigation, route}) {
           ),
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Chat"
         component={Chat}
         options={{
@@ -50,7 +51,7 @@ export function TabScreen({navigation, route}) {
 
           ),
         }}
-      /> */}
+      />
       <Tab.Screen
         name="Creation"
         component={Creation}

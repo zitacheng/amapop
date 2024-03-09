@@ -16,7 +16,6 @@ import {images} from '../constant/images';
 import arrow from '../assets/arrow.png';
 import {color} from '../constant/color';
 import {basic} from '../constant/basic';
-import {MultiLang} from '../component/Multilang';
 import {Load} from '../component/Load';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -33,6 +32,7 @@ const qs = require("qs")
 Icon.loadFont();
 
 const Home = ({navigation}) => {
+  // const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState([]);
   const [current, setCurrent] = useState(null);
@@ -155,6 +155,17 @@ const Home = ({navigation}) => {
                         <Icon name={pop.like == true ? 'heart' : 'heart-o'} size={20} color={color.pink} />
                       </TouchableOpacity> */}
                       <TouchableOpacity onPress={() => {Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as ' + pop.attributes.serie + ' - ' + pop.attributes.name + ' je suis interessé' +'&phone=+33768628787')}}>
+                        <Image style={styles.whatsapp} source={images.whatsapp} resizeMode="cover" />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => {
+                        console.log("HELLO ", pop)
+                        navigation.navigate('Chatting',
+                        {
+                          pop: pop,
+                          image:  pop.attributes.image,
+                          username: pop.attributes.user.data.attributes.username
+                        }
+                        )}}>
                         <Icon name={'send'} size={20} color={color.pink} />
                       </TouchableOpacity>
                     </View>
@@ -517,6 +528,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
+  },
+  whatsapp: {
+    width: 20,
+    height: 20
   }
 });
 
