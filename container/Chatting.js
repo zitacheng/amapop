@@ -55,7 +55,7 @@ const Chatting = ({ navigation, route }) => {
             "sender",
             "sender.avatar",
           ],
-          sort: ['updatedAt'],
+          sort: ['createdAt'],
         },
         { encodeValuesOnly: true }
       )
@@ -76,7 +76,7 @@ const Chatting = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    console.log("route ", route);
+    console.log("routeeee ", route);
     if (route.params.home) {
       getConvs(
         qs.stringify(
@@ -103,14 +103,12 @@ const Chatting = ({ navigation, route }) => {
       )
         .unwrap()
         .then((res) => {
-          console.log("res ", res);
           if (res.data.length > 0) {
-            setConvId(res[0].data.id);
+            setConvId(res.data[0].id);
             getMessages();
           }
         })
         .catch((err) => {
-          console.log('error getConvs ', err)
           Alert.alert("Erreur", " Veuillez réessayer ultérieurement", [
             { text: "OK" },
           ]);
