@@ -453,10 +453,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white',
     borderRadius: 20,
     flexDirection: 'row',
-    backgroundColor: 'white',
     marginRight: 5,
   },
   togglesBoxFilter: {
