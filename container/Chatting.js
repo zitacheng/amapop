@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -15,7 +15,7 @@ import {
   Alert,
 } from "react-native";
 import { images } from "../constant/images";
-import { Load } from "../component/Load";
+import { PopDetail } from "../component/PopDetail";
 import Icon from "react-native-vector-icons/Ionicons";
 import { color } from "../constant/color";
 import { basic } from "../constant/basic";
@@ -39,7 +39,9 @@ const Chatting = ({ navigation, route }) => {
   const [createConv] = useCreateConversationsMutation();
   const [getConvs] = useLazyGetConversationsQuery();
   const [getMsgs] = useLazyGetMessagesQuery();
+  const modalRef = useRef(null);
 
+  console.log("route ",route)
   const getMessages = () => {
     getMsgs(
       qs.stringify(
@@ -194,8 +196,8 @@ const Chatting = ({ navigation, route }) => {
                 <Image
                   style={styles.popImg}
                   source={
-                    route.params.image.data &&
-                    route.params.image.data.length > 0
+                    route.params?.image.data &&
+                    route.params?.image.data.length > 0
                       ? {
                           uri:
                             API_URL + route.params.image.data[0].attributes.url,
@@ -211,7 +213,7 @@ const Chatting = ({ navigation, route }) => {
                       route.params.pop.attributes.name}
                   </Text>
                   <Text style={styles.popSub}>{route.params.username}</Text>
-                  <TouchableOpacity onPress={() => {}} style={styles.btn}>
+                  <TouchableOpacity onPress={() => {modalRef.current.open()}} style={styles.btn}>
                     <Text>Détail</Text>
                   </TouchableOpacity>
                 </View>
@@ -302,6 +304,7 @@ const Chatting = ({ navigation, route }) => {
           </>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+      <PopDetail modalRef={modalRef} navigation={navigation} pop={route.params.pop} />
     </SafeAreaView>
   );
 };

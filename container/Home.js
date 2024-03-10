@@ -16,7 +16,7 @@ import {images} from '../constant/images';
 import arrow from '../assets/arrow.png';
 import {color} from '../constant/color';
 import {basic} from '../constant/basic';
-import {Load} from '../component/Load';
+import {PopDetail} from '../component/PopDetail';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconAnt from 'react-native-vector-icons/AntDesign';
@@ -148,7 +148,7 @@ const Home = ({navigation}) => {
                       </LinearGradient>
                     </View>
                     <View style={[styles.btnRow, basic.shadow]}>
-                      <TouchableOpacity style={[styles.smBtnRound, basic.shadow]} onPress={() => {setCurrent(pop.attributes);modalRef.current.open();}}>
+                      <TouchableOpacity style={[styles.smBtnRound, basic.shadow]} onPress={() => {setCurrent(pop);modalRef.current.open();}}>
                         <Text style={styles.profileTxt}>Détail</Text>
                       </TouchableOpacity>
                       {/* <TouchableOpacity onPress={() => {}}>
@@ -158,7 +158,6 @@ const Home = ({navigation}) => {
                         <Image style={styles.whatsapp} source={images.whatsapp} resizeMode="cover" />
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => {
-                        console.log("HELLO ", pop)
                         navigation.navigate('Chatting',
                         {
                           pop: pop,
@@ -181,34 +180,7 @@ const Home = ({navigation}) => {
         </View>
       </ScrollView>
       </TouchableWithoutFeedback>
-      <Modal style={styles.modal} position={"bottom"} ref={modalRef} coverScreen={true}>
-        {
-          current &&
-          <>
-          <Image style={styles.modalPic} source={current.image && current.image.data.length > 0 ? {uri:API_URL + current.image.data[0].attributes.url} : images.noimg} resizeMode="cover" />
-            <Text style={styles.title}>{current && (current.serie + ' - ' + current.name)}</Text>
-            <Text style={styles.content}>{"Note du pop: " + current.note}</Text>
-            <Text style={styles.content}>{stateSentence(current.state)}</Text>
-            <Text style={styles.content}>{"Date d'ajout: " + new Date(current.createdAt).toLocaleDateString()}</Text>
-            <View style={basic.break} />
-            <TouchableOpacity
-                style={basic.btn}
-                onPress={() => {
-                  Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as XXX je suis interessé' +'&phone=+33768628787')
-                }}>
-                <Text style={basic.btnTxt}>Envoyer un message</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={basic.btnWhiteout}
-                onPress={() => {
-                  modalRef.current.close();
-                  navigation.navigate('UserProfile');
-                }}>
-                <Text style={basic.btnTxtOut}>Voir son profil</Text>
-            </TouchableOpacity>
-          </>
-        }
-      </Modal>
+      <PopDetail modalRef={modalRef} pop={current} showBtn={true} navigation={navigation} userId={user?.user?.id} />
       <Modal style={styles.modalSort} position={"bottom"} ref={modalSortRef} coverScreen={true}>
         <Text style={styles.title}>Trier par:</Text>
         <View style={styles.radioBox}>

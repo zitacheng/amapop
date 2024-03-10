@@ -43,6 +43,7 @@ export function TabScreen({navigation, route}) {
         name="Chat"
         component={Chat}
         options={{
+          // tabBarBadge: 3,
           tabBarLabel: 'Chat',
           tabBarIcon: () => (
             <View>

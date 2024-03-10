@@ -104,6 +104,15 @@ export const api = createApi({
         };
       },
     }),
+    createReport: builder.mutation({
+      query: (data) => {
+        return {
+          url: "/api/reports",
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
     createMsg: builder.mutation({
       query: (data) => {
         return {
@@ -183,5 +192,6 @@ export const {
   useCreateConversationsMutation,
   useCreateMessageMutation,
   useGetMessagesQuery,
-  useLazyGetMessagesQuery
+  useLazyGetMessagesQuery,
+  useCreateReportMutation,
 } = api;
