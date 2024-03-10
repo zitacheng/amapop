@@ -140,9 +140,20 @@ const Login = ({navigation}) => {
                   })
                 })
                 .then(response => {setLoading(false);return response.json()})
-                .then(data => {console.log("DATAAA", data)});
+                .then(data => {
+                  Alert.alert('Envoyé', 'Un mail de réinitialisation vous a été envoyé.', [
+                    {text: 'OK'},
+                  ]);
+                  setLoading(false);
+                })
+                .catch(() => {
+                  Alert.alert('Erreur', 'Erreur du serveur, veuillez réessayer plus tard.', [
+                    {text: 'OK'},
+                  ]);
+                  setLoading(false);
+                });
               }}>
-                <Text style={basic.btnTxt}>{"Rénitialiser"}</Text>
+                <Text style={basic.btnTxt}>{"Réinitialiser"}</Text>
               </TouchableOpacity>
             }
               </>
