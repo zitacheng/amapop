@@ -168,12 +168,12 @@ const Chatting = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor={color.pink}/>
       {/* <Load loading={fetchingConvs} /> */}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         enabled
-        style={styles.container}
+        style={styles.containerKey}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
@@ -317,6 +317,13 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
   },
+  containerKey: {
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+    backgroundColor: '#F1E4E7'
+  },
   back: {
     width: 30,
     height: 40,
@@ -406,7 +413,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 18,
     fontFamily: "Helvetica",
-    backgroundColor: color.lightPurple,
+    backgroundColor: color.darkOrange,
     padding: 5,
     borderTopRightRadius: 6,
     borderTopLeftRadius: 15,
