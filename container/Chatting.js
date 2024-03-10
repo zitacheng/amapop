@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     width: "100%",
-    backgroundColor: '#F1E4E7'
+    backgroundColor: color.lightPink
   },
   back: {
     width: 30,

@@ -12,5 +12,6 @@ export const color = {
     darkOrange: '#ff916b',
     ultraLightYellow: '#f8f3d5',
     ultraLightPurple: '#f2edf6',
+    lightPink: '#F1E4E7',
   };
   

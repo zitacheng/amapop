@@ -53,7 +53,7 @@ const Chat = ({route, navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <Image style={basic.logo} source={images.logoWhite} resizeMode="cover" />
+      <Image style={basic.logo} source={images.logo} resizeMode="cover" />
       {/* <View style={basic.search}>
         <TouchableOpacity
           style={styles.icon}
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontFamily: 'Helvetica',
+    fontWeight: '600',
     color: 'white',
     marginBottom: 20,
   },
