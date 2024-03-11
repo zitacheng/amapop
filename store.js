@@ -1,4 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { setupListeners } from '@reduxjs/toolkit/query';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,6 +26,7 @@ export const store = configureStore({
   }
     ,
 })
+setupListeners(store.dispatch)
 
 export const persistor = persistStore(store)
 

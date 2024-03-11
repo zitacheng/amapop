@@ -23,6 +23,7 @@ import IconSim from "react-native-vector-icons/SimpleLineIcons";
 import { API_URL } from "../constant/back";
 import {
   useLazyGetMessagesQuery,
+  useGetMessagesQuery,
   useCreateConversationsMutation,
   useCreateMessageMutation,
   useLazyGetConversationsQuery,
@@ -33,7 +34,7 @@ Icon.loadFont();
 
 const Chatting = ({ navigation, route }) => {
   const [msg, setMsg] = useState("");
-  const [convId, setConvId] = useState(undefined);
+  const [convId, setConvId] = useState(route?.params?.convId);
   const [messages, setMessages] = useState([]);
   const [createMsg] = useCreateMessageMutation();
   const [createConv] = useCreateConversationsMutation();
@@ -41,7 +42,33 @@ const Chatting = ({ navigation, route }) => {
   const [getMsgs] = useLazyGetMessagesQuery();
   const modalRef = useRef(null);
 
-  console.log("route ",route)
+  const {
+    data: fetchedMessages,
+    fetchingMessages,
+    error,
+  } = useGetMessagesQuery(
+    qs.stringify(
+      {
+        filters: {
+          conversation: {
+            id: {
+              $eq: convId,
+            },
+          },
+        },
+        populate: ["sender", "sender.avatar"],
+        sort: ["createdAt:desc"],
+      },
+      { encodeValuesOnly: false }
+    ),
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      skip: convId == undefined,
+      pollingInterval: 3000,
+    }
+  );
+
   const getMessages = () => {
     getMsgs(
       qs.stringify(
@@ -53,52 +80,49 @@ const Chatting = ({ navigation, route }) => {
               },
             },
           },
-          populate: [
-            "sender",
-            "sender.avatar",
-          ],
-          sort: ['createdAt:desc'],
+          populate: ["sender", "sender.avatar"],
+          sort: ["createdAt:desc"],
         },
         { encodeValuesOnly: false }
       )
     )
       .unwrap()
       .then((res) => {
-        console.log("res MSG", res);
         if (res.data.length > 0) {
-          setMessages(res.data)
+          setMessages(res.data);
         }
       })
       .catch((err) => {
-        console.log("getmess err ", err)
         Alert.alert("Erreur", " Veuillez réessayer ultérieurement", [
           { text: "OK" },
         ]);
       });
-  }
+  };
 
   useEffect(() => {
-    console.log("routeeee ", route);
     if (route.params.home) {
       getConvs(
         qs.stringify(
           {
             filters: {
-              pop: {
-                id: {
-                  $eq: route.params.popId,
+              $and: [
+                {
+                  pop: {
+                    id: {
+                      $eq: route.params.popId,
+                    },
+                  },
                 },
-              },
-              users: {
-                id: {
-                  $in: [route.params.ownerId, route.params.userId],
+                {
+                  users: {
+                    id: {
+                      $in: [route.params.ownerId, route.params.userId],
+                    },
+                  },
                 },
-              },
+              ],
             },
-            populate: [
-              "users",
-              "pop",
-            ],
+            populate: ["users", "pop"],
           },
           { encodeValuesOnly: true }
         )
@@ -107,7 +131,7 @@ const Chatting = ({ navigation, route }) => {
         .then((res) => {
           if (res.data.length > 0) {
             setConvId(res.data[0].id);
-            getMessages();
+            // getMessages();
           }
         })
         .catch((err) => {
@@ -115,9 +139,6 @@ const Chatting = ({ navigation, route }) => {
             { text: "OK" },
           ]);
         });
-    } else {
-      setConvId(route.params.convId);
-      getMessages();
     }
   }, [route]);
 
@@ -127,7 +148,7 @@ const Chatting = ({ navigation, route }) => {
     })
       .unwrap()
       .then((res) => {
-        setMsg('');
+        setMsg("");
         getMessages();
       })
       .catch((err) => {
@@ -154,6 +175,8 @@ const Chatting = ({ navigation, route }) => {
         .unwrap()
         .then((res) => {
           //THEN CREATE MEssage
+          setConvId(res.data.id);
+
           sendMessage(res.data.id);
         })
         .catch((err) => {
@@ -168,7 +191,7 @@ const Chatting = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={color.pink}/>
+      <StatusBar barStyle="dark-content" backgroundColor={color.pink} />
       {/* <Load loading={fetchingConvs} /> */}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -213,18 +236,23 @@ const Chatting = ({ navigation, route }) => {
                       route.params.pop.attributes.name}
                   </Text>
                   <Text style={styles.popSub}>{route.params.username}</Text>
-                  <TouchableOpacity onPress={() => {modalRef.current.open()}} style={styles.btn}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      modalRef.current.open();
+                    }}
+                    style={styles.btn}
+                  >
                     <Text>Détail</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
-            <FlatList
-              data={messages}
+
+              <FlatList
+              data={fetchedMessages?.data}
               style={styles.flatBox}
               renderItem={({ item }) => {
                 if (item.attributes.sender.data.id != route.params.userId) {
-                  console.log("item A ", item)
                   return (
                     <View style={styles.chat}>
                       <View style={styles.msgRow}>
@@ -244,19 +272,20 @@ const Chatting = ({ navigation, route }) => {
                           resizeMode="cover"
                         />
                         <View style={styles.msgContact}>
-                          <Text style={styles.txt}>
-                            {item.attributes.msg}
-                          </Text>
+                          <Text style={styles.txt}>{item.attributes.msg}</Text>
                         </View>
                       </View>
-                      <Text style={[styles.time, {textAlign: 'left'}]}>{new Date(item.attributes.createdAt).toLocaleString()}</Text>
+                      <Text style={[styles.time, { textAlign: "left" }]}>
+                        {new Date(item.attributes.createdAt).toLocaleString()}
+                      </Text>
                     </View>
                   );
                 } else {
-                  console.log("item B ", item)
                   return (
                     <View style={styles.chat}>
-                      <View style={[styles.msgRow,  {justifyContent: "flex-end"}]}>
+                      <View
+                        style={[styles.msgRow, { justifyContent: "flex-end" }]}
+                      >
                         <View style={styles.msg}>
                           <Text style={styles.txt}>{item.attributes.msg}</Text>
                         </View>
@@ -276,7 +305,9 @@ const Chatting = ({ navigation, route }) => {
                           resizeMode="cover"
                         />
                       </View>
-                      <Text style={styles.time}>{new Date(item.attributes.createdAt).toLocaleString()}</Text>
+                      <Text style={styles.time}>
+                        {new Date(item.attributes.createdAt).toLocaleString()}
+                      </Text>
                     </View>
                   );
                 }
@@ -304,7 +335,11 @@ const Chatting = ({ navigation, route }) => {
           </>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-      <PopDetail modalRef={modalRef} navigation={navigation} pop={route.params.pop} />
+      <PopDetail
+        modalRef={modalRef}
+        navigation={navigation}
+        pop={route.params.pop}
+      />
     </SafeAreaView>
   );
 };
@@ -322,7 +357,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     width: "100%",
-    backgroundColor: color.lightPink
+    backgroundColor: color.lightPink,
   },
   back: {
     width: 30,
@@ -410,7 +445,7 @@ const styles = StyleSheet.create({
   },
   msg: {
     color: "white",
-    alignSelf: 'center',
+    alignSelf: "center",
     fontSize: 18,
     fontFamily: "Helvetica",
     backgroundColor: color.darkOrange,
@@ -466,9 +501,9 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   time: {
-    textAlign: 'right',
+    textAlign: "right",
     marginTop: 5,
-  }
+  },
 });
 
 export default Chatting;
