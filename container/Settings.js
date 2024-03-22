@@ -11,6 +11,7 @@ import {
   ScrollView,
   Linking,
   Keyboard,
+  Platform,
   ActivityIndicator,
   TouchableWithoutFeedback,
   TouchableOpacity,

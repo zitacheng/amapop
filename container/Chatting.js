@@ -13,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Platform,
 } from "react-native";
 import { images } from "../constant/images";
 import { PopDetail } from "../component/PopDetail";

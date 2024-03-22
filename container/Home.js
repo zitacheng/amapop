@@ -60,13 +60,6 @@ const Home = ({navigation}) => {
   //TODO recuperer que ceux que les gens echange
   const [menu, setMenu] = useState(popsSerie);
 
-  const pops = [
-    {id: 1, name: 'Hirono',  pic: images.gallery, model: 'Destroyer', look: false, like: true},
-    {id: 2, name: 'SkullPanda',  pic: images.gallery6, model: 'model name', exchange: true, like: false},
-    {id: 3, name: 'Hirono',  pic: images.gallery3, model: 'fallen angel', look: true, like: true},
-    {id: 3, name: 'Hirono',  pic: images.gallery4, model: 'Unspoken', exchange: true, like: false},
-    {id: 3, name: 'Hirono',  pic: images.gallery5, model: 'the silent', exchange: true, like: true},
-  ];
 
   const onChangeMenu = (item) => {
     let newArr = [...menu];

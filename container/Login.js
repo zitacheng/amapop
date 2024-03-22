@@ -8,6 +8,7 @@ import {
   Image,
   TextInput,
   SafeAreaView,
+  Platform,
   ScrollView,
   Keyboard,
   TouchableWithoutFeedback,
@@ -40,11 +41,6 @@ const Login = ({navigation}) => {
   const [getMe] = useLazyGetMeQuery();
   const refPass = useRef(null);
   const height = useHeaderHeight()
-
-  function restPass() {
-    setLoading(true);
-    console.log("RESET PASS")
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -105,6 +101,7 @@ const Login = ({navigation}) => {
                       ],
                     }, {encodeValuesOnly: true})).unwrap().then((res) => {
                       dispatch(setUser({user: res}));
+                      console.log("res ", res)
                       navigation.navigate('TabScreen');
                     });
                   }).catch((err) => {

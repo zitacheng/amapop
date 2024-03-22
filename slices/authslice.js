@@ -28,3 +28,4 @@ export const { setCredentials, setUser, logout } = slice.actions
 export default slice.reducer
 
 export const selectCurrentUser = (state) => state.auth.user
+export const selectCurrentToken = (state) => state.auth.token
