@@ -21,10 +21,9 @@ import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modalbox';
-import { useAuth, useToken } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import { useGetPopsQuery, useRemovePopMutation } from '../services/auth';
 import { API_URL, stateSentence } from "../constant/back";
-import Moment from 'react-moment';
 import {Load} from '../component/Load';
 
 const qs = require("qs")
@@ -36,8 +35,6 @@ const Profile = ({navigation}) => {
   const modalRef = useRef(null);
   const [removePop] = useRemovePopMutation();
   const user = useAuth()
-  const token = useToken()
-  console.log("token ", token)
   const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
     filters: {
       user: {id: user?.user?.id}
