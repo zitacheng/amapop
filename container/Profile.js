@@ -119,7 +119,7 @@ const Profile = ({navigation}) => {
                   </TouchableOpacity>
                   <LinearGradient
                   colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
-                    <Text style={styles.cardtitle}>{(item.series.length > 1 ? 'Multiple' : item.series[0].name) + ' - ' + item.name}</Text>
+                    <Text style={styles.cardtitle}>{(item.series.length > 1 ? 'Multiple serie' : item.series[0].name) + ' - ' + item.name}</Text>
                   </LinearGradient>
                   <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Edit', {editMode: true});}}>
                     <IconMat name={'lead-pencil'} size={20} color={color.pink} />
@@ -145,7 +145,7 @@ const Profile = ({navigation}) => {
                   </TouchableOpacity>
                   <LinearGradient
                   colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
-                    <Text style={styles.cardtitle}>{(item.attributes?.series?.length > 1 ? 'Multiple' : item.attributes?.series[0].name)  + ' - ' + item.attributes.name}</Text>
+                    <Text style={styles.cardtitle}>{(item.attributes?.series?.length > 1 ? 'Multiple série' : item.attributes?.series[0].name)  + ' - ' + item.attributes.name}</Text>
                   </LinearGradient>
                   {
                     item.attributes.state == 'booked' &&
@@ -201,7 +201,7 @@ const Profile = ({navigation}) => {
               {/* <View style={styles.imgBox}> */}
               <Image style={styles.modalPic} source={current.attributes?.image?.data && current.attributes.image.data.length > 0 ? {uri:API_URL + current.attributes.image.data[0].attributes.url} : images.noimg} resizeMode="contain" />
               {/* </View> */}
-              <Text style={styles.modalTitle}>{(current.attributes.series.length > 1 ? 'Multiple' :  current.attributes.series[0].name) + ' - ' + current.attributes.name}</Text>
+              <Text style={styles.modalTitle}>{(current.attributes.series.length > 1 ? 'Multiple serie' :  current.attributes.series[0].name) + ' - ' + current.attributes.name}</Text>
               <Text style={styles.desc}>{"Note: " + (current.attributes.note ? current.attributes.note : "Pas de note")}</Text>
               <Text style={styles.desc}>{stateSentence(current.attributes.state)}</Text>
               <Text style={styles.desc}>{"Date d'ajout: " + new Date(current.attributes.createdAt).toLocaleDateString()}</Text>

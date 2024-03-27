@@ -179,6 +179,7 @@ const Home = ({navigation}) => {
         <View style={styles.scrollContent}>
           {
             fetchedPops?.data.map((pop, id) => {
+              console.log("MAP ", pop.attributes.user.data.attributes.phone)
               if ((selected.find((e) => {return (e === pop.attributes.serie)}) || selected.length <= 0) && 
               (!search || (search && (pop.attributes.name.toLowerCase().includes(search.toLocaleLowerCase()) || pop.attributes.serie.toLowerCase().includes(search.toLocaleLowerCase()))))
               )
@@ -189,7 +190,7 @@ const Home = ({navigation}) => {
                     <View style={styles.imgBox}>
                       <Image style={styles.cardImg} source={pop.attributes.image.data && pop.attributes.image.data.length > 0 ? {uri:API_URL + pop.attributes.image.data[0].attributes.url} : images.noimg} resizeMode="cover" />
                       <LinearGradient colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.nameBg}>
-                        <Text style={styles.name}>{(pop.attributes?.series?.length > 1 ? 'Multiple' : pop.attributes?.series[0].name) + ' - ' + pop.attributes.name}</Text>
+                        <Text style={styles.name}>{(pop.attributes?.series?.length > 1 ? 'Multiple srie' : pop.attributes?.series[0].name) + ' - ' + pop.attributes.name}</Text>
                       </LinearGradient>
                     </View>
                     <View style={[styles.btnRow, basic.shadow]}>
@@ -199,7 +200,7 @@ const Home = ({navigation}) => {
                       {/* <TouchableOpacity onPress={() => {}}>
                         <Icon name={pop.like == true ? 'heart' : 'heart-o'} size={20} color={color.pink} />
                       </TouchableOpacity> */}
-                      <TouchableOpacity onPress={() => {Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as ' + pop.attributes.serie + ' - ' + pop.attributes.name + ' je suis interessé' +'&phone=+33768628787')}}>
+                      <TouchableOpacity onPress={() => {Linking.openURL('whatsapp://send?text=' + 'Bonjour j\'ai vu que tu as ' + (pop?.attributes?.series?.length > 1 ? 'Multiple serie' : pop.attributes.series[0].name) + ' - ' + pop.attributes.name + ' je suis interessé' +'&phone=' + pop.attributes.user.data.attributes.phone)}}>
                         <Image style={styles.whatsapp} source={images.whatsapp} resizeMode="cover" />
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => {

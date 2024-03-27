@@ -42,7 +42,7 @@ export const PopDetail = ({ pop, navigation, modalDetail, setModalDetail, showBt
             resizeMode="cover"
           />
           <Text style={styles.title}>
-            {(pop?.attributes?.series?.length > 1 ? 'Multiple' : pop?.attributes?.series[0].name) + " - " + pop?.attributes?.name}
+            {(pop?.attributes?.series?.length > 1 ? 'Multiple serie' : pop?.attributes?.series[0].name) + " - " + pop?.attributes?.name}
           </Text>
           <Text style={styles.content}>
             {"Note du pop: " +
@@ -57,7 +57,7 @@ export const PopDetail = ({ pop, navigation, modalDetail, setModalDetail, showBt
           </Text>
           {
                 pop?.attributes?.series?.length > 1 &&
-                <Text style={styles.content}>{"Liste des sérites: "}
+                <Text style={styles.content}>{"Liste des séries: "}
                 {
                   pop?.attributes?.series?.map((item, id) => {
                     return(
@@ -76,7 +76,7 @@ export const PopDetail = ({ pop, navigation, modalDetail, setModalDetail, showBt
                   Linking.openURL(
                     "whatsapp://send?text=" +
                       "Bonjour j'ai vu que tu as " +
-                      (pop?.attributes?.series?.length > 1 ? 'Multiple' : pop.attributes.series[0].name) +
+                      (pop?.attributes?.series?.length > 1 ? 'Multiple serie' : pop.attributes.series[0].name) +
                       " - " +
                       pop?.attributes?.name +
                       " je suis interessé" +
