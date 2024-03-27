@@ -40,7 +40,7 @@ const Login = ({navigation}) => {
   const [login] = useLoginMutation();
   const [getMe] = useLazyGetMeQuery();
   const refPass = useRef(null);
-  const height = useHeaderHeight()
+  const height = useHeaderHeight();
 
   return (
     <SafeAreaView style={styles.container}>

@@ -38,7 +38,7 @@ const Creation = ({navigation, route}) => {
   const [name, setName] = useState('');
   const [note, setNote] = useState('');
   const [other, setOther] = useState('');
-  const [serie, setSerie] = useState('');
+  const [serie, setSerie] = useState([]);
   const [checked, setChecked] = useState('change');
   const [prio, setPrio] = useState(false);
   const [img1, setImg1] = useState(null);
@@ -51,12 +51,13 @@ const Creation = ({navigation, route}) => {
 
   const cleanVariables = () => {
     setImg1(null);
-    setSerie(null);
+    setSerie([]);
     setName('');
     setNote('');
     setOther('');
   }
 
+  console.log("serie ", serie)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -79,7 +80,8 @@ const Creation = ({navigation, route}) => {
                       <View style={styles.imgRow}>
                           <TouchableOpacity style={styles.addImg} onPress={async() => {
                             let result = await ImagePicker.launchImageLibraryAsync({
-                              allowsEditing: true,
+                              allowsEditing: false,
+                              aspect: [1, 1],
                               quality: 1,
                             });
 
@@ -117,19 +119,26 @@ const Creation = ({navigation, route}) => {
                       <View style={styles.btnRow}>
                       {
                           fetchedSeries?.data?.map((item, id) => {
+                            if (item.id == 11)
                               return (
-                                <TouchableOpacity style={[styles.badge, {backgroundColor: (serie && item.id == serie.id) ? color.pink : color.lightPurple}]}
+                                <TouchableOpacity style={[styles.badge, {backgroundColor: (serie && (serie.find(el => el.id === item.id))) ? color.pink : color.lightPurple}]}
                                   onPress={() => {
-                                    setSerie(item)
+                                    let tmp = [...serie];
+                                    let idx = tmp.findIndex(el => el.id === item.id);
+                                    if (idx >= 0)
+                                      tmp.splice(idx, 1);
+                                    else
+                                      tmp.push({name: item.attributes.name, id: item.id});
+                                    setSerie(tmp)
                                   }} key={id}>
                                   <Text style={styles.smTxt}>{item.attributes.name}</Text>
                                 </TouchableOpacity>
                               )
                             })
                       }
-                       <TouchableOpacity style={[styles.badge, {backgroundColor: (serie && serie.id == -1) ? color.pink : color.lightPurple}]}
+                       <TouchableOpacity style={[styles.badge, {backgroundColor: (serie &&(serie.find(el => el.id === -1))) ? color.pink : color.lightPurple}]}
                           onPress={() => {
-                            setSerie({name: 'Autre', id: -1});
+                            setSerie([{name: 'Autre', id: -1}]);
 
                           }} key={-1}>
                           <Text style={styles.smTxt}>Autre</Text>
@@ -201,7 +210,7 @@ const Creation = ({navigation, route}) => {
                             data.append('data', JSON.stringify({
                               name,
                               note,
-                              serie: serie.id == -1 ? other : serie.name,
+                              series: serie,
                               other: serie.id == -1 ? true : false,
                               priority: prio,
                               state: checked,

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {images} from '../constant/images';
-import arrow from '../assets/arrow.png';
 import {color} from '../constant/color';
 import {basic} from '../constant/basic';
 import {PopDetail} from '../component/PopDetail';
@@ -21,7 +20,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import { LinearGradient } from 'expo-linear-gradient';
-import Modal from 'react-native-modalbox';
+import ModalBox from 'react-native-modalbox';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useGetPopsQuery, useGetSeriesQuery, updateUserInfo } from '../services/auth';
 import { API_URL, popsSerie } from "../constant/back";
@@ -82,7 +81,7 @@ const Home = ({navigation}) => {
   const [current, setCurrent] = useState(null);
   const [sorting, setSorting] = useState('Date croissant');
   const user = useAuth()
-  const modalRef = useRef(null);
+  const [modalDetail, setModalDetail] = useState(false);
   const modalSortRef = useRef(null);
   const modalFilterRef = useRef(null);
   const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
@@ -190,11 +189,11 @@ const Home = ({navigation}) => {
                     <View style={styles.imgBox}>
                       <Image style={styles.cardImg} source={pop.attributes.image.data && pop.attributes.image.data.length > 0 ? {uri:API_URL + pop.attributes.image.data[0].attributes.url} : images.noimg} resizeMode="cover" />
                       <LinearGradient colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.nameBg}>
-                        <Text style={styles.name}>{pop.attributes.serie + ' - ' + pop.attributes.name}</Text>
+                        <Text style={styles.name}>{(pop.attributes?.series?.length > 1 ? 'Multiple' : pop.attributes?.series[0].name) + ' - ' + pop.attributes.name}</Text>
                       </LinearGradient>
                     </View>
                     <View style={[styles.btnRow, basic.shadow]}>
-                      <TouchableOpacity style={[styles.smBtnRound, basic.shadow]} onPress={() => {setCurrent(pop);modalRef.current.open();}}>
+                      <TouchableOpacity style={[styles.smBtnRound, basic.shadow]} onPress={() => {setCurrent(pop);setModalDetail(true)}}>
                         <Text style={styles.profileTxt}>Détail</Text>
                       </TouchableOpacity>
                       {/* <TouchableOpacity onPress={() => {}}>
@@ -226,8 +225,8 @@ const Home = ({navigation}) => {
         </View>
       </ScrollView>
       </TouchableWithoutFeedback>
-      <PopDetail modalRef={modalRef} pop={current} showBtn={true} navigation={navigation} userId={user?.user?.id} />
-      <Modal style={styles.modalSort} position={"bottom"} ref={modalSortRef} coverScreen={true}>
+      <PopDetail modalDetail={modalDetail} setModalDetail={setModalDetail} pop={current} showBtn={true} navigation={navigation} userId={user?.user?.id} />
+      <ModalBox style={styles.modalSort} position={"bottom"} ref={modalSortRef} coverScreen={true}>
         <Text style={styles.title}>Trier par:</Text>
         <View style={styles.radioBox}>
           <BouncyCheckbox
@@ -279,8 +278,8 @@ const Home = ({navigation}) => {
               onPress={() => {changeRadio('Non favoris')}}
           />
         </View>
-      </Modal>
-      <Modal style={styles.modalFilter} position={"center"} ref={modalFilterRef} coverScreen={true}>
+      </ModalBox>
+      <ModalBox style={styles.modalFilter} position={"center"} ref={modalFilterRef} coverScreen={true}>
         <Text style={styles.modalTitle}>Filtrer par:</Text>
         <ScrollView>
         <View style={styles.btnSelect}>
@@ -318,7 +317,7 @@ const Home = ({navigation}) => {
             }}>
               <IconAnt name={'closecircle'} size={20} color={color.pink} />
         </TouchableOpacity>
-      </Modal>
+      </ModalBox>
     </SafeAreaView>
   )
 };

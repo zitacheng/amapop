@@ -20,7 +20,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import IconMat from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView } from 'react-native-gesture-handler';
-import Modal from 'react-native-modalbox';
+import Modal from 'react-native-modal';
 import { useAuth } from '../hooks/useAuth';
 import { useGetPopsQuery, useRemovePopMutation } from '../services/auth';
 import { API_URL, stateSentence } from "../constant/back";
@@ -33,6 +33,7 @@ const Profile = ({navigation}) => {
   const [tabActive, setTabActive] = useState('change');
   const [current, setCurrent] = useState(null);
   const modalRef = useRef(null);
+  const [modalDetail, setModalDetail] = useState(false);
   const [removePop] = useRemovePopMutation();
   const user = useAuth()
   const {data: fetchedPops, fetchingPops, error} = useGetPopsQuery(qs.stringify({
@@ -59,6 +60,10 @@ const Profile = ({navigation}) => {
   //       return "";
   //   }
   // }
+
+  function closeModal() {
+    setModalDetail(false);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,12 +114,12 @@ const Profile = ({navigation}) => {
           favs.map((item, id) => {
               return (
                 <View style={[styles.card, basic.shadow]} id={id} key={id}>
-                  <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
+                  <TouchableOpacity onPress={() => {setCurrent(item); setModalDetail(true)}}>
                     <Image style={styles.cardImg} source={item.pic} resizeMode="cover" />
                   </TouchableOpacity>
                   <LinearGradient
                   colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
-                    <Text style={styles.cardtitle}>{item.serie + ' - ' + item.name}</Text>
+                    <Text style={styles.cardtitle}>{(item.series.length > 1 ? 'Multiple' : item.series[0].name) + ' - ' + item.name}</Text>
                   </LinearGradient>
                   <TouchableOpacity style={[styles.cardBottom, basic.shadow]} onPress={() => {navigation.navigate('Edit', {editMode: true});}}>
                     <IconMat name={'lead-pencil'} size={20} color={color.pink} />
@@ -130,7 +135,7 @@ const Profile = ({navigation}) => {
             if ((tabActive == 'change' && (item.attributes.state == 'change' || item.attributes.state == 'booked')) || (tabActive == 'look' && item.attributes.state == 'looking'))
               return (
                 <View style={[styles.card, basic.shadow]} id={id} key={id}>
-                  <TouchableOpacity onPress={() => {setCurrent(item); modalRef.current.open();}}>
+                  <TouchableOpacity onPress={() => {setCurrent(item); setModalDetail(true)}}>
                     {
                       item?.attributes?.image?.data && item.attributes.image.data.length > 0 ?
                       <Image style={styles.cardImg} source={{uri:API_URL + item.attributes.image.data[0].attributes.url}} resizeMode="cover" />
@@ -140,7 +145,7 @@ const Profile = ({navigation}) => {
                   </TouchableOpacity>
                   <LinearGradient
                   colors={['rgba(0, 0, 0, 0.9)', 'transparent']} style={styles.cardtitleBg}>
-                    <Text style={styles.cardtitle}>{item.attributes.serie + ' - ' + item.attributes.name}</Text>
+                    <Text style={styles.cardtitle}>{(item.attributes?.series?.length > 1 ? 'Multiple' : item.attributes?.series[0].name)  + ' - ' + item.attributes.name}</Text>
                   </LinearGradient>
                   {
                     item.attributes.state == 'booked' &&
@@ -189,25 +194,45 @@ const Profile = ({navigation}) => {
         }
         </View>
       </ScrollView>
-        <Modal style={styles.modal} position={"bottom"} ref={modalRef} coverScreen={true}>
+        <Modal style={styles.modal} coverScreen={true} isVisible={modalDetail} scrollHorizontal={true}>
           {
             current &&
-            <>
-              <Image style={styles.modalPic} source={current.attributes?.image?.data && current.attributes.image.data.length > 0 ? {uri:API_URL + current.attributes.image.data[0].attributes.url} : images.noimg} resizeMode="cover" />
-              <Text style={styles.modalTitle}>{current.attributes && (current.attributes.serie + ' - ' + current.attributes.name)}</Text>
+            <ScrollView style={styles.modalScroll}>
+              {/* <View style={styles.imgBox}> */}
+              <Image style={styles.modalPic} source={current.attributes?.image?.data && current.attributes.image.data.length > 0 ? {uri:API_URL + current.attributes.image.data[0].attributes.url} : images.noimg} resizeMode="contain" />
+              {/* </View> */}
+              <Text style={styles.modalTitle}>{(current.attributes.series.length > 1 ? 'Multiple' :  current.attributes.series[0].name) + ' - ' + current.attributes.name}</Text>
               <Text style={styles.desc}>{"Note: " + (current.attributes.note ? current.attributes.note : "Pas de note")}</Text>
               <Text style={styles.desc}>{stateSentence(current.attributes.state)}</Text>
               <Text style={styles.desc}>{"Date d'ajout: " + new Date(current.attributes.createdAt).toLocaleDateString()}</Text>
+              {
+                current.attributes.series.length > 1 &&
+                <Text style={styles.desc}>{"Liste des sérites: "}
+                {
+                  current?.attributes?.series?.map((item, id) => {
+                    return(
+                      item.name + (id === current.attributes.series.length - 1 ? '' : ', ')
+                    )
+                  })
+
+                }
+                </Text>
+              }
               <View style={basic.break} />
-              <TouchableOpacity
-                  style={basic.btnWhiteout}
-                  onPress={() => {
-                    modalRef.current.close();
-                    navigation.navigate('Edit', {editMode: true, pop: current});
-                  }}>
-                  <Text style={basic.btnTxtOut}>Modifier</Text>
-              </TouchableOpacity>
-            </>
+                <TouchableOpacity
+                    style={basic.btnWhiteout}
+                    onPress={() => {
+                      setModalDetail(false);
+                      navigation.navigate('Edit', {editMode: true, pop: current});
+                    }}>
+                    <Text style={basic.btnTxtOut}>Modifier</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={closeModal} style={styles.closeBox}>
+                  <Image style={styles.close} source={images.close} resizeMode="cover" />
+                </TouchableOpacity>
+                <View style={basic.break} />
+                <View style={basic.break} />
+            </ScrollView>
           }
         </Modal>
       </View>
@@ -397,15 +422,29 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingLeft: 10,
   },
+  modalScroll: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    position: 'relative',
+  },
   modal: {
     justifyContent: 'flex-start',
-    borderRadius: 20,
-    height: '90%',
+    margin: 0,
+    marginTop: 80,
+    borderRadius: 30,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  imgBox: {
     width: '100%',
+    height: 600,
+    backgroundColor: 'pink',
   },
   modalPic: {
-    width: '100%',
-    height: '50%',
+    height: 600, 
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
@@ -423,6 +462,19 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingTop: 10,
   },
+  closeBox: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  close: {
+    width: 30,
+    height: 30,
+  }
 });
 
 export default Profile;

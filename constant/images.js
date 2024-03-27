@@ -9,6 +9,7 @@ import user from '../assets/user.png';
 import chat from '../assets/chat.png';
 import profile from '../assets/profile.png';
 import caution from '../assets/caution.png';
+import close from '../assets/close.png';
 
 export const images = {
     logo: logo,
@@ -22,5 +23,6 @@ export const images = {
     chat: chat,
     profile: profile,
     caution: caution,
+    close: close,
   };
   

@@ -14,15 +14,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { images } from "../constant/images";
-import arrow from "../assets/arrow.png";
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import { color } from "../constant/color";
 import { basic } from "../constant/basic";
-import { MultiLang } from "../component/Multilang";
 import { Load } from "../component/Load";
 import IconAnt from "react-native-vector-icons/AntDesign";
-import { RadioButton, Checkbox } from "react-native-paper";
+import { RadioButton } from "react-native-paper";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
@@ -43,7 +40,7 @@ const Edit = ({ navigation, route }) => {
   const [name, setName] = useState(route?.params?.pop.attributes.name);
   const [note, setNote] = useState(route?.params?.pop.attributes.note);
   const [other, setOther] = useState("");
-  const [serie, setSerie] = useState({ id: -1, name: "Autre" });
+  const [serie, setSerie] = useState([{ id: -1, name: "Autre" }]);
   const [checked, setChecked] = useState(route?.params?.pop.attributes.state);
   const [prio, setPrio] = useState(route?.params?.pop.attributes.priority);
   const [img1, setImg1] = useState(null);
@@ -68,17 +65,14 @@ const Edit = ({ navigation, route }) => {
 
   const cleanVariables = () => {
     setImg1(null);
-    setSerie(undefined);
+    setSerie([]);
     setName("");
     setNote("");
     setOther("");
   };
 
-  useEffect(() => {
-    let val = fetchedSeries.data.find((el) => el.attributes.name.toLowerCase().trim() == route?.params?.pop.attributes.serie.toLowerCase().trim());
-    console.log("VAL ", val)
-    if (val)
-      setSerie(val)
+  useEffect(() => {    
+    setSerie(route?.params?.pop.attributes?.series)
   }, [fetchedSeries]);
 
   return (
@@ -124,7 +118,8 @@ const Edit = ({ navigation, route }) => {
                   style={styles.addImg}
                   onPress={async () => {
                     let result = await ImagePicker.launchImageLibraryAsync({
-                      allowsEditing: true,
+                      allowsEditing: false,
+                      aspect: [1, 1],
                       quality: 1,
                     });
 
@@ -171,7 +166,7 @@ const Edit = ({ navigation, route }) => {
                         styles.badge,
                         {
                           backgroundColor:
-                            serie && item.id == serie.id
+                          (serie && (serie.find(el => el.id === item.id)))
                               ? color.pink
                               : color.lightPurple,
                         },
@@ -190,7 +185,7 @@ const Edit = ({ navigation, route }) => {
                     styles.badge,
                     {
                       backgroundColor:
-                        serie && serie.id == -1
+                      (serie && (serie.find(el => el.id === -1)))
                           ? color.pink
                           : color.lightPurple,
                     },

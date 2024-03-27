@@ -41,7 +41,7 @@ const Chatting = ({ navigation, route }) => {
   const [createConv] = useCreateConversationsMutation();
   const [getConvs] = useLazyGetConversationsQuery();
   const [getMsgs] = useLazyGetMessagesQuery();
-  const modalRef = useRef(null);
+  const [modalDetail, setModalDetail] = useState(false);
 
   const {
     data: fetchedMessages,
@@ -239,7 +239,7 @@ const Chatting = ({ navigation, route }) => {
                   <Text style={styles.popSub}>{route.params.username}</Text>
                   <TouchableOpacity
                     onPress={() => {
-                      modalRef.current.open();
+                      setModalDetail(true)
                     }}
                     style={styles.btn}
                   >
@@ -337,7 +337,8 @@ const Chatting = ({ navigation, route }) => {
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
       <PopDetail
-        modalRef={modalRef}
+        modalDetail={modalDetail}
+        setModalDetail={setModalDetail}
         navigation={navigation}
         pop={route.params.pop}
       />

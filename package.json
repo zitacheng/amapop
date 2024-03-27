@@ -19,11 +19,15 @@
     "axios": "^1.6.7",
     "expo": "~49.0.15",
     "expo-app-loading": "^2.1.1",
+    "expo-constants": "~14.4.2",
+    "expo-device": "~5.4.0",
     "expo-font": "~11.4.0",
     "expo-image-picker": "~14.3.2",
     "expo-linear-gradient": "~12.3.0",
+    "expo-notifications": "~0.20.1",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
+    "expo-updates": "~0.18.19",
     "i": "^0.3.7",
     "moment": "^2.30.1",
     "qs": "^6.11.2",
@@ -38,6 +42,7 @@
     "react-native-in-app-review": "^4.3.3",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-loading-spinner-overlay": "^3.0.1",
+    "react-native-modal": "^13.0.1",
     "react-native-modalbox": "^2.0.2",
     "react-native-paper": "^5.11.1",
     "react-native-phone-number-input": "^2.1.0",
@@ -48,11 +53,7 @@
     "react-native-vector-icons": "^10.0.2",
     "react-native-web": "~0.19.6",
     "react-redux": "^8.1.3",
-    "redux-persist": "^6.0.0",
-    "expo-updates": "~0.18.19",
-    "expo-notifications": "~0.20.1",
-    "expo-device": "~5.4.0",
-    "expo-constants": "~14.4.2"
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

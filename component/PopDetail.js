@@ -6,39 +6,43 @@ import {
   StyleSheet,
   Image,
   Alert,
+  ScrollView,
   Text,
 } from "react-native";
 import { images } from "../constant/images";
-import Modal from "react-native-modalbox";
+import Modal from 'react-native-modal';
 import { API_URL, stateSentence } from "../constant/back";
 import { basic } from "../constant/basic";
 import DialogInput from "react-native-dialog-input";
 import { useCreateReportMutation } from "../services/auth";
-export const PopDetail = ({ pop, navigation, modalRef, showBtn, userId }) => {
-  console.log("pop ", pop);
+export const PopDetail = ({ pop, navigation, modalDetail, setModalDetail, showBtn, userId }) => {
   const [signal, setSignal] = useState(false);
   const [createReport] = useCreateReportMutation();
+
+  function closeModal() {
+    setModalDetail(false);
+  }
 
   return (
     <Modal
       style={styles.modal}
       position={"bottom"}
-      ref={modalRef}
+      isVisible={modalDetail}
       coverScreen={true}
     >
       {
-        <View style={styles.box}>
+        <ScrollView style={styles.modalScroll}>
           <Image
             style={styles.modalPic}
             source={
               pop?.attributes?.image && pop?.attributes?.image.data.length > 0
-                ? { uri: API_URL + pop.attributes.image.data[0].attributes.url }
+                ? { uri: API_URL + pop?.attributes.image.data[0].attributes.url }
                 : images.noimg
             }
             resizeMode="cover"
           />
           <Text style={styles.title}>
-            {pop?.attributes?.serie + " - " + pop?.attributes?.name}
+            {(pop?.attributes?.series?.length > 1 ? 'Multiple' : pop?.attributes?.series[0].name) + " - " + pop?.attributes?.name}
           </Text>
           <Text style={styles.content}>
             {"Note du pop: " +
@@ -51,6 +55,19 @@ export const PopDetail = ({ pop, navigation, modalRef, showBtn, userId }) => {
             {"Date d'ajout: " +
               new Date(pop?.attributes?.createdAt).toLocaleDateString()}
           </Text>
+          {
+                pop?.attributes?.series?.length > 1 &&
+                <Text style={styles.content}>{"Liste des sérites: "}
+                {
+                  pop?.attributes?.series?.map((item, id) => {
+                    return(
+                      item.name + (id === pop?.attributes.series.length - 1 ? '' : ', ')
+                    )
+                  })
+
+                }
+                </Text>
+              }
           <View style={basic.break} />
           {showBtn && (
             <View style={styles.row}>
@@ -59,7 +76,7 @@ export const PopDetail = ({ pop, navigation, modalRef, showBtn, userId }) => {
                   Linking.openURL(
                     "whatsapp://send?text=" +
                       "Bonjour j'ai vu que tu as " +
-                      pop?.attributes?.serie +
+                      (pop?.attributes?.series?.length > 1 ? 'Multiple' : pop.attributes.series[0].name) +
                       " - " +
                       pop?.attributes?.name +
                       " je suis interessé" +
@@ -165,18 +182,25 @@ export const PopDetail = ({ pop, navigation, modalRef, showBtn, userId }) => {
               setSignal(false);
             }}
           ></DialogInput>
-        </View>
-      }
+          <TouchableOpacity onPress={closeModal} style={styles.closeBox}>
+            <Image style={styles.close} source={images.close} resizeMode="cover" />
+          </TouchableOpacity>
+          <View style={basic.break} />
+          <View style={basic.break} />
+        </ScrollView>
+        }
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
   modal: {
-    justifyContent: "flex-start",
-    borderRadius: 20,
-    height: "90%",
-    width: "100%",
+    justifyContent: 'flex-start',
+    margin: 0,
+    marginTop: 80,
+    borderRadius: 30,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   content: {
     fontSize: 22,
@@ -187,8 +211,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   modalPic: {
-    width: "100%",
-    height: "50%",
+    height: 600, 
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
@@ -217,7 +240,7 @@ const styles = StyleSheet.create({
   report: {
     position: "absolute",
     top: 10,
-    right: 10,
+    left: 10,
   },
   reportImg: {
     width: 40,
@@ -226,4 +249,25 @@ const styles = StyleSheet.create({
   box: {
     position: "relative",
   },
+  modalScroll: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    position: 'relative',
+  },
+  closeBox: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  close: {
+    width: 30,
+    height: 30,
+  }
 });
